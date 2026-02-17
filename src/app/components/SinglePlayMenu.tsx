@@ -1,12 +1,9 @@
 import { User, Users, PlusCircle, Settings, LogOut } from 'lucide-react';
 import { Button } from './ui/button';
 import { useNavigate } from 'react-router-dom';
-// interface GameMenuProps {
-//   onLogout: () => void;
-//   onStartGame: () => void;
-// }
 
-export function GameMenu(/*{ onLogout, onStartGame }: GameMenuProps*/) {
+
+export function SinglePlayMenu() {
   const navigate = useNavigate();
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-purple-900 via-indigo-900 to-black relative overflow-hidden">
@@ -64,12 +61,12 @@ export function GameMenu(/*{ onLogout, onStartGame }: GameMenuProps*/) {
         {/* Menu Options */}
         <div className="space-y-6">
           {/* Single Player */}
-          <button className="w-full group relative" onClick={() => navigate('/single-play-menu')}>
+          <button className="w-full group relative" onClick={() => navigate('/game-play')}>
             <div className="bg-gradient-to-r from-purple-600 to-purple-800 border-4 border-white p-6 transition-all hover:shadow-[0_0_30px_rgba(139,92,246,0.8)] hover:scale-105">
               <div className="flex items-center justify-center gap-4">
                 <User className="w-8 h-8 text-white" />
                 <span className="text-white font-['Press_Start_2P'] text-xl">
-                  SINGLE PLAYER
+                  Story Mode
                 </span>
               </div>
             </div>
@@ -82,25 +79,14 @@ export function GameMenu(/*{ onLogout, onStartGame }: GameMenuProps*/) {
               <div className="flex items-center justify-center gap-4">
                 <Users className="w-8 h-8 text-white" />
                 <span className="text-white font-['Press_Start_2P'] text-xl">
-                  MULTIPLAYER
+                  Create Level
                 </span>
               </div>
             </div>
             <div className="absolute -bottom-1 -right-1 w-full h-full bg-pink-900 border-4 border-pink-900 -z-10"></div>
           </button>
 
-          {/* Create */}
-          <button className="w-full group relative">
-            <div className="bg-gradient-to-r from-cyan-600 to-cyan-800 border-4 border-white p-6 transition-all hover:shadow-[0_0_30px_rgba(34,211,238,0.8)] hover:scale-105">
-              <div className="flex items-center justify-center gap-4">
-                <PlusCircle className="w-8 h-8 text-white" />
-                <span className="text-white font-['Press_Start_2P'] text-xl">
-                  CREATE
-                </span>
-              </div>
-            </div>
-            <div className="absolute -bottom-1 -right-1 w-full h-full bg-cyan-900 border-4 border-cyan-900 -z-10"></div>
-          </button>
+  
 
           {/* Options */}
           <button className="w-full group relative">

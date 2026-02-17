@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+// interface GamePlayProps {
+//   onBack: () => void;
+// }
 
-interface GamePlayProps {
-  onBack: () => void;
-}
-
-export function GamePlay({ onBack }: GamePlayProps) {
+export function GamePlay(/*{ onBack }: GamePlayProps*/) {
+  const navigate = useNavigate();
+  
   const [activeButton, setActiveButton] = useState<string | null>(null);
   const [showMenu, setShowMenu] = useState(false);
   const [playerPos, setPlayerPos] = useState({ x: 200, y: 200 });
@@ -31,7 +33,7 @@ export function GamePlay({ onBack }: GamePlayProps) {
     ctx.fillRect(0, 400, canvas.width, 80);
 
     // Draw some mountains (triangles)
-    ctx.fillStyle = '#8B7355';
+    ctx.fillStyle = '#301e07ff';
     ctx.beginPath();
     ctx.moveTo(100, 400);
     ctx.lineTo(200, 250);
@@ -331,7 +333,7 @@ export function GamePlay({ onBack }: GamePlayProps) {
                 
                 <button
                   className="w-full bg-pink-600 hover:bg-pink-500 text-white font-['Press_Start_2P'] text-lg py-4 px-6 border-4 border-white transition-all hover:scale-105"
-                  onClick={onBack}
+                  onClick={() => navigate('/game-menu')}
                 >
                   EXIT TO MENU
                 </button>

@@ -1,11 +1,12 @@
 import { Gamepad2, Sparkles, ArrowLeft } from 'lucide-react';
 import { Button } from './ui/button';
+import { useNavigate } from 'react-router-dom';
+// interface HeroProps {
+//   onBackToCover: () => void;
+// }
 
-interface HeroProps {
-  onBackToCover: () => void;
-}
-
-export function Hero({ onBackToCover }: HeroProps) {
+export function Hero(/*{ onBackToCover }: HeroProps*/) {
+  const navigate = useNavigate();
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-purple-900 via-indigo-900 to-black">
       {/* Animated background grid */}
@@ -37,7 +38,7 @@ export function Hero({ onBackToCover }: HeroProps) {
 
       {/* Back button */}
       <button
-        onClick={onBackToCover}
+        onClick={() => navigate('/')}
         className="absolute top-6 left-6 z-20 flex items-center gap-2 text-cyan-300 hover:text-cyan-100 font-['VT323'] text-xl transition-colors"
       >
         <ArrowLeft className="w-5 h-5" />
@@ -64,7 +65,7 @@ export function Hero({ onBackToCover }: HeroProps) {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
           <Button 
-            onClick={onBackToCover}
+            onClick={() => navigate('/game-play')}
             size="lg" 
             className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-['Press_Start_2P'] text-sm px-8 py-6 border-4 border-white shadow-[0_8px_0_rgba(0,0,0,0.3)] hover:shadow-[0_4px_0_rgba(0,0,0,0.3)] hover:translate-y-1 transition-all"
           >

@@ -1,0 +1,519 @@
+<html>
+    <head>
+        <title>level create</title>
+    </head>
+    <style>
+        body{
+            box-sizing: border-box;
+            margin: 0px;
+            padding: 0px;
+        }
+        .error_screen{
+            width: 100%;
+            height: 100%;
+            background-color: #2222228a;
+            position: absolute;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: ghostwhite;
+        }
+        .error_box{
+            text-align: center;
+            width: 240px;
+            height: 240px;
+            background-color: crimson;
+            color: ghostwhite;
+            border-radius: 12px;
+        }
+        .close_error{
+            color: white;
+            background-color: #222;
+            margin-top: 7px;
+            width: 120px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .start_window{
+            width: 120px;
+            height: 120x; 
+            border: 1px solid black;
+            display: flex;
+            flex-direction: column;
+        }
+        .create_options{
+            background-color: #222;
+            color: ghostwhite;
+            margin-bottom: 3px;
+            cursor: pointer;
+        }
+        .level_stats_holder{
+            width: 240px;
+            height: 282px;
+            border: 1px solid black;
+            display: none;
+            flex-direction: column;
+        }
+        .stat_option{
+            display: flex;
+            flex-direction: column;
+            background-color: #222;
+            color: ghostwhite;
+            margin-bottom: 3px;
+            cursor: pointer;
+        }
+        .level_desc_input{
+            width: 240px;
+            height: 140px;
+        }
+        .level_create_screen{
+            width: 420px;
+            height: 420px;
+            border: #222 1px solid;
+            display: none;
+            flex-direction: column;
+        }
+
+    /* Tablets (portrait & landscape) */
+/* @media only screen and (max-width: 768px) {
+    .start_window,
+    .level_create_screen {
+        width: 90%;
+        height: auto;
+    }
+
+    .level_stats_holder,
+    .level_desc_input {
+        width: 90%;
+    }
+
+    .error_box {
+        width: 70%;
+        height: auto;
+    }
+    .level_create_screen{
+        width: 80%;
+        height: 60%;
+        font-size: 0.9rem;
+    }
+} */
+
+/* Phones
+@media only screen and (max-width: 480px) {
+    .start_window,
+    .level_create_screen {
+        width: 95%;
+        height: auto;
+    }
+
+    .level_stats_holder,
+    .level_desc_input {
+        width: 95%;
+    }
+
+    .create_options,
+    .stat_option,
+    .close_error {
+        font-size: 0.9rem;
+        padding: 6px;
+    }
+
+    .error_box {
+        width: 80%;
+        height: auto;
+        font-size: 0.9rem;
+    }
+    .level_create_screen{
+        width: 80%;
+        height: 60%;
+        font-size: 0.9rem;
+    }
+} */
+    </style>
+    <body>
+        <div id="error_screen" class="error_screen">
+            <div id="error_box" class="error_box">
+                ERROR!<br>
+                <div id="error_text"></div>
+            </div>
+            <div id="close_error" class="close_error">CLOSE</div>
+        </div>
+        <div id="delete_confirm_holder" style="width: 100%; height: 100%; position: absolute; background-color: rgba(0, 0, 0, 0.42); justify-content: center; align-items: center; display: none; flex-direction: column;">
+            <div id="confirm_delete" style="width: 240px; height: 240px; border: 1px solid black; background-color: crimson; border-radius: 12px; display: flex; flex-direction: column;">
+                <div style="color: ghostwhite; text-align: center; margin-top: 12px;">Are you sure?<br>Delete Level:</div>
+                <div id="delete_level_stats" style="text-align: center; color: ghostwhite;"></div>
+                <div id="delete_confirm_no" class="stat_option" style="text-align: center; margin: 12px 0px 12px 0px;">No</div>
+                <div id="delete_confirm_yes" class="stat_option" style="text-align: center;">Yes</div>
+            </div>
+        </div>
+        <div id="start_window" class="start_window">
+            <div id="create_new_level" class="create_options">Create New</div>
+            <div id="load_level" class="create_options">Load</div>
+            <div id="exit_level" class="create_options">Exit</div>
+        </div>
+        <div id="level_stats" class="level_stats_holder">
+            <form id="level_create_form" action="create_new_level">
+                <div class="stat_option">
+                    <div>Level Name: </div>
+                    <input id="level_name_input" name="name">
+                </div>
+                <div class="stat_option">
+                    <div>Level Size: </div>
+                    <select id="level_size_input" name="size">
+                        <option value="">Choose Size</option>
+                        <option value="room">Room</option>
+                        <option value="small">Small</option>
+                        <option value="mid">Mid</option>
+                        <option value="large">Large</option>
+                    </select>
+                </div>
+                <div class="stat_option">
+                    <div>Level Description: </div>
+                    <textarea id="level_desciption_input" class="level_desc_input" name="desc"></textarea>
+                </div>
+                <button class="stat_option" id="create_level_input" type="submit"> Create</button>
+                <div class="stat_option" id="exit_level_stats">Exit</div>
+            </form>
+        </div>
+        <div id="load_level_screen" style="width: 280px; height: 240px; border: 1px solid black; display: flex; flex-direction: column;">
+            <div>Load Levels: </div>
+            <div id="load_level_holder" style="width:270px; height: 220px; overflow-y: scroll;"></div>
+            <div id="exit_load_screen" class="create_options">Exit</div>
+        </div>
+        <div id="level_create_screen" class="level_create_screen">
+            <div id="level_create_options" style="position: absolute; width: 120px; height: 120px; border: 1px solid black; background-color: ghostwhite; display: none; flex-direction: column; top: 36px; left: 12px;">
+                <div id="create_save" class="create_options">Save</div>
+                <div id="create_test" class="create_options">Test</div>
+                <div id="create_exit" class="create_options">Exit</div>
+                <div id="create_clear" class="create_options">Clear</div>
+                <div id="create_delete" class="create_options">Delete</div>
+            </div>
+            <div id="level_create_nav" style="width: 98%; height: 72px; border: 1px solid black; margin-left: 4px; display: flex; flex-direction: column;">
+                <div style="width: 280px; height: 32px; border: 1px solid black; display: flex; flex-direction: row;">
+                    <div id="level_create_menu" style="background-color: rgb(87, 50, 114); width: 28px; height: 28px; margin: 2px; border-radius: 3px; cursor: pointer;" title="menu"></div>
+                    <div  id="level_nav_name" style="position: relative; top: 6px; left: 12px; width: 120px;"></div>
+                </div>
+                <div id="create_level_asset_nav" style="display: flex; flex-direction: row; width: 98%; height: 32px; justify-content: space-evenly; background-color: whitesmoke; margin-left: 4px; margin-top: 4px;">
+                    <div id="terrain_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Terrain</div>
+                    <div id="ground_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Ground</div>
+                    <div id="NPC_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">NPC</div>
+                    <div id="chest_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Chest</div>
+                    <div id="enemy_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Enemies</div>
+                    <div id="landmark_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Landmarks</div>
+                </div>
+            </div>
+            <div id="create_level_holder" style="display: flex; flex-direction: row;">
+                <div id="asset_display" style="width: 180px; height: 340px; border: 1px solid black; margin-top: 2px; overflow-y: scroll; display:none;"></div>
+                <div id="create_level_preview" style=" width: 98%; height: 340px; border: 1px solid black; margin-left: 4px; margin-top: 2px;"></div>
+                <div id="create_level_camera" style="width: 48px; height: 48px; position: absolute; background-color: #222; top: 370px; left: 370px; color: white; font-size: 10px; justify-items: center; text-align: center; display: flex; flex-direction: column; justify-content: center; cursor: pointer;">
+                    <div id="camera_header" style=" display: flex; flex-direction: column;">camera</div>
+                    <div id="camera_options" style="display: none; flex-direction: column;">
+                        <div>UP</div>
+                        <div style="display: flex; flex-direction: row; width: 96px; height: 32px; border: 1px solid white; margin-left: 12px; justify-content: center; ">
+                            <div>left</div>
+                            <div>+</div>
+                            <div>-</div>
+                            <div>right</div>
+                        </div>
+                        <div>down</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+    //level array
+    levels = [
+        {id: 1, name: "test", size: "room", desc: "This is a test"},
+    ];
+    var level_pending_delete = null;
+    //screens
+    var error_screen = document.getElementById('error_screen');
+    var start_window = document.getElementById("start_window");
+    var level_stats = document.getElementById("level_stats");
+    var level_create_screen = document.getElementById("level_create_screen");
+    var load_level_screen = document.getElementById("load_level_screen");
+    //error box
+    var error_text = document.getElementById('error_text');
+    var close_error = document.getElementById('close_error');
+    //start window options
+    var create_new_level = document.getElementById('create_new_level');
+    var load_level = document.getElementById("load_level");
+    var exit_level = document.getElementById("exit_level");
+    //load level
+    var load_level_holder = document.getElementById('load_level_holder');
+    var exit_load_screen = document.getElementById('exit_load_screen');
+    //level stats options
+    var level_create_form = document.querySelector("#level_create_form");
+    var level_name_input = document.getElementById("level_name_input");
+    var level_size_input = document.getElementById("level_size_input");
+    var level_desciption_input = document.getElementById("level_desciption_input");
+    var create_level_input = document.getElementById("create_level_input");
+    var exit_level_stats = document.getElementById("exit_level_stats");
+    //level create 
+    var level_nav_name = document.getElementById("level_nav_name");
+    var current_level = null;
+    var level_create_menu = document.getElementById('level_create_menu');
+    //level create options menu
+    var level_create_options = document.getElementById('level_create_options');
+    //save created level
+    var create_save = document.getElementById("create_save");
+    //test created level
+    var create_test = document.getElementById('create_test');
+    //exit level creation
+    var create_exit = document.getElementById('create_exit');
+    //clear created level
+    var create_clear = document.getElementById('create_clear');
+    //delete created level
+    var create_delete = document.getElementById('create_delete');
+    var delete_confirm_holder = document.getElementById('delete_confirm_holder');
+    var delete_level_stats = document.getElementById('delete_level_stats');
+    var delete_confirm_no = document.getElementById('delete_confirm_no');
+    var delete_confirm_yes = document.getElementById('delete_confirm_yes');
+    //level preview
+    var create_level_preview = document.getElementById('create_level_preview');
+    //level camera
+    var create_level_camera = document.getElementById('create_level_camera');
+    var camera_header = document.getElementById('camera_header');
+    var camera_options = document.getElementById('camera_options');
+    //screen array
+    var screens = [start_window, level_stats, level_create_screen,load_level_screen];
+    create_new_level.onclick = function(){
+        showScreen(level_stats);
+    }
+    exit_level_stats.onclick = function(){
+        showScreen(start_window);
+    }
+    load_level.onclick = function(){
+        showScreen(load_level_screen);
+        renderSavedLevels();
+    }
+    exit_load_screen.onclick = function(){
+        showScreen(start_window);
+    }
+    //pointer on hover array
+    var options_arr = [create_new_level,load_level,exit_level,create_level_input,exit_level_stats, close_error, create_save, create_test, create_exit, create_clear, create_delete, delete_confirm_no, delete_confirm_yes];
+    //hover funtion
+    options_arr.forEach(option =>{
+        onHover(option,"yellow","white");
+    });
+    //close error screen
+    close_error.onclick = function(){
+        error_screen.style.display = 'none';
+    }
+    //create new level
+    level_create_form.addEventListener("submit", function(e){
+        //stops page reload for dynamic emplimentation
+        e.preventDefault();
+        //checks to see if create inputs are empty
+        error_text.innerHTML = "";
+        if(level_name_input.value.trim() === ""){
+            error_screen.style.display = "flex";
+            error_text.innerHTML += "Please Name your creation...<br>";
+            return;
+        }
+        if(level_size_input.value === ""){
+            error_screen.style.display = "flex";
+            error_text.innerHTML += "Please choose a Size...<br>";
+            return;
+        }
+        //get values from form
+        var newLevel = {
+            id: levels.length + 1,
+            name: level_name_input.value,
+            size: level_size_input.value,
+            desc: level_desciption_input.value
+        };
+        //push new level values into levels array
+        levels.push(newLevel);
+        //saves level array
+        saveLevel();
+        current_level = newLevel;
+        saveCurrentLevel();
+        renderLevelName(current_level);
+        showScreen(level_create_screen);
+        
+    });
+    //open level create menu
+    // open menu
+    clickAway(level_create_menu,level_create_options);
+
+    create_exit.onclick = function(){
+        showScreen(start_window);
+    }    
+    //functions
+    //hover on an element and change the color, off of hover the color changes back
+    function onHover(element,color1,color2){
+        element.addEventListener("mouseover", ()=>{
+            element.style.color = color1;
+        });
+        element.addEventListener("mouseout", ()=>{
+            element.style.color = color2;
+        });
+    }
+    //switches the current screen to the next one and saves so even on refresh the screen is the current
+    function showScreen(screenElement){
+        screens.forEach(screen =>{
+            screen.style.display = "none";
+    });
+        screenElement.style.display = "flex";
+        // save active screen
+        localStorage.setItem("activeScreen", screenElement.id);
+    }
+    //render saved levels to load
+    function renderSavedLevels(){
+        load_level_holder.innerHTML = "";
+            levels.forEach(level=>{
+            var levels_box = document.createElement('div');
+            Object.assign(levels_box.style,{
+                width:'255px', height: 'auto',borderBottom: '1px solid black', display: 'flex', flexDirection: 'column', marginBotton: '4px'
+            });
+            levels_box.innerHTML = level.name+"| size: "+level.size+"|<br>Description: "+level.desc;
+            load_level_holder.appendChild(levels_box);
+            //buttons
+            var load_button_holder = document.createElement('div');
+            levels_box.appendChild(load_button_holder);
+            Object.assign(load_button_holder.style,{display: "flex", flexDirection: 'row', justifyContent: 'space-evenly'});
+            //load button
+            var load_level_button = document.createElement('div');
+            load_button_holder.appendChild(load_level_button);
+            Object.assign(load_level_button.style,{width: '64px', height: '32px', color: 'ghostwhite', backgroundColor: '#222', textAlign: 'center', cursor: 'pointer'});
+            load_level_button.innerHTML = "Load";
+            onHover(load_level_button,'yellow','white');
+            load_level_button.onclick = function(){
+
+            }
+            //delete button
+            var delete_level_button = document.createElement('div');
+            load_button_holder.appendChild(delete_level_button);
+            Object.assign(delete_level_button.style,{width: '64px', height: '32px', color: 'ghostwhite', backgroundColor: '#222', textAlign: 'center', cursor: 'pointer'});
+            delete_level_button.innerHTML = "Delete";
+            onHover(delete_level_button,'yellow','white');
+            //delete levels
+            delete_level_button.onclick = function(){
+                level_pending_delete = level.id;
+                delete_level_stats.innerHTML = "Name: "+level.name;
+                delete_confirm_holder.style.display = 'flex';
+            }
+            //loading levels stuff
+            load_level_button.onclick = function(){
+                current_level = level;
+                saveCurrentLevel();
+                renderLevelName(current_level);
+                showScreen(level_create_screen);
+            }
+        });
+    }
+    //delete level logic foreal this time tho
+        delete_confirm_yes.onclick = function(){
+            if(level_pending_delete !== null){
+                deleteSavedLevel(level_pending_delete);
+            }
+            delete_confirm_holder.style.display = 'none';
+        }
+        delete_confirm_no.onclick = function(){
+            level_pending_delete = null;
+            delete_confirm_holder.style.display = 'none';
+        }
+    //render current level stats
+    function renderLevelName(level){
+        if(!level) return;
+        level_nav_name.textContent = level.name;
+    }
+        //click away function 
+    function clickAway(element1,element2){
+        element1.addEventListener("click", function(e){
+            e.stopPropagation();
+            element2.style.display = 'flex';
+        });
+        element1.addEventListener("click", function(e){
+            e.stopPropagation();
+        });
+        document.addEventListener("click",function(e){ 
+            const clickedInsideMenu = element2.contains(e.target);
+            const clickedMenuButton = element1.contains(e.target);
+
+            if(!clickedInsideMenu && ! clickedMenuButton){
+                element2.style.display = 'none';
+            }
+        });
+    }
+    //camera on hover
+    create_level_camera.onclick = function(){
+        create_level_camera.animate(
+            [
+                {width: '48px', height: '48px', top: '370px', left: '370px'},
+                {width: '120px', height: '64px', top: '354px', left: '300px'}
+            ],
+            {
+                iterations: 1,
+                duration: 420,
+                easing: 'ease-in',
+                fill: 'forwards'
+            }
+        );
+        camera_header.style.display = 'none';
+        camera_options.style.display = 'flex';
+    };
+
+    //save data
+    function saveLevel(){
+        localStorage.setItem("levels",JSON.stringify(levels));
+    }
+    //save current level being built
+    function saveCurrentLevel(){
+        localStorage.setItem("current_level",JSON.stringify(current_level));
+    }
+    //load saved data
+    //load screen
+    function loadScreen(){
+        const saved_id = localStorage.getItem("activeScreen");
+        if(saved_id){
+            const save_element = document.getElementById(saved_id);
+            showScreen(save_element);
+        }else{
+            showScreen(start_window);
+        }
+    }
+    //load level
+    function loadSavedLevels(){
+        const saved = localStorage.getItem("levels");
+        if(saved){
+            levels = JSON.parse(saved);
+        }
+    }
+    //delete level
+    function deleteSavedLevel(id){
+        levels = levels.filter(level => level.id !== id);
+
+        //if current level is deleted say bye bye forever
+        if(current_level && current_level.id === id){
+            current_level = null;
+            localStorage.removeItem("current_level");
+            level_nav_name.textContent = "";
+        }
+        //update local storage
+        saveLevel();
+        //reresh UI
+        renderSavedLevels();
+    }
+    //load current level
+    function loadCurrentLevel(){
+        const saved = localStorage.getItem("current_level");
+        if(saved){
+            current_level = JSON.parse(saved);
+        }
+    }
+
+    window.onload = () =>{
+        loadSavedLevels();
+        loadCurrentLevel();
+        loadScreen();
+        if(current_level){
+            renderLevelName(current_level);
+        }
+        renderSavedLevels();
+    };
+</script>

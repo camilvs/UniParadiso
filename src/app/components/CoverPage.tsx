@@ -1,12 +1,14 @@
 import { Gamepad2 } from 'lucide-react';
 import { Button } from "./ui/button";
+import { useNavigate } from 'react-router-dom';
 
-interface CoverPageProps {
-  onPlay: () => void;
-  onAboutUs: () => void;
-}
+// interface CoverPageProps {
+//   onPlay: () => void;
+//   onAboutUs: () => void;
+// }
 
-export function CoverPage({ onPlay, onAboutUs }: CoverPageProps) {
+export function CoverPage(/*{ onPlay, onAboutUs }: CoverPageProps*/) {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-purple-900 via-indigo-900 to-black relative overflow-hidden">
       {/* Animated background grid */}
@@ -49,7 +51,7 @@ export function CoverPage({ onPlay, onAboutUs }: CoverPageProps) {
         </div>
 
         <Button
-          onClick={onPlay}
+          onClick={() => navigate('/auth')}
           size="lg"
           className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-['Press_Start_2P'] text-lg px-12 py-8 border-4 border-white shadow-[0_8px_0_rgba(0,0,0,0.3)] hover:shadow-[0_4px_0_rgba(0,0,0,0.3)] hover:translate-y-1 transition-all animate-pulse"
         >
@@ -59,7 +61,7 @@ export function CoverPage({ onPlay, onAboutUs }: CoverPageProps) {
 
         <div className="mt-6">
           <button
-            onClick={onAboutUs}
+            onClick={() => navigate('/landing')}
             className="text-cyan-300 hover:text-cyan-100 font-['VT323'] text-2xl underline transition-colors"
           >
             ABOUT US

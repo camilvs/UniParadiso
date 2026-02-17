@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { User, Mail, Lock, ArrowLeft } from 'lucide-react';
 import { Button } from './ui/button';
+import { useNavigate } from 'react-router-dom';
 
-interface AuthPageProps {
-  onBack: () => void;
-  onLoginSuccess: () => void;
-}
+// interface AuthPageProps {
+//   onBack: () => void;
+//   onLoginSuccess: () => void;
+// }
 
-export function AuthPage({ onBack, onLoginSuccess }: AuthPageProps) {
+export function AuthPage(/*{ onBack, onLoginSuccess }: AuthPageProps*/) {
+  const navigate = useNavigate();
+
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,7 +21,7 @@ export function AuthPage({ onBack, onLoginSuccess }: AuthPageProps) {
     // Handle authentication logic here
     console.log(isLogin ? 'Logging in...' : 'Signing up...');
     // Simulate successful login/signup and navigate to game menu
-    onLoginSuccess();
+    navigate('/game-menu');
   };
 
   return (
@@ -53,7 +56,7 @@ export function AuthPage({ onBack, onLoginSuccess }: AuthPageProps) {
       <div className="relative z-10 w-full max-w-md px-6">
         {/* Back button */}
         <button
-          onClick={onBack}
+          onClick={() => navigate('/')}
           className="mb-6 flex items-center gap-2 text-cyan-300 hover:text-cyan-100 font-['VT323'] text-xl transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />

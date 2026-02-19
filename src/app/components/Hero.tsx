@@ -65,7 +65,7 @@ export function Hero(/*{ onBackToCover }: HeroProps*/) {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
           <Button 
-            onClick={() => navigate('/game-play')}
+            onClick={() => navigate('/auth')}
             size="lg" 
             className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-['Press_Start_2P'] text-sm px-8 py-6 border-4 border-white shadow-[0_8px_0_rgba(0,0,0,0.3)] hover:shadow-[0_4px_0_rgba(0,0,0,0.3)] hover:translate-y-1 transition-all"
           >

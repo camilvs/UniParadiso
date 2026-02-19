@@ -12,7 +12,7 @@ import { AuthPage } from './components/AuthPage';
 import { GameMenu } from './components/GameMenu';
 import { GamePlay } from './components/GamePlay';
 import { SinglePlayMenu } from './components/SinglePlayMenu';
-
+import { AdminLevelCreate } from './components/AdminLevelCreate';
 export default function App() {
   return (
     <Routes>
@@ -21,6 +21,7 @@ export default function App() {
       <Route path="/game-menu" element={<GameMenu />} />
       <Route path="/game-play" element={<GamePlay />} />
       <Route path="/single-play-menu" element={<SinglePlayMenu />} />
+      <Route path="/admin-level-create" element={<AdminLevelCreate />} />
 
         {/* Landing page with features and about the game */}
       <Route path="/landing" element={

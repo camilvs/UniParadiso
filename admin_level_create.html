@@ -208,7 +208,7 @@
                 </div>
                 <div id="create_level_asset_nav" style="display: flex; flex-direction: row; width: 98%; height: 32px; justify-content: space-evenly; background-color: whitesmoke; margin-left: 8px; margin-top: 4px;">
                     <div id="terrain_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Terrain</div>
-                    <div id="ground_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Ground</div>
+                    <div id="tile_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Tiles</div>
                     <div id="NPC_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">NPC</div>
                     <div id="chest_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Chest</div>
                     <div id="enemy_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Enemies</div>
@@ -216,7 +216,7 @@
                 </div>
             </div>
             <div id="create_level_holder" style="display: flex; flex-direction: row;">
-                <div id="create_level_preview" style=" width: 98%; height: 600px; border: 1px solid black; margin-left: 8px; margin-top: 2px; perspective: 800px; overflow: hidden;">
+                <div id="create_level_preview" style=" width: 98%; height: 600px; border: 1px solid black; margin-left: 8px; margin-top: 2px; perspective: 800px; overflow: hidden; background-color: #222;">
                     <!---World goes here-->
                 </div>
             </div>
@@ -234,6 +234,7 @@
                     <div id="close_camera" style="background-color: #585858; color: ghostwhite">close</div>
                 </div>
             </div>
+            <div id="asset_preview" style="width: 848px; height: 380px; border: 1px solid black; position: relative; top: -34px;  display: flex; flex-wrap: wrap; overflow-y: scroll; background-color: #222;"></div>
         </div>
     </body>
 </html>
@@ -293,6 +294,10 @@
     var camera_header = document.getElementById('camera_header');
     var camera_options = document.getElementById('camera_options');
     var close_camera = document.getElementById("close_camera");
+    //creator nav
+    var tile_asset = document.getElementById('tile_asset');
+    //asset preview
+    var asset_preview = document.getElementById('asset_preview');
     //screen array
     var screens = [start_window, level_stats, level_create_screen,load_level_screen];
     create_new_level.onclick = function(){
@@ -437,33 +442,137 @@
         level_nav_name.textContent = level.name+" Size:"+level.size;
     }
     //render level dimensions 
-    var cube = document.createElement('div');
-    create_level_preview.appendChild(cube);
-    Object.assign(cube.style,{ width: "200px", height: "200px", position: 'relative', transformStyle: 'preserve-3D', top: '300px'});
-    //front
-    //face back
-    var face_back = document.createElement('div');
-    cube.appendChild(face_back);
-    Object.assign(face_back.style,{transform: 'rotateY(180deg) translateZ(224px)' ,position: 'absolute', width: '642px', height: '434px', backgroundColor: 'rgba( 0, 0, 0, 0.4)', top: '-217px', left: '122px',flexDirection: 'row' });
-    //face left
-    var face_left = document.createElement('div');
-    cube.appendChild(face_left);
-    Object.assign(face_left.style,{transform: 'rotateY(-90deg) translateZ(54px)', backgroundColor: 'rgba(255, 0, 0, 0.4)', position: 'absolute', width: '452px', height: '512px', top: '-256px', left: '-50px',flexDirection: 'row'});
-    //right
-    var face_right = document.createElement('div');
-    cube.appendChild(face_right);
-    Object.assign(face_right.style,{transform: 'rotateY(90deg) translateZ(54px)', position: 'absolute', backgroundColor: 'rgba(0, 255, 0, 0.4)', width: '460px', height: '436px',  left: '482px', top: '-218px',flexDirection: 'row'});
-    var face_top = document.createElement('div');
-    cube.appendChild(face_top);
-    Object.assign(face_top.style,{transform: 'rotateY(180deg) rotateX(90deg) translateZ(440px)', backgroundColor: 'violet', width: '640px', height: '448px', dislay: 'flex', left: '124px', position: 'absolute', flexDirection: 'row'});
-    var face_bottom = document.createElement('div');
-    cube.appendChild(face_bottom);
-    Object.assign(face_bottom.style,{transform:'rotateY(180deg) rotateX(90deg) translateZ(8px)', backgroundColor: 'blue', position: 'absolute', width: '640px', height: '448px', display: 'flex', left: '124px', flexDirection: 'row'});
-    var tiles = 42;
-    tiles.forEach(tile=>{
-        var t_set = document.createElement('div');
-        face_bottom.appendChild(t_set); 
-    });
+    //tile floor
+// Tile floor constants
+const TILE = 120;
+const COLS = 5;
+const ROWS = 5;
+
+const ROOM_WIDTH = TILE * COLS;   // 600
+const ROOM_HEIGHT = TILE * ROWS;  // 480
+const ROOM_DEPTH = ROOM_WIDTH;    // 600
+
+var cube = document.createElement('div');
+create_level_preview.appendChild(cube);
+
+// Cube Container
+Object.assign(cube.style, {
+    width: ROOM_WIDTH + 'px',
+    height: ROOM_HEIGHT + 'px',
+    position: 'relative',
+    transformStyle: 'preserve-3d',
+    margin: '0 auto',
+    transform: 'translateZ(0px)', // Adjusted to keep base perspective stable
+    top: '-500px' // Kept as requested for clickability
+});
+
+// Helper for faces to reduce repetition
+const faceBase = {
+    position: 'absolute',
+    backgroundColor: '#222',
+    opacity: 1,
+    backgroundImage: 'url(./images/tile0.png)',
+    backgroundSize: TILE + 'px'
+};
+
+// 1. Back Wall (Perpendicular to Depth)
+var face_back = document.createElement('div');
+face_back.id='face_back';
+cube.appendChild(face_back);
+Object.assign(face_back.style, faceBase, {
+    width: ROOM_WIDTH + 'px',
+    height: '480px',
+    // Half of ROOM_DEPTH (600/2)
+    transform: `rotateY(180deg) translateZ(${ROOM_DEPTH / 2}px)`,
+    top: '510px'
+});
+
+// 2. Left Wall (Perpendicular to Width)
+var face_left = document.createElement('div');
+face_left.id='face_left';
+cube.appendChild(face_left);
+Object.assign(face_left.style, faceBase, {
+    width: ROOM_DEPTH + 'px',
+    height: '480px',
+    left: '0px',
+    // Half of ROOM_WIDTH (600/2)
+    transform: `rotateY(-90deg) translateZ(${ROOM_WIDTH / 2}px)`,
+    top: '510px'
+});
+
+// 3. Right Wall (Perpendicular to Width)
+var face_right = document.createElement('div');
+face_right.id='face_right';
+cube.appendChild(face_right);
+Object.assign(face_right.style, faceBase, {
+    width: ROOM_DEPTH + 'px',
+    height: '480px',
+    // Removed the '13px' left offset to ensure perfect closure
+    left: '60px', 
+    transform: `rotateY(90deg) translateZ(240px)`,
+    top: '510px'
+});
+
+// 4. Floor (Perpendicular to Height)
+var face_bottom = document.createElement('div');
+face_bottom.id='face_bottom';
+cube.appendChild(face_bottom);
+Object.assign(face_bottom.style, faceBase, {
+    width: ROOM_WIDTH + 'px',
+    height: ROOM_HEIGHT + 'px', // Should be DEPTH for a floor
+    top: '300px', // Offset for height difference
+    transform: `rotateX(-90deg) translateZ(390px)`
+});
+
+// 5. Ceiling (Perpendicular to Height)
+var face_top = document.createElement('div');
+face_top.id='face_top';
+cube.appendChild(face_top);
+Object.assign(face_top.style, faceBase, {
+    width: ROOM_WIDTH + 'px',
+    height: ROOM_HEIGHT + 'px',
+    top: '300px',
+    transform: `rotateX(-90deg) translateZ(0px)`
+});
+    //makee grid funtion
+    function makeGrid(face, cols, rows, tileSize){
+        Object.assign(face.style,{
+            display: 'grid', 
+            gridTemplateColumns : `repeat(${COLS}, ${TILE}px)`,
+            gridTemplateRows: `repeat(${ROWS}, ${TILE}px)`
+        });
+        for(let i = 0; i <cols * rows; i++){
+            const tile = document.createElement('div');
+            tile.classList.add('tile');
+
+            Object.assign(tile.style,{
+                width: tileSize + "px",
+                height: tileSize + "px",
+                boxSizing: "border-box",
+                // border: '1px solid rgba(0, 0, 0, 0.2)'
+            });
+            face.appendChild(tile);
+        }
+        //hover to highlight
+        face.addEventListener('mouseover', function(e){
+            if(e.target.classList.contains('tile')){
+                e.target.style.backgroundColor = "rgba(255,255,0,0.4)";
+            }
+        });
+        face.addEventListener('mouseout',function(e){
+            if(e.target.classList.contains('tile')){
+                e.target.style.backgroundColor='';
+            }
+        });
+       
+
+    }
+    //set up grid
+    makeGrid(face_back, COLS, ROWS, TILE);
+    makeGrid(face_left, COLS, ROWS, TILE);
+    makeGrid(face_right, COLS, ROWS, TILE);
+    makeGrid(face_top, COLS, ROWS, TILE);
+    makeGrid(face_bottom, COLS, ROWS, TILE);
     //click away function 
     function clickAway(element1,element2){
         element1.addEventListener("click", function(e){
@@ -482,39 +591,60 @@
             }
         });
     }
-    //camera on hover
-    create_level_camera.onclick = function(){
-        create_level_camera.animate(
-            [
-                {width: '48px', height: '48px', top: "4px", left: '848px'},
-                {width: '120px', height: '64px', top: '4px', left: '776px'}
-            ],
-            {
-                iterations: 1,
-                duration: 420,
-                easing: 'ease-in',
-                fill: 'forwards'
-            }
-        );
-        camera_header.style.display = 'none';
-        camera_options.style.display = 'flex';
-    };
-    close_camera.onclick = function(){
-        camera_header.style.display = 'flex';
-        camera_options.style.display = 'none';
-        create_level_camera.animate(
-            [
-                {width: '120px', height: '64px', top: '4px', left: '776px'},
-                {width: '48px', height: '48px', top: "4px", left: '848px'}
-            ],
-            {
-                iterations: 1,
-                duration: 420,
-                easing: 'ease-in',
-                fill: 'forwards'
-            }
-        );
-    };
+    //tile asset on click
+    const total_tiles = 93;
+    let selected_tile = null;
+    asset_preview.addEventListener('click',(e)=>{
+        if(e.target.classList.contains('tile_preview')){
+            //take highlight off other tiles for visual feedback
+            document.querySelectorAll('.tile_preview').forEach(t=>{
+                t.style.outline = 'none';
+            });
+            //highlight selected tile
+            e.target.style.outline = '2px solid yellow';
+
+            selected_tile = e.target.dataset.id;
+            console.log("selected tile:"+selected_tile);
+        }
+    });
+    tile_asset.onclick = () =>{
+        const is_hidden = getComputedStyle(asset_preview).display === 'none';
+        asset_preview.style.display === is_hidden ? 'flex' : 'none';
+    }
+    //change grid background to selected tile background
+    let isPainting = false;
+
+    cube.addEventListener('mousedown', function(e){
+        if(
+            e.target.classList.contains('tile') &&
+            selected_tile !== null
+        ){
+            e.target.style.backgroundImage = `url(./images/tile${selected_tile}.png)`;
+            e.target.style.backgroundSize = `${TILE}px ${TILE}px`;
+        }
+
+        isPainting = true;
+    });
+
+    cube.addEventListener('mouseup', () => {
+        isPainting = false;
+    });
+
+    cube.addEventListener('mouseleave', () => {
+        isPainting = false;
+    });
+
+    cube.addEventListener('mouseover', function(e){
+        if(
+            isPainting &&
+            e.target.classList.contains('tile') &&
+            selected_tile !== null
+        ){
+            e.target.style.backgroundImage = `url(./images/tile${selected_tile}.png)`;
+            e.target.style.backgroundSize = `${TILE}px ${TILE}px`;
+        }
+    });
+
     //save data
     function saveLevel(){
         localStorage.setItem("levels",JSON.stringify(levels));
@@ -563,6 +693,25 @@
             current_level = JSON.parse(saved);
         }
     }
+    //load tiles on startup
+    function generateTiles(){
+        asset_preview.innerHTML = "";
+        for(let i = 0; i < total_tiles; i++){
+            const tile = document.createElement('div');
+            tile.classList.add('tile_preview');
+            //tile id
+            tile.dataset.id = i;
+            tile.style.backgroundImage = `url(./images/tile${i}.png)`;
+            Object.assign(tile.style, {
+                width: '64px',
+                height: '64px',
+                backgroundSize: 'cover',
+                margin: '4px',
+                cursor: 'pointer'
+            });
+            asset_preview.appendChild(tile);
+        }
+    }
 
     window.onload = () =>{
         loadSavedLevels();
@@ -572,5 +721,7 @@
             renderLevelName(current_level);
         }
         renderSavedLevels();
+        generateTiles();
+        
     };
 </script>

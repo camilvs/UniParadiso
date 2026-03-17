@@ -1,0 +1,115 @@
+<html>
+    <head>
+        <title>test level</title>
+    </head>
+    <body>
+        <div id="level_test_screen" style="width: 908px; height: 908px; border: #222 1px solid; display: flex; flex-direction: column; margin: auto; margin-top: 24px;">
+            <div id="level_test_nav" style="width: 98%; height: 72px; border: 1px solid #222; display: flex; flex-direction: column; margin-left: 8px;">
+                <div style="width: 280px; height: 32px; border: solid #222 1px; display: flex; flex-direction: row;">
+                    <div id="level_test_menu" style="background-color: rgb( 87, 50, 114); width: 28px; height: 28px; margin: 2px; border-radius: 3px; cursor: pointer;"></div>
+                    <div id="level_test_level_name" style="position: relative; top: 6px;  left: 12px; width: 240px;"></div>
+                </div>
+            </div>
+            <div id="level_test_level_holder" style="display: flex; flex-direction: column; ">
+                <div id="level_test_preview" style=" width: 98%; height: 600px; border: 1px solid black; margin-left: 8px; margin-top: 2px; perspective: 800px; overflow: hidden; overflow-x: scroll;">
+                    <!--World goes here-->
+                </div>
+                <div id="level_test_controller_dpad" style="position: relative; width: 96px; height: 96px; background-color: #2222225f; border-radius: 96px; display: flex; flex-direction: column; top: -112px; left: 15px;">
+                    <div id="controller_up" style="width: 32px; height: 32px; border: #222 3px outset; border-radius: 32px; position: relative; left: 28px; cursor: pointer; background-color: #222; color: ghostwhite; display: flex; flex-direction: column; text-align: center; justify-content: center;">&#8593</div>
+                    <div style="display: flex; flex-direction: row;">
+                        <div id="controller_left" style="width: 32px; height: 32px; border: #222 3px outset; border-radius: 32px; position: relative; left: 28px; cursor: pointer; background-color: #222; color: ghostwhite; display: flex; flex-direction: column; text-align: center; justify-content: center;">&#8593</div>
+                        <div style="width: 16px; height: 16px; border-radius: 16px; margin: 3px; border: 1px outset #222; background-color: #222;"></div>
+                        <div id="controller_right" style="width: 32px; height: 32px; border: #222 3px outset; border-radius: 32px; position: relative; left: 28px; cursor: pointer; background-color: #222; color: ghostwhite; display: flex; flex-direction: column; text-align: center; justify-content: center;">&#8593</div>
+                    </div>
+                    <div id="controller_up" style="width: 32px; height: 32px; border: #222 3px outset; border-radius: 32px; position: relative; left: 28px; cursor: pointer; background-color: #222; color: ghostwhite; display: flex; flex-direction: column; text-align: center; justify-content: center;">&#8593</div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+  const body = document.getElementById('body');
+  let level_test_screen = document.getElementById('level_test_screen');
+  let level_test_nav = document.getElementById('level_test_nav');
+  let level_test_menu = document.getElementById('level_test_menu');
+  let level_test_level_name = document.getElementById('level_test_level_name');
+  function ensureLevelShape(level){
+    if(!level) return null;
+    level.faces ??= { face_back:[], face_left:[], face_right:[], face_top:[], face_bottom:[] };
+    level.objects = Array.isArray(level.objects) ? level.objects : [];
+    level.npcs    = Array.isArray(level.npcs)    ? level.npcs    : [];
+    return level;
+  }
+
+  window.onload = () => {
+    const rawLevels = localStorage.getItem("levels");
+    const testIdRaw = localStorage.getItem("test_level_id");
+
+    console.log("play_test: raw localStorage keys:", {
+      has_levels: !!rawLevels,
+      test_level_id: testIdRaw
+    });
+
+    if(!rawLevels){
+      console.warn("play_test: No 'levels' found in localStorage.");
+      return;
+    }
+    if(!testIdRaw){
+      console.warn("play_test: No 'test_level_id' found in localStorage.");
+      return;
+    }
+
+    let levels;
+    try {
+      levels = JSON.parse(rawLevels);
+    } catch (e) {
+      console.error("play_test: Failed to JSON.parse(levels):", e);
+      return;
+    }
+
+    const testId = Number(testIdRaw);
+    const level = ensureLevelShape(levels.find(l => Number(l.id) === testId) || null);
+
+    if(!level){
+      console.warn("play_test: Level id not found:", testId);
+      return;
+    }
+
+    //Proof: show what transferred
+    console.log("Transferred Level Object:", level);
+
+    // nice summary (so you don’t have to expand giant arrays every time)
+    const summary = {
+      id: level.id,
+      name: level.name,
+      size: level.size,
+      background: level.background,
+      faces: Object.fromEntries(
+        Object.entries(level.faces).map(([k, arr]) => [k, Array.isArray(arr) ? arr.filter(v => v !== undefined).length : 0])
+      ),
+      objects_count: (level.objects || []).length,
+      npcs_count: (level.npcs || []).length,
+      sample_object: (level.objects || [])[0] || null,
+      sample_npc: (level.npcs || [])[0] || null
+    };
+
+    console.log("✅ Transfer Summary:", summary);
+
+    // let npc_box = document.getElementById('npc_box');
+    // level.npcs.forEach(npc =>{
+    //     npc_box.innerHTML = summary.sample_npc.dialogue;
+    //     Object.assign(npc_box.style,{
+    //         width: '120px',
+    //         height: '120px',
+    //         backgroundImage: `url(./images/npc_${summary.sample_npc.sprite_id}.png)`,
+    //         backgroundPostion: 'center',
+    //         backgroundSize: 'cover'
+    //     });
+    // });
+
+    // body.style.backgroundImage = `url(./images/background${summary.background}.png)`
+    // console.log(summary.npcs_count);
+    level_test_level_name.textContent = summary.name;
+    };
+
+</script>

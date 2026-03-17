@@ -86,7 +86,23 @@
             background-color: #2222222a;
             border: 1px solid black;
         }
+        .scrolling-background {
+    background-repeat: repeat-x;
+    
+    animation: scrollBackground 20s linear infinite;
+    }
 
+        @keyframes scrollBackground {
+        from {
+            background-position: 0 0;
+        }
+        to {
+            background-position: -1000px 0; 
+        }
+    }
+    #create_level_preview{
+        animation: scrollBackground 20s linear infinite;
+    }
     /* Tablets (portrait & landscape) */
 /* @media only screen and (max-width: 768px) {
     .start_window,
@@ -151,14 +167,6 @@
             </div>
             <div id="close_error" class="close_error">CLOSE</div>
         </div>
-        <div id="delete_confirm_holder" style="width: 100%; height: 100%; position: absolute; background-color: rgba(0, 0, 0, 0.42); justify-content: center; align-items: center; display: none; flex-direction: column;">
-            <div id="confirm_delete" style="width: 240px; height: 240px; border: 1px solid black; background-color: crimson; border-radius: 12px; display: flex; flex-direction: column;">
-                <div style="color: ghostwhite; text-align: center; margin-top: 12px;">Are you sure?<br>Delete Level:</div>
-                <div id="delete_level_stats" style="text-align: center; color: ghostwhite;"></div>
-                <div id="delete_confirm_no" class="stat_option" style="text-align: center; margin: 12px 0px 12px 0px;">No</div>
-                <div id="delete_confirm_yes" class="stat_option" style="text-align: center;">Yes</div>
-            </div>
-        </div>
         <div id="start_window" class="start_window">
             <div id="create_new_level" class="create_options">Create New</div>
             <div id="load_level" class="create_options">Load</div>
@@ -207,8 +215,9 @@
                     <div  id="level_nav_name" style="position: relative; top: 6px; left: 12px; width: 240px;"></div>
                 </div>
                 <div id="create_level_asset_nav" style="display: flex; flex-direction: row; width: 98%; height: 32px; justify-content: space-evenly; background-color: whitesmoke; margin-left: 8px; margin-top: 4px;">
-                    <div id="terrain_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Terrain</div>
+                    <div id="background_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Backgrounds</div>
                     <div id="tile_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Tiles</div>
+                    <div id="object_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Objects</div>
                     <div id="NPC_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">NPC</div>
                     <div id="chest_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Chest</div>
                     <div id="enemy_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Enemies</div>
@@ -216,32 +225,241 @@
                 </div>
             </div>
             <div id="create_level_holder" style="display: flex; flex-direction: row;">
-                <div id="create_level_preview" style=" width: 98%; height: 600px; border: 1px solid black; margin-left: 8px; margin-top: 2px; perspective: 800px; overflow: hidden; background-color: #222;">
+                <div id="create_level_preview" style=" width: 98%; height: 600px; border: 1px solid black; margin-left: 8px; margin-top: 2px; perspective: 800px; overflow-y: hidden; background-image: url(./images/background0.png); overflow-x: scroll;">
                     <!---World goes here-->
                 </div>
             </div>
-            <div id="create_level_camera" style="width: 48px; height: 64px; position: relative; background-color: #222; top: 4px; left: 848px; color: white; font-size: 10px; justify-items: center; text-align: center; display: flex; flex-direction: column; justify-content: center; cursor: pointer;">
-                <div id="camera_header" style=" display: flex; flex-direction: column;">camera</div>
-                <div id="camera_options" style="display: none; flex-direction: column;">
-                    <div>UP</div>
-                    <div style="display: flex; flex-direction: row; width: 96px; height: 32px; border: 1px solid white; margin-left: 12px; justify-content: center; ">
-                        <div>left</div>
-                        <div>+</div>
-                        <div>-</div>
-                        <div>right</div>
+            <div id="asset_preview" style="width: 889px; height: 380px; border: 1px solid black; position: relative; top: 0px;  display: flex; flex-wrap: wrap; overflow-y: scroll; background-color: #222;left: 8px; "></div>
+        </div>
+        <div id="asset_editor" style="width: 240px; height: 380px; border: 1px solid black; position: absolute; top: 200px; background-color: ghostwhite; left: 120px; display: none; flex-direction: column;">
+            <div id="asset_header" style="width: 238px; height: 28px; border-bottom: 1px solid grey; margin-left: 1px; font-size: 24px; margin-top: 4px; display: flex; flex-direction: row;">
+                <div id="asset_name" style="height: 28px; width: 222px; cursor: pointer;"></div>
+                <div id="close_asset_editor" style="height: 26px; width: 26px; border: 1px solid; text-align: center; cursor: pointer;">X</div>
+            </div>
+            <div id="asset_display" style="width: 180px; height: 180px; border: 1px solid black; margin: 8px 0px 4px 30px; background-color: aliceblue;"></div>
+            <div style="width: 180px; height: 160px; margin-left: 30px; border: 1px solid black; display: flex; flex-direction: column; justify-content: space-evenly;">
+                <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                    X
+                    <input id="asset_x" type="range" min="-60" max="530">
+                    <output for="asset_x" id="asset_x_output"></output>
+                </div>
+                <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                    Y
+                    <input id="asset_y" type="range" min="528" max="920">
+                    <output for="asset_y" id="asset_y_output"></output>
+                </div>
+                <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                    Z
+                    <input id="asset_z" type="range" max="400" min="-300">
+                    <output for="asset_z" id="asset_z_output"></output>
+                </div>
+                <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                    Ry
+                    <input id="asset_ry" type="range" max="359" min="0">
+                    <output for="asset_ry" id="asset_ry_output"></output>
+                </div>
+                <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                    Rx
+                    <input id="asset_rx" type="range" max="359" min="0">
+                    <output for="asset_rx" id="asset_rx_output"></output>
+                </div>
+                <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                    Rz
+                    <input id="asset_rz" type="range" max="359" min="0">
+                    <output for="asset_rz" id="asset_rz_output"></output>
+                </div>
+                <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                    SC
+                    <input id="asset_scale" type="range" max="4" min="1" value="1">
+                    <output for="asset_scale" id="asset_scale_output"></output>
+                </div>
+                <div id="delete_object" style="text-align: center; background-color: #222; color: ghostwhite; cursor: pointer">Delete</div>
+            </div>
+        </div>
+        <div id="npc_asset_window" style="width: 254px; height: 442px; position: absolute; top: 0px; background-color: ghostwhite; display: none; flex-direction: column; border: 1px solid black; top: 120px; left: 120px;">
+            <div id="npc_header" style="display: flex; flex-direction: row; height: 28px; width: 250px; border-bottom: grey 1px solid; margin-left: 2px;">
+                <div id="npc_name" style="width: 222px; height: 28px; font-size: 24px; background-color: transparent;"></div>
+                <div id="close_npc_window" style="height: 26px; width: 26px; border: 1px solid; text-align: center; cursor: pointer; display: flex; flex-direction: column; justify-content: center;">X</div>   
+            </div>
+            <div style="width: 410px; height: 124px; border: 1px solid transparent; margin: 4px; display: flex; flex-direction: row;">
+                <div id="npc_preview" style="width: 120px; height: 120px; background-color: aliceblue; border: 1px solid black; margin: 1;"></div>
+                <div id="npc_dialogue_preview" style="width: 120px; height: 120px; background-color: aliceblue; border: 1px solid black; margin: 1;"></div>
+            </div>
+                <div style="width: 250px; height: 120px; border: 1px solid;margin-top: 1px; display: flex; flex-direction: column;">
+                    <div style="font-size: 12px; margin: 3px; border-bottom: #222 1px solid; display: flex; flex-direction: row; width: 242px; height: 20px; justify-content: space-between;">
+                        <div style="margin-top: 3px;">Dialogue Box:</div>
+                        <div id="test_npc" style="background-color: #222; inset: 1px solid black; color: ghostwhite; display: flex; flex-direction: column; text-align: center; justify-content: center; padding: 0px 3px 0px 3px; position: relative; top: -2px; border-radius: 4px; cursor: pointer;">Test</div>
+                        <div style="display: flex; flex-direction: row; position: relative; left: -24px;">
+                            <div id="move_portrait_left" style="background-color: #222; border: inset 1px black; width: 16px; border-radius: 4px; color: ghostwhite; display: flex; flex-direction: column; justify-content: center; text-align: center; position: relative; top: -2px; left: 4px; cursor: pointer;" title="portrait left">&#8592</div>
+                            <div id="move_portrait_up" style="background-color: #222; border: inset 1px black; width: 16px; border-radius: 4px; color: ghostwhite; display: flex; flex-direction: column; justify-content: center; text-align: center; position: relative; top: -2px; left: 6px; cursor: pointer;" title="portrait up">&#8593</div>
+                            <div id="move_portrait_down" style="background-color: #222; border: inset 1px black; width: 16px; border-radius: 4px; color: ghostwhite; display: flex; flex-direction: column; justify-content: center; text-align: center; position: relative; top: -2px; left: 8px; cursor: pointer;" title="portrait down">&#8595</div>
+                            <div id="move_portrait_right" style="background-color: #222; border: inset 1px black; width: 16px; border-radius: 4px; color: ghostwhite; display: flex; flex-direction: column; justify-content: center; text-align: center; position: relative; top: -2px; left: 10px; cursor: pointer;" title="portrait right">&#8594</div>
+                            <div id="move_portrait_flip" style="background-color: #222; border: inset 1px black; width: 21px; border-radius: 4px; color: ghostwhite; display: flex; flex-direction: column; justify-content: center; text-align: center; position: relative; top: -2px; left: 12px; cursor: pointer;" title="portrait right">Flip</div>
+                        </div>
                     </div>
-                    <div>down</div>
-                    <div id="close_camera" style="background-color: #585858; color: ghostwhite">close</div>
+                    <textarea id="npc_dialogue" style="height: 98px; background-color: #222; color: ghostwhite;"></textarea>
+                </div>
+                <div style="width: 254px; height: 174px; border: 1px solid transparent; margin-left: 0px; display: flex; flex-direction: column; flex-wrap: wrap;">
+                    <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                        X
+                        <input id="npc_x" type="range" min="-60" max="530">
+                        <output for="npc_x" id="npc_x_output"></output>
+                    </div>
+                    <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                        Y
+                        <input id="npc_y" type="range" min="528" max="920">
+                        <output for="npc_y" id="npc_y_output"></output>
+                    </div>
+                    <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                        Z
+                        <input id="npc_z" type="range" max="400" min="-300">
+                        <output for="npc_z" id="npc_z_output"></output>
+                    </div>
+                    <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                        Ry
+                        <input id="npc_ry" type="range" max="359" min="0">
+                        <output for="npc_ry" id="npc_ry_output"></output>
+                    </div>
+                    <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                        Rx
+                        <input id="npc_rx" type="range" max="359" min="0">
+                        <output for="npc_rx" id="npc_rx_output"></output>
+                    </div>
+                    <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                        Rz
+                        <input id="npc_rz" type="range" max="359" min="0">
+                        <output for="npc_rz" id="npc_rz_output"></output>
+                    </div>
+                    <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                        SC
+                        <input id="npc_scale" type="range" max="4" min="1" value="1">
+                        <output for="npc_scale" id="npc_scale_output"></output>
+                    </div>
+                    <div id="delete_npc" style="text-align: center; background-color: #222; color: ghostwhite; cursor: pointer">Delete</div>
+            </div>
+        </div>
+        <div id="npc_dialogue_test_window" style="width: 420px; height: 164px; position: absolute; top: 12px; left: 0px; background-color: ghostwhite; border: #222 1px solid; display: none; flex-direction: column;">
+            <div id="text_blinker" style ="width: 24px; height: 24px; border-radius: 28px; border: 3px outset white; background-color: #222; position: absolute; left: 376px; top: 126px; cursor: pointer;" title="Replay"></div>
+            <div style="width: 416px; height: 28px; background-color: transparent; margin-left: 2px; border-bottom: 1px solid grey; display: flex; flex-direction: row;">
+                <div id="npc_dialogue_header" style="width: 388px; height: 28px; background-color: transparent;"></div>
+                <div id="close_dialogue_test_window" style="height: 26px; width: 26px; border: 1px solid; text-align: center; cursor: pointer; display: flex; flex-direction: column; justify-content: center;">X</div>
+            </div>
+            <div style="display: flex; flex-direction: row;">
+                <div id="test_npc_portrait" style="width: 120px; height: 120px; border: black 1px solid; position: relative; left: 8px; top: 8px; background-color: aliceblue; margin-right: 8px;"></div>
+                <div id="test_npc_dialogue_box" style="width: 276px; height: 116px; margin: 8px; background-color: #222; color: ghostwhite; padding: 4px;"></div>
+            </div>   
+        </div>
+        <div id="chest_asset_window" style="width: 296px; height: 420px; border: 1px solid black; position: absolute; top: 0px; background-color: ghostwhite; display: flex; flex-direction: column;">
+            <div id="chest_asset_header" style="width: 292px; height: 28px; display: flex; flex-direction: row; border-bottom: 1px grey solid;">
+                <div id="asset_chest_header" style="width: 272px; height: 28px; background-color: transparent; cursor: pointer;" title="drag to move"></div>
+                <div style="width: 26px; height: 26px; border: 1px solid black; justify-content: center; display: flex; flex-direction: column; text-align: center; cursor: pointer;">X</div>
+            </div>
+            <div style="height: 120px; width: 276px; margin: 4px 0px 2px 1px; display: flex; flex-direction: row;">
+                <div id="chest_image_preview" style="width: 120px; height: 120px; background-color: aliceblue; border: #222 1px solid; margin-right: 4px;"></div>
+                <div style="display: flex; flex-direction: column;">
+                    <div style="display: flex; flex-direction: row; margin: 4px 0px 8px 0px;">
+                        <label>X</label>
+                        <input type="range" id="chest_x" >
+                    </div>
+                    <div style="display: flex; flex-direction: row;  margin: 24px 0px 8px 0px;">
+                        <label>Y</label>
+                        <input type="range" id="chest_y">
+                    </div>
+                    Chest Style:<br>
+                    <select id="chest_style">
+                        <option value="">Choose Style</option>
+                    </select>
                 </div>
             </div>
-            <div id="asset_preview" style="width: 848px; height: 380px; border: 1px solid black; position: relative; top: -34px;  display: flex; flex-wrap: wrap; overflow-y: scroll; background-color: #222;"></div>
+            <div style="width: 292px; height: 120px; border: 1px solid transparent; display: flex; flex-direction: column; margin-top: 4px;">
+                <div  id="item_name_preview" style="text-align: left; margin-left: 4px; font-size: 14px;">Contents:</div>
+                <div style="display: flex; flex-direction: row; margin-bottom: 4px;">
+                    <div id="item_image_preview" style="width: 64px; height: 64px; border: 1px solid black; margin-right: 3px;"></div>
+                    <div style="width: 240px; height: 64px; border: 1px solid black; display: flex; flex-direction: column;">
+                        <div id="stat_display" style="height: 16px; width: 226px; background-color: #222; justify-content: space-evenly; display: flex; flex-direction: row;">
+                            <div style="display: flex; flex-direction: row;" title="Defense">
+                                <div style="width: 12px; height: 12px; border-radius: 12px; background-color: red; margin: 2px;"></div>
+                                <div id="content_def_stat" style="color: ghostwhite; font-size: 16px; width: 16px;"></div>
+                            </div>
+                            <div style="display: flex; flex-direction: row;" title="Restoration">
+                                <div style="width: 12px; height: 12px; border-radius: 12px; background-color: orange; margin: 2px;"></div>
+                                <div id="content_res_stat" style="color: ghostwhite; font-size: 16px; width: 16px;"></div>
+                            </div>
+                            <div style="display: flex; flex-direction: row;" title="Attack">
+                                <div style="width: 12px; height: 12px; border-radius: 12px; background-color: yellow; margin: 2px;"></div>
+                                <div id="content_atk_stat" style="color: ghostwhite; font-size: 16px; width: 16px;"></div>
+                            </div>
+                            <div style="display: flex; flex-direction: row;" title="Evasion">
+                                <div style="width: 12px; height: 12px; border-radius: 12px; background-color: green; margin: 2px;"></div>
+                                <div id="content_eva_stat" style="color: ghostwhite; font-size: 16px; width: 16px;"></div>
+                            </div>
+                            <div style="display: flex; flex-direction: row;" title="Special Attack">
+                                <div style="width: 12px; height: 12px; border-radius: 12px; background-color: blue; margin: 2px;"></div>
+                                <div id="content_SPatk_stat" style="color: ghostwhite; font-size: 16px; width: 16px;"></div>
+                            </div>
+                            <div style="display: flex; flex-direction: row;" title="Dexterity">
+                                <div style="width: 12px; height: 12px; border-radius: 12px; background-color: indigo; margin: 2px;"></div>
+                                <div id="content_dex_stat" style="color: ghostwhite; font-size: 16px; width: 16px;"></div>
+                            </div> 
+                            <div style="display: flex; flex-direction: row;" title="Special Defense">
+                                <div style="width: 12px; height: 12px; border-radius: 12px; background-color: violet; margin: 2px;"></div>
+                                <div id="content_SPdef_stat" style="color: ghostwhite; font-size: 16px; width: 16px;"></div>
+                            </div>
+                        </div>
+                        <div id="content_desc" style="overflow-y: scroll;"></div>
+                    </div>
+                </div>
+                    <div id="contents_nav" style="width: 292px; height: 36px; background-color: #222; margin-left: 1px; display: flex; flex-direction: row; justify-content: space-evenly;">
+                        <div id="nav_items" style="width: 24px; height: 24px; border: 1px solid white; border-radius: 4px; margin: 6px; cursor: pointer; color: ghostwhite; font-size: 12px; background-image: url(./images/icon_0.png); background-position: center; background-size: contain;" title="Items"></div>
+                        <div id="nav_equipments" style="width: 24px; height: 24px; border: 1px solid white; border-radius: 4px; margin: 6px; cursor: pointer; color: ghostwhite; font-size: 12px; background-image: url(./images/icon_1.png); background-position: center; background-size: contain;" title="Equipment"></div>
+                        <div id="nav_weapons" style="width: 24px; height: 24px; border: 1px solid white; border-radius: 4px; margin: 6px; cursor: pointer; color: ghostwhite; font-size: 12px; background-image: url(./images/icon_2.png); background-position: center; background-size: contain;" title="Weapons"></div>
+                        <div id="nav_skills" style="width: 24px; height: 24px; border: 1px solid white; border-radius: 4px; margin: 6px; cursor: pointer; color: ghostwhite; font-size: 12px; background-image: url(./images/icon_3.png); background-position: center; background-size: contain;" title="Skills"></div>
+                        <div id="nav_manifests" style="width: 24px; height: 24px; border: 1px solid white; border-radius: 4px; margin: 6px; cursor: pointer; color: ghostwhite; font-size: 12px; background-image: url(./images/icon_4.png); background-position: center; background-size: contain;" title="Manifest"></div>
+                        <div id="nav_keys" style="width: 24px; height: 24px; border: 1px solid white; border-radius: 4px; margin: 6px; cursor: pointer; color: ghostwhite; font-size: 12px; background-image: url(./images/icon_5.png); background-position: center; background-size: contain;" title="Keys"></div>
+                        <div id="nav_keys" style="width: 24px; height: 24px; border: 1px solid white; border-radius: 4px; margin: 6px; cursor: pointer; color: ghostwhite; font-size: 12px; background-image: url(./images/icon_6.png); background-position: center; background-size: contain;" title="Materials"></div>
+                    </div>
+                    
+                </div>
+                <div id="content_asset_holder" style="width: 292px; height: 136px; background-color: aliceblue; margin-left: 2px; overflow-y: scroll;"></div>
+        </div>
+        <div id="delete_confirm_holder" style="width: 100%; height: 100%; position: absolute; background-color: rgba(0, 0, 0, 0.42); justify-content: center; align-items: center; display: none; flex-direction: column; top: 0px;">
+            <div id="confirm_delete" style="width: 240px; height: 240px; border: 1px solid black; background-color: crimson; border-radius: 12px; display: none; flex-direction: column;">
+                <div style="color: ghostwhite; text-align: center; margin-top: 12px;">Are you sure?<br>Delete Level:</div>
+                <div id="delete_level_stats" style="text-align: center; color: ghostwhite;"></div>
+                <div id="delete_confirm_no" class="stat_option" style="text-align: center; margin: 12px 0px 12px 0px;">No</div>
+                <div id="delete_confirm_yes" class="stat_option" style="text-align: center;">Yes</div>
+            </div>
+            <div id="confirm_object_delete" style="width: 240px; height: 240px; border: 1px solid black; background-color: crimson; border-radius: 12px; display: none; flex-direction: column;">
+                <div style="color: ghostwhite; text-align: center; margin-top: 12px;">Are you sure?<br>Delete Object:</div>
+                <div id="delete_object_stats" style="text-align: center; color: ghostwhite;"></div>
+                <div id="delete_object_no" class="stat_option" style="text-align: center; margin: 12px 0px 12px 0px;">No</div>
+                <div id="delete_object_yes" class="stat_option" style="text-align: center;">Yes</div>
+            </div>
+            <div id="confirm_npc_delete" style="width: 240px; height: 240px; border: 1px solid black; background-color: crimson; border-radius: 12px; display: none; flex-direction: column;">
+                <div style="color: ghostwhite; text-align: center; margin-top: 12px;">Are you sure?<br>Delete NPC:</div>
+                <div id="delete_npc_stats" style="text-align: center; color: ghostwhite;"></div>
+                <div id="delete_npc_no" class="stat_option" style="text-align: center; margin: 12px 0px 12px 0px;">No</div>
+                <div id="delete_npc_yes" class="stat_option" style="text-align: center;">Yes</div>
+            </div>
         </div>
     </body>
 </html>
 <script>
+    const TILE = 120;
     //level array
     levels = [
-        {id: 1, name: "test", size: "room", desc: "This is a test"},
+        {id: 1, name: "test", size: "room", desc: "This is a test",
+            background: 3,
+            faces: {
+                face_back: [],
+                face_left: [],
+                face_right: [],
+                face_top: [],
+                face_bottom: [],
+            },
+            objects: [],
+            npcs: [],
+        }
     ];
     var level_pending_delete = null;
     //screens
@@ -289,6 +507,9 @@
     var delete_confirm_yes = document.getElementById('delete_confirm_yes');
     //level preview
     var create_level_preview = document.getElementById('create_level_preview');
+    var cube = document.createElement('div');
+    create_level_preview.appendChild(cube);
+    cube_sides_array = [];
     //level camera
     var create_level_camera = document.getElementById('create_level_camera');
     var camera_header = document.getElementById('camera_header');
@@ -296,8 +517,95 @@
     var close_camera = document.getElementById("close_camera");
     //creator nav
     var tile_asset = document.getElementById('tile_asset');
+    var background_asset = document.getElementById('background_asset');
+    let object_asset = document.getElementById('object_asset');
     //asset preview
     var asset_preview = document.getElementById('asset_preview');
+    //asset editor
+    let asset_editor = document.getElementById('asset_editor');
+    let asset_name = document.getElementById('asset_name');
+    asset_name.title = 'drag to move';
+    let close_asset_editor = document.getElementById('close_asset_editor');
+    let asset_display = document.getElementById('asset_display');
+    let asset_x = document.getElementById('asset_x');
+    let asset_x_output = document.getElementById('asset_x_output');
+    let asset_y_output = document.getElementById('asset_y_output');
+    let asset_z_output = document.getElementById('asset_z_output');
+    let asset_ry = document.getElementById('asset_ry');
+    let asset_ry_output = document.getElementById('asset_ry_output');
+    let asset_rx = document.getElementById('asset_rx');
+    let asset_rx_output = document.getElementById('asset_rx_output');
+    let asset_rz = document.getElementById('asset_rz');
+    let asset_rz_output = document.getElementById('asset_rz_output');
+    let asset_scale = document.getElementById('asset_scale');
+    let asset_scale_output = document.getElementById('asset_scale_output');
+    let delete_object = document.getElementById('delete_object');
+    //object delete
+    let confirm_object_delete = document.getElementById('confirm_object_delete');
+    let delete_object_stats = document.getElementById('delete_object_stats');
+    let delete_object_no = document.getElementById('delete_object_no');
+    let delete_object_yes = document.getElementById('delete_object_yes');
+    //npc assets
+    let NPC_asset = document.getElementById('NPC_asset');
+    let npc_asset_window = document.getElementById('npc_asset_window');
+    let npc_header = document.getElementById('npc_header');
+    let npc_name = document.getElementById('npc_name');
+    let close_npc_window = document.getElementById('close_npc_window');
+    let npc_preview = document.getElementById('npc_preview');
+    let npc_dialogue_preview = document.getElementById('npc_dialogue_preview');
+    let npc_dialogue = document.getElementById('npc_dialogue');
+    let test_npc = document.getElementById('test_npc');
+    //npc portrait editor
+    let move_portrait_left = document.getElementById('move_portrait_left');
+    let move_portrait_up = document.getElementById('move_portrait_up');
+    let move_portrait_down = document.getElementById('move_portrait_down');
+    let move_portrait_right = document.getElementById('move_portrait_right');
+    let move_portrait_flip = document.getElementById('move_portrait_flip');
+    //npc editor
+    let npc_x = document.getElementById('npc_x');
+    let npc_x_output = document.getElementById('npc_x_output');
+    let npc_y = document.getElementById('npc_y');
+    let npc_y_output = document.getElementById('npc_y_output');
+    let npc_z = document.getElementById('npc_z');
+    let npc_z_output = document.getElementById('npc_z_output');
+    let npc_ry = document.getElementById('npc_ry');
+    let npc_ry_output = document.getElementById('npc_ry_output');
+    let npc_rx = document.getElementById('npc_rx');
+    let npc_rx_output = document.getElementById('npc_rx_output');
+    let npc_rz = document.getElementById('npc_rz');
+    let npc_rz_output = document.getElementById('npc_rz_output');
+    let npc_scale = document.getElementById('npc_scale');
+    let npc_scale_output = document.getElementById('npc_scale_output');
+    //npc test
+    let npc_dialogue_test_window = document.getElementById('npc_dialogue_test_window');
+    let text_blinker = document.getElementById('text_blinker');
+    let npc_dialogue_header = document.getElementById('npc_dialogue_header');
+    let close_dialogue_test_window = document.getElementById('close_dialogue_test_window');
+    let test_npc_portrait = document.getElementById('test_npc_portrait');
+    let test_npc_dialogue_box = document.getElementById('test_npc_dialogue_box');
+    //delete npc
+    let delete_npc = document.getElementById('delete_npc');
+    let confirm_npc_delete = document.getElementById('confirm_npc_delete');
+    let delete_npc_no = document.getElementById('delete_npc_no');
+    let delete_npc_yes = document.getElementById('delete_npc_yes');
+    const npc_amount = 2;
+    //chest editor
+    let chest_asset_window = document.getElementById('chest_asset_window');
+    let chest_asset_header = document.getElementById('chest_asset_header');
+    let chest_image_preview = document.getElementById('chest_image_preview');
+    let chest_x = document.getElementById('chest_x');
+    let chest_y = document.getElementById('chest_y');
+    let chest_style = document.getElementById('chest_style');
+    let item_name_preview = document.getElementById('item_name_preview');
+    let item_image_preview = document.getElementById('item_image_preview');
+    //chest content stat display
+    let content_def_stat = document.getElementById('content_def_stat');
+    let content_res_stat = document.getElementById('content_res_stat');
+    let content_atk_stat = document.getElementById('content_atk_stat');
+    let content_eva_stat = document.getElementById('content_eva_stat');
+    let content_SPatk_stat = document.getElementById('content_SPatk_stat');
+    let content_dex_stat = document.getElementById('content_dex_stat');
+    let content_SPdef_stat = document.getElementById('content_SPdef_stat');
     //screen array
     var screens = [start_window, level_stats, level_create_screen,load_level_screen];
     create_new_level.onclick = function(){
@@ -314,7 +622,9 @@
         showScreen(start_window);
     }
     //pointer on hover array
-    var options_arr = [create_new_level,load_level,exit_level,create_level_input,exit_level_stats, close_error, create_save, create_test, create_exit, create_clear, create_delete, delete_confirm_no, delete_confirm_yes];
+    var options_arr = [create_new_level,load_level,exit_level,create_level_input,exit_level_stats, close_error, create_save, create_test, create_exit, create_clear, create_delete, delete_confirm_no, delete_confirm_yes,delete_object,delete_object_no, delete_object_yes,
+        move_portrait_left, move_portrait_up, move_portrait_down, move_portrait_right, move_portrait_flip,
+    ];
     //hover funtion
     options_arr.forEach(option =>{
         onHover(option,"yellow","white");
@@ -344,25 +654,33 @@
             id: levels.length + 1,
             name: level_name_input.value,
             size: level_size_input.value,
-            desc: level_desciption_input.value
+            desc: level_desciption_input.value,
+            background: null,
+            faces: {
+                face_back: [],
+                face_left: [],
+                face_right: [],
+                face_top: [],
+                face_bottom: [],
+            },
+            objects:[],
+            npcs: [],
         };
         //push new level values into levels array
         levels.push(newLevel);
         //saves level array
         saveLevel();
         current_level = newLevel;
+        ensureLevelShape(current_level);
         saveCurrentLevel();
         renderLevelName(current_level);
+        // clearRoomVisuals();
         showScreen(level_create_screen);
     });
 
     //open level create menu
     // open menu
     clickAway(level_create_menu,level_create_options);
-
-    create_exit.onclick = function(){
-        showScreen(start_window);
-    }    
     //functions
     //hover on an element and change the color, off of hover the color changes back
     function onHover(element,color1,color2){
@@ -388,7 +706,7 @@
             levels.forEach(level=>{
             var levels_box = document.createElement('div');
             Object.assign(levels_box.style,{
-                width:'255px', height: 'auto',borderBottom: '1px solid black', display: 'flex', flexDirection: 'column', marginBotton: '4px'
+                width:'255px', height: 'auto',borderBottom: '1px solid black', display: 'flex', flexDirection: 'column', marginBottom: '4px'
             });
             levels_box.innerHTML = level.name+"| size: "+level.size+"|<br>Description: "+level.desc;
             load_level_holder.appendChild(levels_box);
@@ -402,8 +720,6 @@
             Object.assign(load_level_button.style,{width: '64px', height: '32px', color: 'ghostwhite', backgroundColor: '#222', textAlign: 'center', cursor: 'pointer'});
             load_level_button.innerHTML = "Load";
             onHover(load_level_button,'yellow','white');
-            load_level_button.onclick = function(){
-            }
             //delete button
             var delete_level_button = document.createElement('div');
             load_button_holder.appendChild(delete_level_button);
@@ -419,6 +735,8 @@
             //loading levels stuff
             load_level_button.onclick = function(){
                 current_level = level;
+                buildLevel(current_level);
+                loadRoomVisuals(current_level);
                 saveCurrentLevel();
                 renderLevelName(current_level);
                 showScreen(level_create_screen);
@@ -441,138 +759,151 @@
         if(!level) return;
         level_nav_name.textContent = level.name+" Size:"+level.size;
     }
-    //render level dimensions 
-    //tile floor
-// Tile floor constants
-const TILE = 120;
-const COLS = 5;
-const ROWS = 5;
 
-const ROOM_WIDTH = TILE * COLS;   // 600
-const ROOM_HEIGHT = TILE * ROWS;  // 480
-const ROOM_DEPTH = ROOM_WIDTH;    // 600
+    function buildLevel(level){
+        cube.innerHTML = "";
+            //cubefaces
+    var face_back = document.createElement('div');
+    var face_left = document.createElement('div');
+    var face_right = document.createElement('div');
+    var face_bottom = document.createElement('div');
+    var face_top = document.createElement('div');
+    //faces array
+    cube_sides_array = [face_back, face_left, face_right, face_bottom, face_top];
+        //room size
+        if(level.size == "room"){
+            const cols = 5; 
+            const rows = 5;
+            const tileSize = 120;
+            const COLS = 5;
+            const ROWS = 5;
+            const ROOM_WIDTH = TILE * COLS;   // 600
+            const ROOM_HEIGHT = TILE * ROWS;  // 600
+            const ROOM_DEPTH = ROOM_WIDTH;    // 600
 
-var cube = document.createElement('div');
-create_level_preview.appendChild(cube);
-
-// Cube Container
-Object.assign(cube.style, {
-    width: ROOM_WIDTH + 'px',
-    height: ROOM_HEIGHT + 'px',
-    position: 'relative',
-    transformStyle: 'preserve-3d',
-    margin: '0 auto',
-    transform: 'translateZ(0px)', // Adjusted to keep base perspective stable
-    top: '-500px' // Kept as requested for clickability
-});
-
-// Helper for faces to reduce repetition
-const faceBase = {
-    position: 'absolute',
-    backgroundColor: '#222',
-    opacity: 1,
-    backgroundImage: 'url(./images/tile0.png)',
-    backgroundSize: TILE + 'px'
-};
-
-// 1. Back Wall (Perpendicular to Depth)
-var face_back = document.createElement('div');
-face_back.id='face_back';
-cube.appendChild(face_back);
-Object.assign(face_back.style, faceBase, {
-    width: ROOM_WIDTH + 'px',
-    height: '480px',
-    // Half of ROOM_DEPTH (600/2)
-    transform: `rotateY(180deg) translateZ(${ROOM_DEPTH / 2}px)`,
-    top: '510px'
-});
-
-// 2. Left Wall (Perpendicular to Width)
-var face_left = document.createElement('div');
-face_left.id='face_left';
-cube.appendChild(face_left);
-Object.assign(face_left.style, faceBase, {
-    width: ROOM_DEPTH + 'px',
-    height: '480px',
-    left: '0px',
-    // Half of ROOM_WIDTH (600/2)
-    transform: `rotateY(-90deg) translateZ(${ROOM_WIDTH / 2}px)`,
-    top: '510px'
-});
-
-// 3. Right Wall (Perpendicular to Width)
-var face_right = document.createElement('div');
-face_right.id='face_right';
-cube.appendChild(face_right);
-Object.assign(face_right.style, faceBase, {
-    width: ROOM_DEPTH + 'px',
-    height: '480px',
-    // Removed the '13px' left offset to ensure perfect closure
-    left: '60px', 
-    transform: `rotateY(90deg) translateZ(240px)`,
-    top: '510px'
-});
-
-// 4. Floor (Perpendicular to Height)
-var face_bottom = document.createElement('div');
-face_bottom.id='face_bottom';
-cube.appendChild(face_bottom);
-Object.assign(face_bottom.style, faceBase, {
-    width: ROOM_WIDTH + 'px',
-    height: ROOM_HEIGHT + 'px', // Should be DEPTH for a floor
-    top: '300px', // Offset for height difference
-    transform: `rotateX(-90deg) translateZ(390px)`
-});
-
-// 5. Ceiling (Perpendicular to Height)
-var face_top = document.createElement('div');
-face_top.id='face_top';
-cube.appendChild(face_top);
-Object.assign(face_top.style, faceBase, {
-    width: ROOM_WIDTH + 'px',
-    height: ROOM_HEIGHT + 'px',
-    top: '300px',
-    transform: `rotateX(-90deg) translateZ(0px)`
-});
-    //makee grid funtion
-    function makeGrid(face, cols, rows, tileSize){
-        Object.assign(face.style,{
-            display: 'grid', 
-            gridTemplateColumns : `repeat(${COLS}, ${TILE}px)`,
-            gridTemplateRows: `repeat(${ROWS}, ${TILE}px)`
-        });
-        for(let i = 0; i <cols * rows; i++){
-            const tile = document.createElement('div');
-            tile.classList.add('tile');
-
-            Object.assign(tile.style,{
-                width: tileSize + "px",
-                height: tileSize + "px",
-                boxSizing: "border-box",
-                // border: '1px solid rgba(0, 0, 0, 0.2)'
+             // Cube Container
+            Object.assign(cube.style, {
+                width: ROOM_WIDTH + 'px',
+                height: ROOM_HEIGHT + 'px',
+                position: 'relative',
+                transformStyle: 'preserve-3d',
+                margin: '0 auto',
+                transform: 'translateZ(0px)', // Adjusted to keep base perspective stable
+                top: '-500px' // Kept as requested for clickability
             });
-            face.appendChild(tile);
-        }
-        //hover to highlight
-        face.addEventListener('mouseover', function(e){
-            if(e.target.classList.contains('tile')){
-                e.target.style.backgroundColor = "rgba(255,255,0,0.4)";
+
+            // Helper for faces to reduce repetition
+            const faceBase = {
+                position: 'absolute',
+                opacity: 1,
+                backgroundSize: TILE + 'px'
+            };
+
+         // 1. Back Wall (Perpendicular to Depth)
+            face_back.id='face_back';
+            cube.appendChild(face_back);
+            Object.assign(face_back.style, faceBase, {
+                width: ROOM_WIDTH + 'px',
+                height: '480px',
+                // Half of ROOM_DEPTH (600/2)
+                transform: `rotateY(180deg) translateZ(${ROOM_DEPTH / 2}px)`,
+                top: '510px'
+            });
+            // 2. Left Wall (Perpendicular to Width)
+            face_left.id='face_left';
+            cube.appendChild(face_left);
+            Object.assign(face_left.style, faceBase, {
+                width: ROOM_DEPTH + 'px',
+                height: '480px',
+                left: '0px',
+                // Half of ROOM_WIDTH (600/2)
+                transform: `rotateY(-90deg) translateZ(${ROOM_WIDTH / 2}px)`,
+                top: '510px',
+            });
+
+            // 3. Right Wall (Perpendicular to Width)
+            face_right.id='face_right';
+            cube.appendChild(face_right);
+            Object.assign(face_right.style, faceBase, {
+                width: ROOM_DEPTH + 'px',
+                height: '480px',
+                // Removed the '13px' left offset to ensure perfect closure
+                left: '60px', 
+                transform: `rotateY(90deg) translateZ(240px)`,
+                top: '510px'
+            });
+
+            // 4. Floor (Perpendicular to Height)
+            face_bottom.id='face_bottom';
+            cube.appendChild(face_bottom);
+            Object.assign(face_bottom.style, faceBase, {
+                width: ROOM_WIDTH + 'px',
+                height: ROOM_HEIGHT + 'px', // Should be DEPTH for a floor
+                top: '300px', // Offset for height difference
+                transform: `rotateX(-90deg) translateZ(390px)`,
+            });
+
+            // 5. Ceiling (Perpendicular to Height)
+            face_top.id='face_top';
+            cube.appendChild(face_top);
+            Object.assign(face_top.style, faceBase, {
+                width: ROOM_WIDTH + 'px',
+                height: ROOM_HEIGHT + 'px',
+                top: '300px',
+                transform: `rotateX(-90deg) translateZ(0px)`,
+            });
+            
+            //exit build level
+            create_exit.onclick = function(){
+                showScreen(start_window);
+                current_level = null;
+                clearRoomVisuals(cube_sides_array);
             }
-        });
-        face.addEventListener('mouseout',function(e){
-            if(e.target.classList.contains('tile')){
-                e.target.style.backgroundColor='';
+            cube_sides_array.forEach(face =>{
+                for(let i = 0; i <cols * rows; i++){
+                    const tile = document.createElement('div');
+                    tile.classList.add('tile');
+                    tile.dataset.index = i;
+
+                    Object.assign(tile.style,{
+                        width: tileSize + "px",
+                        height: tileSize + "px",
+                        boxSizing: "border-box",
+                        border: '1px solid rgba(255, 255, 255, 0)'
+                    });
+                    face.appendChild(tile);
+                    //hover to highlight
+                    
+                }
+                face.addEventListener('mouseover', function(e){
+                        if(e.target.classList.contains('tile')){
+                            e.target.style.backgroundColor = "rgba(255,255,0,0.4)";
+                        }
+                    });
+                    face.addEventListener('mouseout',function(e){
+                        if(e.target.classList.contains('tile')){
+                            e.target.style.backgroundColor='';
+                        }
+                    });
+            });    
+                //set up grid
+                makeGrid(face_back, COLS, ROWS, TILE);
+                makeGrid(face_left, COLS, ROWS, TILE);
+                makeGrid(face_right, COLS, ROWS, TILE);
+                makeGrid(face_top, COLS, ROWS, TILE);
+                makeGrid(face_bottom, COLS, ROWS, TILE);
             }
-        });
-       
 
     }
-    //set up grid
-    makeGrid(face_back, COLS, ROWS, TILE);
-    makeGrid(face_left, COLS, ROWS, TILE);
-    makeGrid(face_right, COLS, ROWS, TILE);
-    makeGrid(face_top, COLS, ROWS, TILE);
-    makeGrid(face_bottom, COLS, ROWS, TILE);
+
+     //make grid funtion
+        function makeGrid(face, cols, rows, tileSize){
+            Object.assign(face.style,{
+                display: 'grid', 
+                gridTemplateColumns : "repeat("+cols+","+ tileSize+"px"+")",
+                gridTemplateRows: "repeat("+rows+","+ tileSize+"px"+")"
+            });
+        }
     //click away function 
     function clickAway(element1,element2){
         element1.addEventListener("click", function(e){
@@ -592,24 +923,14 @@ Object.assign(face_top.style, faceBase, {
         });
     }
     //tile asset on click
-    const total_tiles = 93;
+    const total_tiles = 96;
     let selected_tile = null;
-    asset_preview.addEventListener('click',(e)=>{
-        if(e.target.classList.contains('tile_preview')){
-            //take highlight off other tiles for visual feedback
-            document.querySelectorAll('.tile_preview').forEach(t=>{
-                t.style.outline = 'none';
-            });
-            //highlight selected tile
-            e.target.style.outline = '2px solid yellow';
 
-            selected_tile = e.target.dataset.id;
-            console.log("selected tile:"+selected_tile);
-        }
-    });
     tile_asset.onclick = () =>{
-        const is_hidden = getComputedStyle(asset_preview).display === 'none';
-        asset_preview.style.display === is_hidden ? 'flex' : 'none';
+        asset_preview.style.display = 'flex';
+        cube_sides_array.forEach(face=>{ face.style.opacity = 1;});
+        generateTiles();
+
     }
     //change grid background to selected tile background
     let isPainting = false;
@@ -621,6 +942,16 @@ Object.assign(face_top.style, faceBase, {
         ){
             e.target.style.backgroundImage = `url(./images/tile${selected_tile}.png)`;
             e.target.style.backgroundSize = `${TILE}px ${TILE}px`;
+
+            //save changes
+            const face = e.target.parentElement.id;
+            const index = e.target.dataset.index;
+
+            if(current_level){
+                
+                current_level.faces[face][index] = selected_tile;
+                saveLevel();
+            }
         }
 
         isPainting = true;
@@ -642,16 +973,782 @@ Object.assign(face_top.style, faceBase, {
         ){
             e.target.style.backgroundImage = `url(./images/tile${selected_tile}.png)`;
             e.target.style.backgroundSize = `${TILE}px ${TILE}px`;
+            if(current_level){
+                const face = e.target.parentElement.id;
+                const index = e.target.dataset.index;
+                current_level.faces[face][index] = selected_tile;
+                saveLevel();
+            }
+        }
+    });
+    //background nav on click
+    const total_backgrounds = 13;
+    let selected_background = null;
+    const total_objects = 29;
+    let selected_object = null;
+    asset_preview.addEventListener('click',(e)=>{
+        //backgrounds
+        if(e.target.classList.contains('background_preview')){
+            //take highhlight off other backgrounds
+            document.querySelectorAll('.background_preview').forEach(b=>{
+                b.style.outline = 'none';
+            });
+            //highlight slected one
+            e.target.style.outline = '2px solid yellow';
+
+            selected_background = e.target.dataset.id;
+            create_level_preview.style.backgroundImage = `url(./images/background${selected_background}.png)`;
+            //save background change
+            if(current_level){
+                current_level.background = selected_background;
+                saveLevel();
+            }
+            console.log("selected background:"+selected_background);
+        }
+        //tiles
+            if(e.target.classList.contains('tile_preview')){
+                //take highlight off other tiles for visual feedback
+                document.querySelectorAll('.tile_preview').forEach(t=>{
+                    t.style.outline = 'none';
+                });
+                //highlight selected tile
+                e.target.style.outline = '2px solid yellow';
+
+                selected_tile = e.target.dataset.id;
+                console.log("selected tile:"+selected_tile);
+            }
+        //objects
+            if(e.target.classList.contains('object_preview')){
+                document.querySelectorAll('.object_preview').forEach(o=>{
+                    o.style.outline = 'none';
+                });
+                //highlight selected object
+                e.target.style.outline = '2px solid yellow';
+                selected_object = e.target.dataset.id;
+                console.log("seleted object "+selected_object);
+                setAssetWindow(selected_object);
+            }
+        //npcs
+        if(e.target.classList.contains('npc_preview')){
+            document.querySelectorAll('.npc_preview').forEach(n=>{
+                n.style.outline = 'none';
+            });
+            //highlight selected npc
+            e.target.style.outline = '2px solid yellow';
+            selected_npc = e.target.dataset.id;
+            console.log("selected npc: "+selected_npc);
+            setNPCWindow(selected_npc);
+        }
+    });
+    //asset editor function
+    let current_object = null;
+    const transform_state = {
+        x: 0,//rotateX
+        y: 0,//rotateY
+        z: 0,//translateZ
+        rz: 0,//rotateZ
+        s: 1//scale
+    };
+    function setAssetWindow(object){
+            asset_editor.style.display = "flex";
+
+            asset_display.style.backgroundImage = `url(./images/object${object}.png)`;
+            asset_display.style.backgroundSize = 'contain';
+            asset_display.style.backgroundRepeat = 'no-repeat';
+            asset_display.style.backgroundPosition = 'center';
+            const new_object = document.createElement('div');
+            new_object.classList.add("object");
+            new_object.dataset.id = object;
+
+            Object.assign(new_object.style,{
+                width: '120px',
+                height: '120px',
+                backgroundImage: `url(./images/object${object}.png)`,
+                backgroundSize: 'cover',
+                position: 'absolute',
+                top: '750px',
+                left: '230px'
+            });
+
+            cube.appendChild(new_object);
+            current_object = new_object;
+
+            //save to level
+            if(current_level){
+                const p_id = nextObjectPid(current_level);
+                new_object.dataset.p_id = p_id;
+
+                current_level.objects.push({
+                    p_id,
+                    sprite_id: Number(object),
+                    left: 230,
+                    top: 750,
+                    z: 0,
+                    rx: 0,
+                    ry: 0,
+                    rz: 0,
+                    scale: 1
+                });
+                saveLevel();
+                saveCurrentLevel();
+            }
+
+            // Reset transform state
+            transform_state.x = 0;
+            transform_state.y = 0;
+            transform_state.z = 0;
+            transform_state.rz = 0;
+            transform_state.s = 1;
+
+            applyTransforms();
+
+            asset_x.value = 230;
+            asset_y.value = 750;
+            asset_z.value = 0;
+            asset_rx.value = 0;
+            asset_ry.value = 0;
+            asset_rz.value = 0;
+            asset_scale.value = 1;
+    }
+    //close asset editor 
+    close_asset_editor.onclick = function(){
+        asset_editor.style.display = 'none';
+    }
+    
+    asset_x.addEventListener('input', function(){
+        current_object.style.left = `${this.value}px`;
+
+        const rec = getCurrentObjectRecord();
+        if(rec){
+            rec.left = Number(this.value);
+            saveLevel();
+        }
+    });
+    asset_y.addEventListener('input', function(){
+        current_object.style.top = `${this.value}px`;
+
+        const rec = getCurrentObjectRecord();
+        if(rec){
+            rec.top = Number(this.value);
+            saveLevel();
         }
     });
 
+    //click on objects to set them as current
+cube.addEventListener('click', (e) => {
+  const objEl = e.target.closest('.object');
+  if(!objEl || !cube.contains(objEl)) return;
+
+  current_object = objEl;
+  asset_editor.style.display = "flex";
+
+  // preview image
+  asset_display.style.backgroundImage =
+    `url(./images/object${current_object.dataset.id}.png)`;
+  asset_display.style.backgroundSize = 'contain';
+  asset_display.style.backgroundRepeat = 'no-repeat';
+  asset_display.style.backgroundPosition = 'center';
+
+  // position sliders
+  asset_x.value = parseInt(current_object.style.left) || 0;
+  asset_y.value = parseInt(current_object.style.top) || 0;
+
+  // parse transform safely (handles multiline + spaces)
+  const t = current_object.style.transform || "";
+
+  const zMatch  = t.match(/translateZ\(([-0-9.]+)px\)/);
+  const xMatch  = t.match(/rotateX\(([-0-9.]+)deg\)/);
+  const yMatch  = t.match(/rotateY\(([-0-9.]+)deg\)/);
+  const rzMatch = t.match(/rotateZ\(([-0-9.]+)deg\)/);
+  const sMatch  = t.match(/scale\(([-0-9.]+)\)/);
+
+  transform_state.z  = zMatch  ? Number(zMatch[1]) : 0;
+  transform_state.x  = xMatch  ? Number(xMatch[1]) : 0;
+  transform_state.y  = yMatch  ? Number(yMatch[1]) : 0;
+  transform_state.rz = rzMatch ? Number(rzMatch[1]) : 0;
+  transform_state.s  = sMatch  ? Number(sMatch[1]) : 1;
+
+  asset_z.value     = transform_state.z;
+  asset_rx.value    = transform_state.x;
+  asset_ry.value    = transform_state.y;
+  asset_rz.value    = transform_state.rz;
+  asset_scale.value = transform_state.s;
+});
+    
+    //backgorund asset onclick
+    background_asset.onclick = function(){
+        asset_preview.style.display = 'flex';
+        cube_sides_array.forEach(face=>{ face.style.opacity = 0.2;});        
+        generateBackgrounds();
+    }
+    //object asset on click
+    object_asset.onclick = function(){
+        asset_preview.style.display = 'flex';
+        generateObjects();
+    }
+    // global drag state (only one window can be dragged at a time)
+    let activeDrag = null; // { win, offsetX, offsetY }
+
+    function dragWindow(handleEl, winEl) {
+    handleEl.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+
+        // set the active drag target
+        activeDrag = {
+        win: winEl,
+        offsetX: e.clientX - winEl.offsetLeft,
+        offsetY: e.clientY - winEl.offsetTop
+        };
+
+        // optional: bring to front when grabbed
+        bringToFront(winEl);
+
+        document.body.style.userSelect = 'none';
+    });
+    }
+
+    // one global move handler
+    document.addEventListener('mousemove', (e) => {
+    if (!activeDrag) return;
+
+    const { win, offsetX, offsetY } = activeDrag;
+    win.style.left = (e.clientX - offsetX) + 'px';
+    win.style.top  = (e.clientY - offsetY) + 'px';
+    });
+
+    // one global mouseup handler
+    document.addEventListener('mouseup', () => {
+    activeDrag = null;
+    document.body.style.userSelect = 'auto';
+    });
+
+    // z-index helper (optional but makes windows feel “right”)
+    let topZ = 1000;
+    function bringToFront(winEl) {
+    winEl.style.zIndex = (++topZ).toString();
+    }
+
+    // usage
+    dragWindow(asset_name, asset_editor);
+    dragWindow(npc_name, npc_asset_window);
+    dragWindow(npc_dialogue_header, npc_dialogue_test_window);
+    dragWindow(chest_asset_header, chest_asset_window);
+    //apply transforms to objects
+    function applyTransforms() {
+        if (!current_object) return;
+
+        current_object.style.transform =
+            `translateZ(${transform_state.z}px)
+            rotateX(${transform_state.x}deg)
+            rotateY(${transform_state.y}deg)
+            rotateZ(${transform_state.rz}deg)
+            scale(${transform_state.s})`;
+
+            const rec = getCurrentObjectRecord();
+            if(rec){
+                rec.z = transform_state.z;
+                rec.rx = transform_state.x;
+                rec.ry = transform_state.y;
+                rec.rz = transform_state.rz;
+                rec.scale = transform_state.s;
+                saveLevel();
+            }
+    }
+
+    //update event listener
+    asset_z.addEventListener('input', function(){
+        transform_state.z = Number(this.value);
+        applyTransforms();
+    });
+
+    asset_ry.addEventListener('input',function(){
+        transform_state.y = Number(this.value);
+        applyTransforms();
+    });
+
+    asset_rx.addEventListener('input',function(){
+        transform_state.x = Number(this.value);
+        applyTransforms();
+    });
+
+    asset_rz.addEventListener('input',function(){
+        transform_state.rz = Number(this.value);
+        applyTransforms();
+    });
+
+    asset_scale.addEventListener('input',function(){
+        transform_state.s = Number(this.value);
+        applyTransforms();
+    });
+    //when moving sliders update save
+    function getCurrentObjectRecord(){
+        if(!current_level || !current_object) return null;
+        const p_id = Number(current_object.dataset.p_id);
+        return current_level.objects.find(o => o.p_id === p_id) || null;
+    }
+    function nextObjectPid(level){
+        const max = (level.objects || []).reduce((m,o)=>Math.max(m, Number(o.p_id) || 0), 0);
+        return max +1;
+    }
+    //delete object stuff 
+    delete_object.onclick = function(){
+        delete_confirm_holder.style.display = 'flex';
+        confirm_object_delete.style.display = 'flex';
+    }
+    delete_object_no.onclick = function(){
+        confirm_object_delete.style.display = 'none';
+        delete_confirm_holder.style.display = 'none';
+    }
+    delete_object_yes.onclick = function(){
+        if(!current_level || !current_object){
+            // nothing selected
+            confirm_object_delete.style.display = 'none';
+            delete_confirm_holder.style.display = 'none';
+            return;
+        }
+
+        const p_id = Number(current_object.dataset.p_id);
+        if(!Number.isFinite(p_id)){
+            console.warn("Selected object has no p_id; cannot delete safely.");
+            confirm_object_delete.style.display = 'none';
+            delete_confirm_holder.style.display = 'none';
+            return;
+        }
+
+        // 1) remove from save data
+        current_level.objects = (current_level.objects || []).filter(o => o.p_id !== p_id);
+
+        // 2) remove DOM element
+        current_object.remove();
+
+        // 3) clear selection
+        current_object = null;
+
+        // 4) persist
+        saveLevel();
+
+        // 5) close UI
+        confirm_object_delete.style.display = 'none';
+        delete_confirm_holder.style.display = 'none';
+        asset_editor.style.display = 'none';
+    };
+    NPC_asset.onclick = function(){
+        asset_preview.style.display = 'flex';
+        generateNPCs();
+    }
+    //load npc's for viewing
+    function generateNPCs(){
+        asset_preview.innerHTML = "";
+        for(let i = 0; i < npc_amount; i++){
+            const npc = document.createElement('div');
+            npc.classList.add('npc_preview');
+            //npc id
+            npc.dataset.id = i;
+            npc.style.backgroundImage = `url(./images/npc_${i}.png)`,
+            Object.assign(npc.style,{
+                width: '64px',
+                height: '64px',
+                backgroundSize: 'cover',
+                margin: '4px',
+                cursor: 'pointer',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center'
+            });
+            asset_preview.appendChild(npc);
+        }
+    }
+    //npc editor function
+    let current_npc = null;
+    const transform_npc_state = {
+        x: 0,//rotateX
+        y: 0,//rotateY
+        z: 0,//translateZ
+        rz: 0,//rotateZ
+        s: 1//scale
+    };
+    const npc_portrait_position = {
+        left: 0,
+        top: 0,
+        scaleX: 1,
+    }
+    const PORTRAIT_STEP = 3;//moves per arrow press
+    function setNPCWindow(npc){
+        npc_asset_window.style.display = "flex";
+        npc_preview.style.backgroundImage = `url(./images/npc_${npc}.png)`,
+        npc_preview.style.backgroundPosition = 'center';
+        npc_preview.style.backgroundSize = 'contain';
+        npc_preview.style.backgroundRepeat = 'no-repeat';
+        const new_npc = document.createElement('div');
+        new_npc.classList.add("npc");
+        new_npc.dataset.id = npc;
+        setNPCPortrait(npc);
+        Object.assign(new_npc.style,{
+            width: '120px',
+            height: '120px',
+            backgroundImage: `url(./images/npc_${npc}.png)`,
+            backgroundSize: 'cover',
+            position: 'absolute',
+            top: '750px',
+            left: '230px'
+        });
+
+        cube.appendChild(new_npc);
+        current_npc = new_npc;
+
+        //save npc to level
+        if(current_level){
+            const n_id = nextNPCNid(current_level);
+            new_npc.dataset.n_id = n_id;
+
+            //reset portrait nudge when creation a fresh npc
+            npc_portrait_position.left = 0;
+            npc_portrait_position.top = 0;
+            npc_portrait_position.scaleX = 1;
+
+            //reset dialogue box
+            npc_dialogue.value = "";
+
+
+            current_level.npcs.push({
+                n_id,
+                sprite_id: Number(npc),
+                left: 230,
+                top: 750,
+                z: 0,
+                rx: 0,
+                ry: 0,
+                rz: 0,
+                scale: 1,
+                portrait_left: 0,
+                portrait_top: 0,
+                portrait_scaleX : 1,
+                dialogue: ""
+            });
+            
+            setNPCPortrait(npc);
+            saveLevel();
+            saveCurrentLevel();
+        }
+        //reset transform  npc state
+        transform_npc_state.x = 0;
+        transform_npc_state.y = 0;
+        transform_npc_state.z = 0;
+        transform_npc_state.rz = 0;
+        transform_npc_state.s = 1;
+
+        applyNPCTransforms();
+        
+        npc_x.value = 230;
+        npc_y.value = 750;
+        npc_z.value = 0;
+        npc_rx.value = 0;
+        npc_ry.value = 0;
+        npc_rz.value = 0;
+        npc_scale.value = 1;
+    }
+        //apply portrait background
+    function applyPortraitPreview(){
+        npc_dialogue_preview.style.backgroundPosition = `${npc_portrait_position.left}px ${npc_portrait_position.top}px`;
+
+        npc_dialogue_preview.style.transform = `scaleX(${npc_portrait_position.scaleX})`;
+
+        npc_dialogue_preview.style.transformOrigin = "center";
+    }
+
+    function setNPCPortrait(sprite_id){
+        npc_dialogue_preview.style.backgroundImage = `url(./images/npc_${sprite_id}.png)`;
+        npc_dialogue_preview.style.backgroundSize = '200%';
+        npc_dialogue_preview.style.backgroundPosition = 'center';
+        applyPortraitPreview();
+    }
+    //portrait arrow buttons onclick
+    move_portrait_left.onclick = () => {npc_portrait_position.left += PORTRAIT_STEP; onPortraitChanged();};
+    move_portrait_right.onclick = () => {npc_portrait_position.left -= PORTRAIT_STEP; onPortraitChanged();};
+    move_portrait_up.onclick = () => {npc_portrait_position.top -= PORTRAIT_STEP; onPortraitChanged();};
+    move_portrait_down.onclick = () => {npc_portrait_position.top += PORTRAIT_STEP; onPortraitChanged();};
+    move_portrait_flip.onclick = () => {
+        npc_portrait_position.scaleX = (npc_portrait_position.scaleX === 1) ? - 1 : 1;
+        onPortraitChanged();    
+    }
+
+    function onPortraitChanged(){
+        applyPortraitPreview();
+
+        const rec = getCurrentNPCRecord();
+        if(rec){
+            rec.portrait_left = npc_portrait_position.left;
+            rec.portrait_top = npc_portrait_position.top;
+            rec.portrait_scaleX = npc_portrait_position.scaleX;
+            saveLevel();
+        }
+    }
+    //close npc editor
+    close_npc_window.onclick = function(){
+        npc_asset_window.style.display = 'none';
+    }
+    //npc editor eventlistener
+    npc_x.addEventListener('input',function(){
+        if(!current_npc) return;
+        current_npc.style.left = `${this.value}px`;
+
+        const rec_npc = getCurrentNPCRecord();
+        if(rec_npc){
+            rec_npc.left = Number(this.value);
+            saveLevel();
+        }
+    });
+    npc_y.addEventListener('input',function(){
+        if(!current_npc) return;
+        current_npc.style.top = `${this.value}px`;
+
+        const rec_npc = getCurrentNPCRecord();
+        if(rec_npc){
+            rec_npc.top = Number(this.value);
+            saveLevel();
+        }
+    });
+    //click on npcs and set them as current npc
+cube.addEventListener('click', (e) => {
+  const npcEl = e.target.closest('.npc');
+  if(!npcEl || !cube.contains(npcEl)) return;
+
+  current_npc = npcEl;
+  npc_asset_window.style.display = 'flex';
+
+  // main npc preview (your existing code)
+  npc_preview.style.backgroundImage = `url(./images/npc_${current_npc.dataset.id}.png)`;
+  npc_preview.style.backgroundPosition = 'center';
+  npc_preview.style.backgroundSize = 'contain';
+  npc_preview.style.backgroundRepeat = 'no-repeat';
+
+  // --- NEW: load saved portrait offsets for this NPC ---
+  const rec = getCurrentNPCRecord();
+  if(rec){
+    npc_portrait_position.left = Number(rec.portrait_left) || 0;
+    npc_portrait_position.top  = Number(rec.portrait_top)  || 0;
+    npc_portrait_position.scaleX = Number(rec.portrait_scaleX) || 1;
+  } else {
+    // safety default (in case record not found)
+    npc_portrait_position.left = 0;
+    npc_portrait_position.top = 0;
+    npc_portrait_position.scaleX = 1;
+  }
+
+  //load npc dialogue
+  if(rec){
+    npc_dialogue.value = rec.dialogue || "";
+  }else {
+    npc_dialogue.value = "";
+  }
+
+  // refresh the dialogue portrait preview using the loaded offsets
+  setNPCPortrait(current_npc.dataset.id);
+  // -----------------------------------------------------
+
+  npc_x.value = parseInt(current_npc.style.left) || 0;
+  npc_y.value = parseInt(current_npc.style.top) || 0;
+
+  const npc_t = current_npc.style.transform || "";
+
+  const npc_zMatch  = npc_t.match(/translateZ\(([-0-9.]+)px\)/);
+  const npc_xMatch  = npc_t.match(/rotateX\(([-0-9.]+)deg\)/);
+  const npc_yMatch  = npc_t.match(/rotateY\(([-0-9.]+)deg\)/);
+  const npc_rzMatch = npc_t.match(/rotateZ\(([-0-9.]+)deg\)/);
+  const npc_sMatch  = npc_t.match(/scale\(([-0-9.]+)\)/);
+
+  transform_npc_state.z  = npc_zMatch  ? Number(npc_zMatch[1])  : 0;
+  transform_npc_state.x  = npc_xMatch  ? Number(npc_xMatch[1])  : 0;
+  transform_npc_state.y  = npc_yMatch  ? Number(npc_yMatch[1])  : 0;
+  transform_npc_state.rz = npc_rzMatch ? Number(npc_rzMatch[1]) : 0;
+  transform_npc_state.s  = npc_sMatch  ? Number(npc_sMatch[1])  : 1;
+
+  npc_z.value     = transform_npc_state.z;
+  npc_rx.value    = transform_npc_state.x;
+  npc_ry.value    = transform_npc_state.y;
+  npc_rz.value    = transform_npc_state.rz;
+  npc_scale.value = transform_npc_state.s;
+});
+    //appy transforms to npcs
+    function applyNPCTransforms(){
+        if(!current_npc) return;
+
+        current_npc.style.transform =
+            `translateZ(${transform_npc_state.z}px)
+            rotateX(${transform_npc_state.x}deg)
+            rotateY(${transform_npc_state.y}deg)
+            rotateZ(${transform_npc_state.rz}deg)
+            scale(${transform_npc_state.s})`; 
+
+        const npc_rec = getCurrentNPCRecord();
+        if(npc_rec){
+                npc_rec.z = transform_npc_state.z;
+                npc_rec.rx = transform_npc_state.x;
+                npc_rec.ry = transform_npc_state.y;
+                npc_rec.rz = transform_npc_state.rz;
+                npc_rec.scale = transform_npc_state.s;
+                saveLevel();
+        }
+    }
+    //update event listener
+    npc_z.addEventListener('input',function(){
+        transform_npc_state.z = Number(this.value);
+        applyNPCTransforms();
+    });
+    npc_ry.addEventListener('input', function(){
+        transform_npc_state.y = Number(this.value);
+        applyNPCTransforms();
+    });
+    npc_rx.addEventListener('input', function(){
+        transform_npc_state.x = Number(this.value);
+        applyNPCTransforms();
+    });
+    npc_rz.addEventListener('input', function(){
+        transform_npc_state.rz = Number(this.value);
+        applyNPCTransforms();
+    });
+    npc_scale.addEventListener('input', function(){
+        transform_npc_state.s = Number(this.value);
+        applyNPCTransforms();
+    });
+    npc_dialogue.addEventListener('input',function(){
+        const rec = getCurrentNPCRecord();
+        if (!rec) return;
+        rec.dialogue = this.value;
+        saveLevel();
+    });
+    test_npc.onclick = () =>{
+        const rec = getCurrentNPCRecord();
+        if(!rec) return;
+        testNPCDialogue(rec);
+        npc_dialogue_test_window.style.display = 'flex';
+    }
+    text_blinker.onclick = () =>{
+        if(text_active === false){
+            test_npc_dialogue_box.innerHTML = "";
+            const rec = getCurrentNPCRecord();
+            if(!rec) return;
+            testNPCDialogue(rec);
+        }
+
+    };
+    //when moving sliders update save
+    function getCurrentNPCRecord(){
+        if(!current_level || !current_npc) return null;
+        const n_id = Number(current_npc.dataset.n_id);
+        return current_level.npcs.find(n => n.n_id === n_id) || null;
+    }
+    function nextNPCNid(level){
+        const npc_max = (level.npcs || []).reduce((m,n)=>Math.max(m, Number(n.n_id) || 0), 0);
+        return npc_max +1;
+    }
+    //delete npc stuff
+    delete_npc.onclick = function(){
+        delete_confirm_holder.style.display = 'flex';
+        confirm_npc_delete.style.display = 'flex';
+    }
+    delete_npc_no.onclick = function(){
+        confirm_npc_delete.style.display = 'none';
+        delete_confirm_holder.style.display = 'none';
+    }
+    delete_npc_yes.onclick = function(){
+        if(!current_level || !current_npc){
+            //nothing selected
+            confirm_npc_delete.style.display = 'none';
+            delete_confirm_holder.style.display = 'none';
+            return;
+        }
+
+        const n_id = Number(current_npc.dataset.n_id);
+        if(!Number.isFinite(n_id)){
+            console.warn("Selected NPC has no n_id; cannot delete safely.");
+            confirm_npc_delete.style.display = 'none';
+            delete_confirm_holder.style.display = 'none';
+            return;
+        }
+        //1) remove from save data
+        current_level.npcs = (current_level.npcs || []).filter(n => n.n_id !== n_id);
+        //2) remove DOM element
+        current_npc.remove();
+
+        //3)clear selection
+        current_npc = null;
+
+        //4) persist
+        saveLevel();
+
+        //5)close UI
+        confirm_npc_delete.style.display = 'none';
+        delete_confirm_holder.style.display = 'none';
+        npc_asset_window.style.display = 'none';
+    }
+    close_dialogue_test_window.onclick = () =>{
+        npc_dialogue_test_window.style.display = 'none';
+    };
+    //test npc
+    function testNPCDialogue(rec){
+        //get dialogue
+        if(rec.dialogue != ""){
+            test_npc_dialogue_box.innerHTML = "";
+            textAnimation(0, rec.dialogue,test_npc_dialogue_box);
+        }
+        //get backgroundImage
+        test_npc_portrait.style.backgroundImage = `url(./images/npc_${rec.sprite_id}.png)`;
+        //match to portrait
+        test_npc_portrait.style.backgroundSize = "200%";
+        test_npc_portrait.style.backgroundRepeat = 'no-repeat';
+
+        const left = Number(rec.portrait_left) || 0;
+        const top  = Number(rec.portrait_top) || 0;
+        test_npc_portrait.style.backgroundPosition = `${left}px ${top}px`;
+
+        // match editor flip behavior
+        const sx = Number(rec.portrait_scaleX) || 1;
+        test_npc_portrait.style.transform = `scaleX(${sx})`;
+        test_npc_portrait.style.transformOrigin = "center";
+    }
+    let text_active = false;
+ function textAnimation(n,text,print_on){
+      if(n < text.length){
+        text_active = true;
+        const blinky = text_blinker.animate(
+        [
+          {backgroundColor:"#222"},
+          {backgroundColor:"yellow"}
+        ],
+        {
+          iterations: 1,
+          duration: 24,
+          fill: "forwards",
+          easing: "linear"
+        }
+      );
+          blinky.onfinish = () => {
+          print_on.innerHTML += text[n];
+          
+          textAnimation(n+1,text,print_on);
+        }
+      }else { 
+        text_active = false;
+        return;
+      }
+    };
     //save data
     function saveLevel(){
         localStorage.setItem("levels",JSON.stringify(levels));
     }
     //save current level being built
     function saveCurrentLevel(){
-        localStorage.setItem("current_level",JSON.stringify(current_level));
+        localStorage.setItem("current_level_id",String(current_level?.id ?? ""));
+    }
+    //clear room
+    function clearRoomVisuals(cube_array){
+        cube_array.forEach(face =>{
+            const tiles = face.querySelectorAll('.tile');
+            tiles.forEach(tile =>{
+                tile.style.backgroundImage = "";
+            });
+        });
+        create_level_preview.style.backgroundImage = "";
     }
     //load saved data
     //load screen
@@ -666,10 +1763,41 @@ Object.assign(face_top.style, faceBase, {
     }
     //load level
     function loadSavedLevels(){
-        const saved = localStorage.getItem("levels");
+    const saved = localStorage.getItem("levels");
         if(saved){
             levels = JSON.parse(saved);
+
+            // ensure every level has faces structure
+            levels.forEach(level => {
+                if(!level.faces){
+                    level.faces = {
+                        face_back: [],
+                        face_left: [],
+                        face_right: [],
+                        face_top: [],
+                        face_bottom: []
+                    };
+                }
+                if(!level.objects){
+                level.objects = []; 
+                }
+                if(!level.npcs){
+                    level.npcs = [];
+                } 
+                level.objects = Array.isArray(level.objects) ? level.objects : [];
+                level.npcs    = Array.isArray(level.npcs)    ? level.npcs    : [];
+                selected_background = level.background;
+            });
+            saveLevel();
         }
+    }
+    //clean loading
+    function ensureLevelShape(level){
+        if(!level) return null;
+        level.faces ??= { face_back:[], face_left:[], face_right:[], face_top:[], face_bottom:[] };
+        level.objects = Array.isArray(level.objects) ? level.objects : [];
+        level.npcs    = Array.isArray(level.npcs)    ? level.npcs    : [];
+        return level;
     }
     //delete level
     function deleteSavedLevel(id){
@@ -678,7 +1806,7 @@ Object.assign(face_top.style, faceBase, {
         //if current level is deleted say bye bye forever
         if(current_level && current_level.id === id){
             current_level = null;
-            localStorage.removeItem("current_level");
+            localStorage.removeItem("current_level_id");
             level_nav_name.textContent = "";
         }
         //update local storage
@@ -688,10 +1816,14 @@ Object.assign(face_top.style, faceBase, {
     }
     //load current level
     function loadCurrentLevel(){
-        const saved = localStorage.getItem("current_level");
-        if(saved){
-            current_level = JSON.parse(saved);
-        }
+    const id = Number(localStorage.getItem("current_level_id"));
+    if(!id) return;
+
+    current_level = ensureLevelShape(levels.find(l => l.id === id) || null);
+    if(!current_level) return;
+
+    buildLevel(current_level);
+    loadRoomVisuals(current_level);
     }
     //load tiles on startup
     function generateTiles(){
@@ -711,6 +1843,183 @@ Object.assign(face_top.style, faceBase, {
             });
             asset_preview.appendChild(tile);
         }
+    }
+    //load backgrounds
+    function generateBackgrounds(){
+        asset_preview.innerHTML = "";
+        for(let i = 0; i < total_backgrounds; i++){
+            const background = document.createElement('div');
+            background.classList.add('background_preview');
+            //background id
+            background.dataset.id = i;
+            background.style.backgroundImage = `url(./images/background${i}.png)`;
+            Object.assign(background.style,{
+                width: '64px',
+                height: '64px',
+                backgroundSize: 'cover',
+                margin: '4px',
+                cursor: 'pointer'
+            });
+            asset_preview.appendChild(background);
+        }
+    }
+    //load objects for viewing
+    function generateObjects(){
+        asset_preview.innerHTML = "";
+        for(let i = 0; i < total_objects; i++){
+            const object = document.createElement('div');
+            object.classList.add('object_preview');
+            //object id 
+            object.dataset.id = i;
+            object.style.backgroundImage = `url(./images/object${i}.png)`;
+            Object.assign(object.style,{
+                width: '64px', 
+                height: '64px',
+                backgroundSize: 'cover',
+                margin: '4px',
+                cursor: 'pointer'
+            });
+            asset_preview.appendChild(object);
+        }
+    }
+    //generate chest style options
+    let chest_styles = 8;
+    let chest_desc_arr = ['Red', 'Wooden', 'Gold', 'Green', 'Blue', 'Silver', 'Wood Box', 'Red Box'];
+    for(let i = 0;  i < chest_styles; i++){
+        let chest_option = document.createElement('option');
+        chest_style.appendChild(chest_option);
+        Object.assign(chest_option.style,{
+            display: 'flex',
+            flexDirection: 'row',
+            height: '32px',
+        });
+        chest_option.innerHTML = chest_desc_arr[i];
+        chest_option.value = i;
+        
+    }
+    chest_style.onchange = ()=>{
+            chest_image_preview.style.backgroundImage = `url(./images/chest_${chest_style.value}.png)`;
+            console.log(chest_style.value);
+        };
+    Object.assign(chest_image_preview.style,{
+        backgroundPosition: 'center',
+        backgroundSize: 'contain',
+        backgroundRepeat: 'no-repeat'
+    });
+
+   
+    create_test.onclick = () => {
+    if(!current_level){
+        console.warn("No current_level selected to test.");
+        return;
+    }
+
+    // make sure latest edits are saved
+    saveLevel();
+    saveCurrentLevel();
+
+    // store what to load
+    localStorage.setItem("test_level_id", String(current_level.id));
+
+    // go to test page
+    window.location.href = "play_test.html";
+    };
+    //loadRoom Visuals
+    function loadRoomVisuals(level){
+
+        if(!level.faces) return;
+
+        cube_sides_array.forEach(face=>{
+            const faceId = face.id;
+            const tiles = face.querySelectorAll('.tile');
+
+            tiles.forEach(tile=>{
+                const index = tile.dataset.index;
+
+                if(level.faces[faceId]){
+                    const tileId = level.faces[faceId][index];
+
+                    if(tileId !== undefined){
+                        tile.style.backgroundImage =
+                            `url(./images/tile${tileId}.png)`;
+                        tile.style.backgroundSize =
+                            `${TILE}px ${TILE}px`;
+                    } else {
+                        tile.style.backgroundImage = '';
+                    }
+                }
+            });
+        });
+        if(level.background !== null && level.background !== undefined){
+            create_level_preview.style.backgroundImage = `url(./images/background${level.background}.png)`;
+        }else {
+            create_level_preview.style.backgroundImage = 'url(./images/background0.png)';
+        }
+        //remove existing DOM objects
+        cube.querySelectorAll('.object').forEach(o => o.remove());
+        //recreate saved objects
+        (level.objects || []).forEach(obj =>{
+            const el = document.createElement('div');
+            el.classList.add('object');
+            el.dataset.id = obj.sprite_id;
+            el.dataset.p_id = obj.p_id;
+
+            Object.assign(el.style,{
+                width: '120px',
+                height: '120px',
+                position: 'absolute',
+                left: obj.left+'px',
+                top: obj.top+'px',
+                backgroundImage: `url(./images/object${obj.sprite_id}.png)`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center', 
+                backgroundRepeat: 'no-repeat',
+            });
+            el.style.transform = `
+            translateZ(${obj.z}px)
+            rotateX(${obj.rx}deg)
+            rotateY(${obj.ry}deg)
+            rotateZ(${obj.rz}deg)
+            scale(${obj.scale})`;
+
+            cube.appendChild(el);
+        });
+        // remove existing DOM npcs
+        cube.querySelectorAll('.npc').forEach(n => n.remove());
+
+        // recreate saved npcs
+        (level.npcs || []).forEach(npc => {
+        const el = document.createElement('div');
+        el.classList.add('npc');
+        el.dataset.id = npc.sprite_id;
+        el.dataset.n_id = npc.n_id;
+        
+        npc.portrait_left ??= 0;
+        npc.portrait_top  ??= 0;
+
+        Object.assign(el.style,{
+            width: '120px',
+            height: '120px',
+            position: 'absolute',
+            left: npc.left+'px',
+            top: npc.top+'px',
+            backgroundImage: `url(./images/npc_${npc.sprite_id}.png)`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+        });
+
+        el.style.transform = `
+            translateZ(${npc.z}px)
+            rotateX(${npc.rx}deg)
+            rotateY(${npc.ry}deg)
+            rotateZ(${npc.rz}deg)
+            scale(${npc.scale})
+        `;
+
+        cube.appendChild(el);
+        });
+
     }
 
     window.onload = () =>{

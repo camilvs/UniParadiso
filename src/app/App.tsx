@@ -6,8 +6,11 @@ import { Features } from './components/Features';
 import { TargetAudience } from './components/TargetAudience';
 import { TechStack } from './components/TechStack';
 import { Footer } from './components/Footer';
-
+import ProtectedRoute from '../context/authContext/ProtectedRoute';
 import { CoverPage } from './components/CoverPage';
+//login and signup pages
+import { LoginPage } from './components/LoginPage';
+import { SignupPage } from './components/SignUpPage';
 import { AuthPage } from './components/AuthPage';
 import { GameMenu } from './components/GameMenu';
 import { GamePlay } from './components/GamePlay';
@@ -18,10 +21,12 @@ export default function App() {
     <Routes>
       <Route path="/" element={<CoverPage />} />
       <Route path="/auth" element={<AuthPage />} />
-      <Route path="/game-menu" element={<GameMenu />} />
-      <Route path="/game-play" element={<GamePlay />} />
-      <Route path="/single-play-menu" element={<SinglePlayMenu />} />
-      <Route path="/admin-level-create" element={<AdminLevelCreate />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupPage />} />
+      <Route path="/game-menu" element={<ProtectedRoute><GameMenu /></ProtectedRoute>} />
+      <Route path="/game-play" element={<ProtectedRoute><GamePlay /></ProtectedRoute>} />
+      <Route path="/single-play-menu" element={<ProtectedRoute><SinglePlayMenu /></ProtectedRoute>} />
+      <Route path="/admin-level-create" element={<ProtectedRoute><AdminLevelCreate /></ProtectedRoute>} />
 
         {/* Landing page with features and about the game */}
       <Route path="/landing" element={

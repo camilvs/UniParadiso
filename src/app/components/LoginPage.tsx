@@ -11,7 +11,7 @@ import {useAuth} from '../../context/authContext';
 //   onLoginSuccess: () => void;
 // }
 
-export function AuthPage(/*{ onBack, onLoginSuccess }: AuthPageProps*/) {
+export function LoginPage(/*{ onBack, onLoginSuccess }: AuthPageProps*/) {
   const navigate = useNavigate();
   const {userLoggedIn} = useAuth();
 

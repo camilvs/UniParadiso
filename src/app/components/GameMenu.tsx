@@ -1,6 +1,8 @@
 import { User, Users, PlusCircle, Settings, LogOut } from 'lucide-react';
 import { Button } from './ui/button';
 import { useNavigate } from 'react-router-dom';
+import {useAuth} from '../../context/authContext';
+import { doSignOut } from '../../firebase/auth';
 // interface GameMenuProps {
 //   onLogout: () => void;
 //   onStartGame: () => void;
@@ -8,6 +10,11 @@ import { useNavigate } from 'react-router-dom';
 
 export function GameMenu(/*{ onLogout, onStartGame }: GameMenuProps*/) {
   const navigate = useNavigate();
+  const {userLoggedIn} = useAuth();
+  const handleLogout = async () => {
+    await doSignOut();
+    navigate('/');
+  }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-purple-900 via-indigo-900 to-black relative overflow-hidden">
       {/* Animated background grid */}
@@ -39,7 +46,7 @@ export function GameMenu(/*{ onLogout, onStartGame }: GameMenuProps*/) {
 
       {/* Logout button */}
       <button
-        onClick={() => navigate('/')}
+        onClick={handleLogout}
         className="absolute top-6 right-6 z-20 flex items-center gap-2 text-pink-300 hover:text-pink-100 font-['VT323'] text-xl transition-colors"
       >
         <LogOut className="w-5 h-5" />
@@ -53,7 +60,9 @@ export function GameMenu(/*{ onLogout, onStartGame }: GameMenuProps*/) {
               GAME MENU
             </span>
           </div>
-
+          <h1 className="text-3xl md:text-1xl font-['Press_Start_2P'] text-white mb-6 leading-tight drop-shadow-[0_0_30px_rgba(139,92,246,0.8)]">
+            Welcome {/*Player Name*/'Player One'}!
+          </h1>
           <h1 className="text-5xl md:text-7xl font-['Press_Start_2P'] text-white mb-6 leading-tight drop-shadow-[0_0_30px_rgba(139,92,246,0.8)]">
             SELECT
             <br />

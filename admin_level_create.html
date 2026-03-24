@@ -219,7 +219,7 @@
                     <div id="tile_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Tiles</div>
                     <div id="object_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Objects</div>
                     <div id="NPC_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">NPC</div>
-                    <div id="chest_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Chest</div>
+                    <div id="treasure_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Chest</div>
                     <div id="enemy_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Enemies</div>
                     <div id="landmark_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Landmarks</div>
                 </div>
@@ -349,32 +349,31 @@
                 <div id="test_npc_dialogue_box" style="width: 276px; height: 116px; margin: 8px; background-color: #222; color: ghostwhite; padding: 4px;"></div>
             </div>   
         </div>
-        <div id="chest_asset_window" style="width: 296px; height: 420px; border: 1px solid black; position: absolute; top: 0px; background-color: ghostwhite; display: flex; flex-direction: column;">
+        <div id="chest_asset_window" style="width: 296px; height: 474px; border: 1px solid black; position: absolute; top: 0px; background-color: ghostwhite; display: none; flex-direction: column;">
             <div id="chest_asset_header" style="width: 292px; height: 28px; display: flex; flex-direction: row; border-bottom: 1px grey solid;">
                 <div id="asset_chest_header" style="width: 272px; height: 28px; background-color: transparent; cursor: pointer;" title="drag to move"></div>
-                <div style="width: 26px; height: 26px; border: 1px solid black; justify-content: center; display: flex; flex-direction: column; text-align: center; cursor: pointer;">X</div>
+                <div id="close_chest_editor" style="width: 26px; height: 26px; border: 1px solid black; justify-content: center; display: flex; flex-direction: column; text-align: center; cursor: pointer;">X</div>
             </div>
             <div style="height: 120px; width: 276px; margin: 4px 0px 2px 1px; display: flex; flex-direction: row;">
-                <div id="chest_image_preview" style="width: 120px; height: 120px; background-color: aliceblue; border: #222 1px solid; margin-right: 4px;"></div>
+                <div id="chest_image_preview" style="width: 120px; height: 120px; background-color: aliceblue; border: #222 1px solid; margin-right: 4px; background-image: url(./images/chest_0.png);"></div>
                 <div style="display: flex; flex-direction: column;">
-                    <div style="display: flex; flex-direction: row; margin: 4px 0px 8px 0px;">
+                    <div id="set_treasure_box" style="width: 98%; height: 24px; border: 1px inset black; text-align: center; color: ghostwhite; background-color: #222; margin-bottom: 4px; cursor: pointer;">Set</div>
+                    <div style="display: flex; flex-direction: row; margin: 4px 0px 0px 0px;">
                         <label>X</label>
-                        <input type="range" id="chest_x" >
+                        <input type="range" id="chest_x"  min="-60" max="530">
                     </div>
-                    <div style="display: flex; flex-direction: row;  margin: 24px 0px 8px 0px;">
+                    <div style="display: flex; flex-direction: row;  margin: 8px 0px 4px 0px;">
                         <label>Y</label>
-                        <input type="range" id="chest_y">
+                        <input type="range" id="chest_y" min="528" max="920">
                     </div>
                     Chest Style:<br>
-                    <select id="chest_style">
-                        <option value="">Choose Style</option>
-                    </select>
+                    <select id="chest_style"></select>
                 </div>
             </div>
             <div style="width: 292px; height: 120px; border: 1px solid transparent; display: flex; flex-direction: column; margin-top: 4px;">
                 <div  id="item_name_preview" style="text-align: left; margin-left: 4px; font-size: 14px;">Contents:</div>
                 <div style="display: flex; flex-direction: row; margin-bottom: 4px;">
-                    <div id="item_image_preview" style="width: 64px; height: 64px; border: 1px solid black; margin-right: 3px;"></div>
+                    <div id="item_image_preview" style="width: 64px; height: 64px; border: 1px solid black; margin-right: 3px; background-color: rgb(192, 192, 192);"></div>
                     <div style="width: 240px; height: 64px; border: 1px solid black; display: flex; flex-direction: column;">
                         <div id="stat_display" style="height: 16px; width: 226px; background-color: #222; justify-content: space-evenly; display: flex; flex-direction: row;">
                             <div style="display: flex; flex-direction: row;" title="Defense">
@@ -416,11 +415,13 @@
                         <div id="nav_skills" style="width: 24px; height: 24px; border: 1px solid white; border-radius: 4px; margin: 6px; cursor: pointer; color: ghostwhite; font-size: 12px; background-image: url(./images/icon_3.png); background-position: center; background-size: contain;" title="Skills"></div>
                         <div id="nav_manifests" style="width: 24px; height: 24px; border: 1px solid white; border-radius: 4px; margin: 6px; cursor: pointer; color: ghostwhite; font-size: 12px; background-image: url(./images/icon_4.png); background-position: center; background-size: contain;" title="Manifest"></div>
                         <div id="nav_keys" style="width: 24px; height: 24px; border: 1px solid white; border-radius: 4px; margin: 6px; cursor: pointer; color: ghostwhite; font-size: 12px; background-image: url(./images/icon_5.png); background-position: center; background-size: contain;" title="Keys"></div>
-                        <div id="nav_keys" style="width: 24px; height: 24px; border: 1px solid white; border-radius: 4px; margin: 6px; cursor: pointer; color: ghostwhite; font-size: 12px; background-image: url(./images/icon_6.png); background-position: center; background-size: contain;" title="Materials"></div>
+                        <div id="nav_materials" style="width: 24px; height: 24px; border: 1px solid white; border-radius: 4px; margin: 6px; cursor: pointer; color: ghostwhite; font-size: 12px; background-image: url(./images/icon_6.png); background-position: center; background-size: contain;" title="Materials"></div>
+                        <div id="nav_traps" style="width: 24px; height: 24px; border: 1px solid white; border-radius: 4px; margin: 6px; cursor: pointer; color: ghostwhite; font-size: 12px; background-image: url(./images/icon_7.png); background-position: center; background-size: contain;" title="Traps"></div>
                     </div>
                     
                 </div>
-                <div id="content_asset_holder" style="width: 292px; height: 136px; background-color: aliceblue; margin-left: 2px; overflow-y: scroll;"></div>
+                <div id="content_asset_holder" style="width: 292px; height: 136px; background-image: linear-gradient(#222, rgb(71, 71, 71)); margin-left: 2px; overflow-y: scroll; display: flex; flex-direction: row; flex-wrap: wrap;"></div>
+                <div id="delete_current_treasue" style=" width: 292; height: 24px; background-color: #222; margin-left: 2px; text-align: center; color: ghostwhite; cursor: pointer; margin-top: 2px;">Delete Treasure</div>
         </div>
         <div id="delete_confirm_holder" style="width: 100%; height: 100%; position: absolute; background-color: rgba(0, 0, 0, 0.42); justify-content: center; align-items: center; display: none; flex-direction: column; top: 0px;">
             <div id="confirm_delete" style="width: 240px; height: 240px; border: 1px solid black; background-color: crimson; border-radius: 12px; display: none; flex-direction: column;">
@@ -444,7 +445,9 @@
         </div>
     </body>
 </html>
+<script src="./data_base.js" id="data_base"></script>
 <script>
+    const data_base = document.getElementById('data_base');
     const TILE = 120;
     //level array
     levels = [
@@ -459,6 +462,7 @@
             },
             objects: [],
             npcs: [],
+            treasure_boxes: [],
         }
     ];
     var level_pending_delete = null;
@@ -590,14 +594,18 @@
     let delete_npc_yes = document.getElementById('delete_npc_yes');
     const npc_amount = 2;
     //chest editor
+    let treasure_asset = document.getElementById('treasure_asset');
     let chest_asset_window = document.getElementById('chest_asset_window');
+    let close_chest_editor = document.getElementById('close_chest_editor');
     let chest_asset_header = document.getElementById('chest_asset_header');
     let chest_image_preview = document.getElementById('chest_image_preview');
+    let set_treasure_box = document.getElementById('set_treasure_box');
     let chest_x = document.getElementById('chest_x');
     let chest_y = document.getElementById('chest_y');
     let chest_style = document.getElementById('chest_style');
     let item_name_preview = document.getElementById('item_name_preview');
     let item_image_preview = document.getElementById('item_image_preview');
+    let delete_current_treasure = document.getElementById('delete_current_treasure');
     //chest content stat display
     let content_def_stat = document.getElementById('content_def_stat');
     let content_res_stat = document.getElementById('content_res_stat');
@@ -606,6 +614,20 @@
     let content_SPatk_stat = document.getElementById('content_SPatk_stat');
     let content_dex_stat = document.getElementById('content_dex_stat');
     let content_SPdef_stat = document.getElementById('content_SPdef_stat');
+    let content_desc = document.getElementById('content_desc');
+    //chest content stat array
+    let content_stats_array = [content_def_stat, content_res_stat, content_atk_stat, content_eva_stat, content_SPatk_stat, content_dex_stat, content_SPdef_stat];
+    //chess content nav
+    let nav_items = document.getElementById('nav_items');
+    let nav_equipments = document.getElementById('nav_equipments');
+    let nav_weapons = document.getElementById('nav_weapons');
+    let nav_skills = document.getElementById('nav_skills');
+    let nav_manifests = document.getElementById('nav_manifest');
+    let nav_keys = document.getElementById('nav_keys');
+    let nav_materials = document.getElementById('nav_materials');
+    let nav_traps = document.getElementById('nav_traps');
+    //chest content screen
+    let content_asset_holder = document.getElementById('content_asset_holder');
     //screen array
     var screens = [start_window, level_stats, level_create_screen,load_level_screen];
     create_new_level.onclick = function(){
@@ -623,7 +645,7 @@
     }
     //pointer on hover array
     var options_arr = [create_new_level,load_level,exit_level,create_level_input,exit_level_stats, close_error, create_save, create_test, create_exit, create_clear, create_delete, delete_confirm_no, delete_confirm_yes,delete_object,delete_object_no, delete_object_yes,
-        move_portrait_left, move_portrait_up, move_portrait_down, move_portrait_right, move_portrait_flip,
+        move_portrait_left, move_portrait_up, move_portrait_down, move_portrait_right, move_portrait_flip,delete_current_treasue,
     ];
     //hover funtion
     options_arr.forEach(option =>{
@@ -665,6 +687,7 @@
             },
             objects:[],
             npcs: [],
+            treasure_boxes: [],
         };
         //push new level values into levels array
         levels.push(newLevel);
@@ -1783,9 +1806,13 @@ cube.addEventListener('click', (e) => {
                 }
                 if(!level.npcs){
                     level.npcs = [];
+                }
+                if(!level.treasure_boxes){
+                    level.treasure_boxes = [];
                 } 
                 level.objects = Array.isArray(level.objects) ? level.objects : [];
                 level.npcs    = Array.isArray(level.npcs)    ? level.npcs    : [];
+                level.treasure_boxes = Array.isArray(level.treasure_boxes) ? level.treasure_boxes : [];
                 selected_background = level.background;
             });
             saveLevel();
@@ -1796,7 +1823,8 @@ cube.addEventListener('click', (e) => {
         if(!level) return null;
         level.faces ??= { face_back:[], face_left:[], face_right:[], face_top:[], face_bottom:[] };
         level.objects = Array.isArray(level.objects) ? level.objects : [];
-        level.npcs    = Array.isArray(level.npcs)    ? level.npcs    : [];
+        level.npcs = Array.isArray(level.npcs) ? level.npcs : [];
+        level.treasure_boxes = Array.isArray(level.treasure_boxes) ? level.treasure_boxes : [];
         return level;
     }
     //delete level
@@ -1882,32 +1910,358 @@ cube.addEventListener('click', (e) => {
             asset_preview.appendChild(object);
         }
     }
-    //generate chest style options
-    let chest_styles = 8;
-    let chest_desc_arr = ['Red', 'Wooden', 'Gold', 'Green', 'Blue', 'Silver', 'Wood Box', 'Red Box'];
-    for(let i = 0;  i < chest_styles; i++){
-        let chest_option = document.createElement('option');
-        chest_style.appendChild(chest_option);
-        Object.assign(chest_option.style,{
-            display: 'flex',
-            flexDirection: 'row',
+// =====================================
+// TREASURE BOXES
+// =====================================
+
+// current selected treasure box in the editor
+let current_treasure = null;
+
+// selected content to place inside a chest before placing it
+let selected_chest_content = null; 
+// example shape: { type: 'weapon', id: 3 }
+
+// optional: open treasure editor from a menu button
+if(typeof treasure_asset !== "undefined" && treasure_asset){
+    treasure_asset.onclick = ()=>{
+        chest_asset_window.style.display = 'flex';
+        chest_image_preview.style.backgroundImage = `url(./images/chest_${chest_style.value || 0}.png)`;
+    };
+}
+
+// generate chest style options
+let chest_styles = 8;
+let chest_desc_arr = ['Red', 'Wooden', 'Gold', 'Green', 'Blue', 'Silver', 'Wood Box', 'Red Box'];
+
+chest_style.innerHTML = "";
+for(let i = 0; i < chest_styles; i++){
+    let chest_option = document.createElement('option');
+    chest_style.appendChild(chest_option);
+
+    chest_option.textContent = chest_desc_arr[i];
+    chest_option.value = i;
+}
+
+Object.assign(chest_image_preview.style,{
+    backgroundPosition: 'center',
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat'
+});
+
+// initial preview
+chest_image_preview.style.backgroundImage = `url(./images/chest_${chest_style.value || 0}.png)`;
+
+// when chest style changes:
+// - update preview
+// - if a chest is selected, update that chest too
+chest_style.onchange = ()=>{
+    chest_image_preview.style.backgroundImage = `url(./images/chest_${chest_style.value}.png)`;
+    chestImage();
+};
+
+// ---------- CONTENT NAV: WEAPONS ----------
+nav_weapons.onclick = ()=>{
+    content_asset_holder.innerHTML = "";
+
+    weapons.forEach(weapon=>{
+        let weapon_card = document.createElement('div');
+        content_asset_holder.appendChild(weapon_card);
+
+        Object.assign(weapon_card.style,{
+            width: '32px',
             height: '32px',
+            border: '3px outset ghostwhite',
+            margin: '8px',
+            borderRadius: '4px',
+            backgroundImage: `url(./images/weapon_${weapon.id}.png)`,
+            backgroundSize: 'contain',
+            backgroundPosition: 'center',
+            backgroundRepeat:'no-repeat',
+            backgroundColor: 'black',
+            cursor: 'pointer'
         });
-        chest_option.innerHTML = chest_desc_arr[i];
-        chest_option.value = i;
-        
-    }
-    chest_style.onchange = ()=>{
-            chest_image_preview.style.backgroundImage = `url(./images/chest_${chest_style.value}.png)`;
-            console.log(chest_style.value);
+
+        weapon_card.title = weapon.name;
+
+        weapon_card.onclick = ()=>{
+            // remember what content the user picked
+            selected_chest_content = {
+                type: 'weapon',
+                id: weapon.id
+            };
+
+            // update content preview
+            getContentsDetails("weapon",weapon.id);
+
+            // if editing an existing chest, save the content into that chest record immediately
+            const rec = getCurrentTreasureBoxRecord();
+            if(rec){
+                rec.content_type = 'weapon';
+                rec.content_id = weapon.id;
+                saveLevel();
+            }
         };
-    Object.assign(chest_image_preview.style,{
+    });
+};
+
+// ------- Content nav: equipment ------
+nav_equipments.onclick = ()=>{
+    content_asset_holder.innerHTML = "";
+
+    equipments.forEach(equipment=>{
+        let equip_card = document.createElement('div');
+        content_asset_holder.appendChild(equip_card);
+
+        Object.assign(equip_card.style,{
+            width: '32px',
+            height: '32px',
+            border: '3px outset ghostwhite',
+            margin: '8px',
+            borderRadius: '4px',
+            backgroundImage: `url(./images/equip_${equipment.id}.png)`,
+            backgroundSize: 'contain',
+            backgroundPosition: 'center',
+            backgroundRepeat:'no-repeat',
+            backgroundColor: 'aliceblue',
+            cursor: 'pointer'
+        });
+        equip_card.title = equipment.name;
+
+        equip_card.onclick = ()=>{
+            //content choosen 
+            selected_chest_content = {
+                type: 'equipment',
+                id: equipment.id
+            };
+
+            //update content preview
+            getContentsDetails("equipment",equipment.id);
+            //if editing existing chest
+            const rec = getCurrentTreasureBoxRecord();
+            if(rec){
+                rec.content_type = 'equipment';
+                rec.content_id = equipment.id;
+                saveLevel();
+            }
+        };
+        
+    });
+};
+
+// ---------- CONTENT DETAILS ----------
+function clearChestContentStats(){
+    for(let i = 0; i < content_stats_array.length; i++){
+        content_stats_array[i].innerHTML = "";
+    }
+}
+
+function clearChestContentPreview(){
+    item_name_preview.innerHTML = "";
+    content_desc.innerHTML = "";
+    item_image_preview.style.backgroundImage = "";
+    clearChestContentStats();
+}
+
+function getContentsDetails(type,id){
+    clearChestContentStats();
+
+    const weapon = weapons[id];
+    const equipment = equipments[id];
+
+    if(weapon){
+        content_desc.innerHTML = weapon.desc || "";
+        item_name_preview.innerHTML = weapon.name || "";
+
+        Object.assign(item_image_preview.style,{
+            backgroundImage: `url(./images/weapon_${id}.png)`,
+            backgroundPosition: 'center',
+            backgroundSize: 'contain',
+            backgroundRepeat: 'no-repeat'
+        });
+
+        let stat = weapon_stats.find(s => s.stat_id === weapon.stat_id);
+
+    }else if(equipment){
+        content_desc.innerHTML = equipment.desc || "";
+        item_name_preview.innerHTML = equipment.name || "";
+
+        Object.assign(item_image_preview.style,{
+            backgroundImage: `url(./images/equip_${id}.png)`,
+            backgroundPosition: 'center',
+            backgroundSize: 'contain',
+            backgroundRepeat: 'no-repeat'
+        });
+
+        let stat = equip_stats.find(s => s.stat_id === equipment.stat_id);
+
+    }
+
+    if(stat){
+        content_def_stat.innerHTML = stat.def ?? "";
+        content_res_stat.innerHTML = stat.res ?? "";
+        content_atk_stat.innerHTML = stat.atk ?? "";
+        content_eva_stat.innerHTML = stat.eva ?? "";
+        content_SPatk_stat.innerHTML = stat.spATK ?? "";
+        content_dex_stat.innerHTML = stat.dex ?? "";
+        content_SPdef_stat.innerHTML = stat.spDEF ?? "";
+    }
+}
+
+// ---------- HELPERS ----------
+function nextTreasureBoxPid(level){
+    const max = (level.treasure_boxes || []).reduce((m,t)=>{
+        return Math.max(m, Number(t.t_id) || 0);
+    }, 0);
+    return max + 1;
+}
+
+function getCurrentTreasureBoxRecord(){
+    if(!current_level || !current_treasure) return null;
+    const t_id = Number(current_treasure.dataset.t_id);
+    return (current_level.treasure_boxes || []).find(t => t.t_id === t_id) || null;
+}
+
+// ---------- PLACE TREASURE BOX ----------
+set_treasure_box.onclick = ()=>{
+    if(!current_level) return;
+
+    const new_t_box = document.createElement('div');
+    new_t_box.classList.add("treasure_box");
+    new_t_box.dataset.id = chest_style.value;
+
+    Object.assign(new_t_box.style,{
+        position: 'absolute',
+        top: '750px',
+        left: '230px',
+        width: '120px',
+        height: '120px',
         backgroundPosition: 'center',
         backgroundSize: 'contain',
-        backgroundRepeat: 'no-repeat'
+        backgroundRepeat: 'no-repeat',
+        backgroundImage: `url(./images/chest_${chest_style.value}.png)`,
+        cursor: 'pointer'
     });
 
-   
+    cube.appendChild(new_t_box);
+    current_treasure = new_t_box;
+
+    const t_id = nextTreasureBoxPid(current_level);
+    new_t_box.dataset.t_id = t_id;
+
+    current_level.treasure_boxes.push({
+        t_id,
+        sprite_id: Number(chest_style.value),
+        left: 230,
+        top: 750,
+        content_type: selected_chest_content ? selected_chest_content.type : null,
+        content_id: selected_chest_content ? selected_chest_content.id : null
+    });
+
+    saveLevel();
+    saveCurrentLevel();
+
+    chest_x.value = 230;
+    chest_y.value = 750;
+
+    chest_asset_window.style.display = 'flex';
+};
+
+// ---------- CLOSE CHEST EDITOR ----------
+close_chest_editor.onclick = ()=>{
+    chest_asset_window.style.display = 'none';
+};
+
+// ---------- CHANGE CHEST IMAGE ----------
+function chestImage(){
+    if(!current_treasure) return;
+
+    current_treasure.style.backgroundImage = `url(./images/chest_${chest_style.value}.png)`;
+    current_treasure.dataset.id = chest_style.value;
+
+    const rec = getCurrentTreasureBoxRecord();
+    if(rec){
+        rec.sprite_id = Number(chest_style.value);
+        saveLevel();
+    }
+}
+
+// ---------- MOVE CURRENT TREASURE ----------
+chest_x.addEventListener('input', function(){
+    if(!current_treasure) return;
+
+    current_treasure.style.left = `${this.value}px`;
+
+    const rec = getCurrentTreasureBoxRecord();
+    if(rec){
+        rec.left = Number(this.value);
+        saveLevel();
+    }
+});
+
+chest_y.addEventListener('input', function(){
+    if(!current_treasure) return;
+
+    current_treasure.style.top = `${this.value}px`;
+
+    const rec = getCurrentTreasureBoxRecord();
+    if(rec){
+        rec.top = Number(this.value);
+        saveLevel();
+    }
+});
+
+// ---------- CLICK A TREASURE BOX TO EDIT IT ----------
+cube.addEventListener('click', (e) => {
+    const tbEl = e.target.closest('.treasure_box');
+    if(!tbEl || !cube.contains(tbEl)) return;
+
+    current_treasure = tbEl;
+    chest_asset_window.style.display = 'flex';
+
+    const rec = getCurrentTreasureBoxRecord();
+
+    // chest style preview
+    chest_image_preview.style.backgroundImage = `url(./images/chest_${current_treasure.dataset.id}.png)`;
+    chest_image_preview.style.backgroundSize = 'contain';
+    chest_image_preview.style.backgroundPosition = 'center';
+    chest_image_preview.style.backgroundRepeat = 'no-repeat';
+
+    // position controls
+    chest_x.value = parseInt(current_treasure.style.left) || 0;
+    chest_y.value = parseInt(current_treasure.style.top) || 0;
+    chest_style.value = current_treasure.dataset.id || 0;
+
+    // content preview
+    if(rec && rec.content_type === 'weapon' && rec.content_id !== null){
+        selected_chest_content = {
+            type: rec.content_type,
+            id: rec.content_id
+        };
+        getContentsDetails("weapon",rec.content_id);
+    } else {
+        selected_chest_content = null;
+        clearChestContentPreview();
+    }
+});
+
+// ---------- DELETE CURRENT TREASURE ----------
+delete_current_treasue.onclick = ()=>{
+    if(!current_level || !current_treasure) return;
+
+    const rec = getCurrentTreasureBoxRecord();
+    if(!rec) return;
+
+    current_level.treasure_boxes = (current_level.treasure_boxes || []).filter(t => t.t_id !== rec.t_id);
+
+    current_treasure.remove();
+    current_treasure = null;
+
+    chest_asset_window.style.display = 'none';
+    clearChestContentPreview();
+    saveLevel();
+};
+
+
     create_test.onclick = () => {
     if(!current_level){
         console.warn("No current_level selected to test.");
@@ -2018,6 +2372,32 @@ cube.addEventListener('click', (e) => {
         `;
 
         cube.appendChild(el);
+        });
+
+        // remove existing DOM treasure boxes
+        cube.querySelectorAll('.treasure_box').forEach(t => t.remove());
+
+        // recreate saved treasure boxes
+        (level.treasure_boxes || []).forEach(tb => {
+            const el = document.createElement('div');
+            el.classList.add('treasure_box');
+            el.dataset.id = tb.sprite_id;
+            el.dataset.t_id = tb.t_id;
+
+            Object.assign(el.style,{
+                width: '120px',
+                height: '120px',
+                position: 'absolute',
+                left: tb.left + 'px',
+                top: tb.top + 'px',
+                backgroundImage: `url(./images/chest_${tb.sprite_id}.png)`,
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                cursor: 'pointer'
+            });
+
+            cube.appendChild(el);
         });
 
     }

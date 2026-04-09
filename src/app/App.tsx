@@ -26,7 +26,8 @@ export default function App() {
       <Route path="/game-menu" element={<ProtectedRoute><GameMenu /></ProtectedRoute>} />
       <Route path="/game-play" element={<ProtectedRoute><GamePlay /></ProtectedRoute>} />
       <Route path="/single-play-menu" element={<ProtectedRoute><SinglePlayMenu /></ProtectedRoute>} />
-      <Route path="/admin-level-create" element={<ProtectedRoute><AdminLevelCreate /></ProtectedRoute>} />
+      {/* <Route path="/level-create" element={<ProtectedRoute><AdminLevelCreate /></ProtectedRoute>} /> */}
+            <Route path="/level-create" element={<AdminLevelCreate />} />
 
         {/* Landing page with features and about the game */}
       <Route path="/landing" element={

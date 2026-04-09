@@ -182,7 +182,6 @@
                     <div>Level Size: </div>
                     <select id="level_size_input" name="size">
                         <option value="">Choose Size</option>
-                        <option value="room">Room</option>
                         <option value="small">Small</option>
                         <option value="mid">Mid</option>
                         <option value="large">Large</option>
@@ -220,7 +219,7 @@
                     <div id="object_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Objects</div>
                     <div id="NPC_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">NPC</div>
                     <div id="treasure_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Chest</div>
-                    <div id="enemy_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Enemies</div>
+                    <div id="enemy_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Encounters</div>
                     <div id="landmark_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Landmarks</div>
                 </div>
             </div>
@@ -231,6 +230,182 @@
             </div>
             <div id="asset_preview" style="width: 889px; height: 380px; border: 1px solid black; position: relative; top: 0px;  display: flex; flex-wrap: wrap; overflow-y: scroll; background-color: #222;left: 8px; "></div>
         </div>
+        <div id="encounter_asset_window" style="width: 420px; height: 444px; border: 1px solid black; background-color: ghostwhite; display: none; flex-direction: column; position: absolute; top: 0;">
+            <div id="encounter_header_holder" style="height: 28px; width: 418px; display: flex; flex-direction: row; border-bottom: 1px solid grey;">
+                <div id="encounter_header" style="height: 28px; width: 392px; cursor: pointer;" title="drag to move"></div>
+                <div id="encounter_window_close" style="width: 26px; height: 26px; border: 1px solid black; justify-content: center; display: flex; flex-direction: column; text-align: center; cursor: pointer;">X</div>
+            </div>
+            <div id="encounter_preview_holder" style="width: 418px; height: 230px; border-bottom: 1px solid transparent; display: flex; flex-direction: row;">
+                <div id="encounter_preview_rotate_l" style="position: absolute; width: 32px; height: 32px; background-color: #222; color: ghostwhite; cursor: pointer; font-size: 24px; text-align: center; left: 8px; top: 32px;" title="Rotate Left">L</div>
+                <div id="encounter_preview_rotate_r" style="position: absolute; width: 32px; height: 32px; background-color: #222; color: ghostwhite; cursor: pointer; font-size: 24px; text-align: center; left: 242px; top: 32px;" title="Rotate Right">R</div>
+                <div id="encounter_preview" style="width: 196px; height: 230px; border: 1px solid black; margin: 4px 4px 4px 42px; display: flex; flex-direction: column; background-image: url(./images//background3.png); background-size: contain;">
+                    <div id="ground_setup" style="
+                        width: 196px;
+                        height: 230px;
+                        position: relative;
+                        perspective: 600px;
+                        transform-style: preserve-3d;
+                        transform: rotateY(0deg) rotateZ(0deg) rotateX(0deg);
+                        transform-origin: 100px 142px;
+                        ">
+                        <!-- ENEMY VISUAL LAYER -->
+                        <div id="top_position_enemy"
+                            style="position: absolute; width: 72px; height: 72px;
+                            left: 68px; top: 110px;
+                            transform: rotateY(0deg) translateZ(80px) rotateZ(0deg) rotateX(-15deg);
+                            transform-origin: bottom center;
+                            /* background-image: url(./images/npc_0.png); */
+                            background-size: contain;
+                            background-repeat: no-repeat;
+                            background-position: center bottom;
+                            border-bottom: 1px solid transparent;
+                            display: none;
+                            opacity: 1;
+                            background-color: transparent;">
+                        </div>
+                        <div id="mid_1_enemy"
+                            style="position: absolute; width: 80px; height: 80px;
+                            left: 12px; top: 86px;
+                            transform: rotateY(0deg) translateZ(18px) rotateZ(0deg) rotateX(-15deg);
+                            transform-origin: bottom center;
+                            /* background-image: url(./images/npc_0.png); */
+                            background-size: 96px;
+                            background-repeat: no-repeat;
+                            background-position: center bottom;
+                            border-bottom: 1px solid transparent;
+                            display: none;
+                            opacity: 1;
+                            background-color: transparent;">
+                        </div>
+                        <div id="mid_2_enemy"
+                            style="position: absolute; width: 80px; height: 80px;
+                            left: 120px; top: 86px;
+                            transform: rotateY(0deg) translateZ(18px) rotateZ(0deg) rotateX(-15deg);
+                            transform-origin: bottom center;
+                            /* background-image: url(./images/npc_0.png); */
+                            background-size: 96px;
+                            background-repeat: no-repeat;
+                            background-position: center bottom;
+                            border-bottom: 1px solid transparent;
+                            display: none;
+                            opacity: 1;
+                            background-color: transparent;">
+                        </div>
+                        <div id="back_1_enemy"
+                            style="position: absolute; width: 96px; height: 96px;
+                            left: -40px; top: 52px;
+                            transform: rotateY(0deg) translateZ(-32px) rotateZ(0deg) rotateX(-15deg);
+                            transform-origin: bottom center;
+                            /* background-image: url(./images/npc_0.png); */
+                            background-size: 96px;
+                            background-repeat: no-repeat;
+                            background-position: center bottom;
+                            border-bottom: 1px solid transparent;
+                            display: none;
+                            background-color: transparent;">
+                        </div>
+                        <div id="back_2_enemy"
+                             style="position: absolute; width: 96px; height: 96px;
+                            left: 50px; top: 52px;
+                            transform: rotateY(0deg) translateZ(-55px) rotateZ(0deg) rotateX(-15deg);
+                            transform-origin: bottom center;
+                            /* background-image: url(./images/npc_0.png); */
+                            background-size: 96px;
+                            background-repeat: no-repeat;
+                            background-position: center bottom;
+                            border-bottom: 1px solid transparent;
+                            display: none;
+                            opacity: 1;
+                            background-color: transparent;">
+                        </div>
+                        <div id="back_3_enemy"
+                             style="position: absolute; width: 96px; height: 96px;
+                            left: 144px; top: 52px;
+                            transform: rotateY(0deg) translateZ(-32px) rotateZ(0deg) rotateX(-15deg);
+                            transform-origin: bottom center;
+                            /* background-image: url(./images/npc_0.png); */
+                            background-size: 96px;
+                            background-repeat: no-repeat;
+                            background-position: center bottom;
+                            border-bottom: 1px solid transparent;
+                            display: none;
+                            opacity: 1;
+                            background-color: transparent;">
+                        </div>
+                        <div id="ground" style="background-image: linear-gradient(black, grey); transform: rotateX(75deg) translateZ(0px) rotateY(0deg) rotateZ(270deg); width: 200px; height: 240px; top: 42px; position: absolute; display: flex; flex-direction: row;">
+                            <div id="front_line" style="height: 240px; width: 54px; border: 1px solid transparent; display: flex; flex-direction: column; justify-content: center; margin-right: 6px;" >
+                                <div id="front_position" style="width: 54px; height: 54px; border: 1px solid gold; border-bottom: 1px solid gold; background-color: #222; cursor: pointer;" title="Front Line"></div>
+                            </div>
+                            <div id="mid_center" style="height: 240px; width: 54px; border: 1px solid transparent; display: flex; flex-direction: column; justify-content: space-evenly; margin-right: 6px;">
+                                <div id="mid_1" style="width: 54px; height: 54px; border: 1px solid gold; background-color: #222; cursor: pointer;" title="Front Mid 1"></div>
+                                <div id="mid_2" style="width: 54px; height: 54px; border: 1px solid gold; background-color: #222; cursor: pointer;" title="Front Mid 2"></div>
+                            </div>
+                            <div id="back_row" style="height: 240px; width: 54px; border: 1px solid transparent; display: flex; flex-direction: column; justify-content: space-between;" >
+                                <div id="back_1" style="width: 54px; height: 54px; border: 1px solid gold; background-color: #222; cursor: pointer;" title="Back Mid 1"></div>
+                                <div id="back_2" style="width: 54px; height: 54px; border: 1px solid gold; background-color: #222; cursor: pointer;" title="Back Mid 2"></div>
+                                <div id="back_3" style="width: 54px; height: 54px; border: 1px solid gold; background-color: #222; cursor: pointer;" title="Back Mid 3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="encounter_stats_holder" style="width: 130px; height: 230px; border: 1px solid black; left: 40px; position: relative; top: 4px; display: flex; flex-direction: column; color: ghostwhite; background-image: linear-gradient(black, grey);">
+                    <div id="e_stats_hearts" style="width:194px; height: 16px; display: flex; flex-direction: row; font-size: 12px;">Hearts:
+                        <div id="e_heart_amount"></div>
+                    </div>
+                    <div style="width:194px; height: 16px; display: flex; flex-direction: row; font-size: 12px; margin: 2px;">
+                        <div style="width: 16px; height: 16px; border-radius: 16px; background-color: red;" title="Defense"></div>
+                        <div id="e_stats_def"></div>
+                    </div>
+                    <div style="width:194px; height: 16px; display: flex; flex-direction: row; font-size: 12px; margin: 2px;">
+                        <div style="width: 16px; height: 16px; border-radius: 16px; background-color: orange;" title="Restoration"></div>
+                        <div id="e_stats_res"></div>
+                    </div>
+                    <div  style="width:194px; height: 16px; display: flex; flex-direction: row; font-size: 12px; margin: 2px;">
+                        <div style="width: 16px; height: 16px; border-radius: 16px; background-color: yellow;" title="Attack"></div>
+                        <div id="e_stats_atk"></div>
+                    </div>
+                    <div style="width:194px; height: 16px; display: flex; flex-direction: row; font-size: 12px; margin: 2px;">
+                        <div style="width: 16px; height: 16px; border-radius: 16px; background-color: green;" title="Evasion"></div>
+                        <div id="e_stats_eva"></div>
+                    </div>
+                    <div style="width:194px; height: 16px; display: flex; flex-direction: row; font-size: 12px; margin: 2px;">
+                        <div style="width: 16px; height: 16px; border-radius: 16px; background-color: blue;" title="Special Attack"></div>
+                        <div id="e_stats_spATK"></div>
+                    </div>
+                    <div style="width:194px; height: 16px; display: flex; flex-direction: row; font-size: 12px; margin: 2px;">
+                        <div style="width: 16px; height: 16px; border-radius: 16px; background-color: indigo;" title="Dexterity"></div>
+                        <div id="e_stats_dex"></div>
+                    </div>
+                    <div  style="width:194px; height: 16px; display: flex; flex-direction: row; font-size: 12px; margin: 2px;">
+                        <div style="width: 16px; height: 16px; border-radius: 16px; background-color: violet;" title="Special Defense"></div>
+                        <div id="e_stats_spDEF"></div>
+                    </div>
+                    <div style="width:194px; height: 16px; display: flex; flex-direction: row; font-size: 12px; margin: 2px;">Weak: 
+                        <div id="e_stats_weak"></div>
+                    </div>
+                    <div style="width:194px; height: 16px; display: flex; flex-direction: row; font-size: 12px; margin: 2px;">Resist: 
+                        <div id="e_stats_resists"></div>
+                    </div>
+                    <div style="width:194px; height: 16px; display: flex; flex-direction: row; font-size: 12px; margin: 2px;">Gold:
+                        <div id="e_stats_gold"></div>
+                    </div>
+                    <div style="width:194px; height: 16px; display: flex; flex-direction: row; font-size: 12px; margin: 2px;">EXP: 
+                        <div id="e_stats_exp"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="enemy_log" style="width: 409px; height: 148px; border: 1px solid black; margin: 8px 0px 0px 4px; background-color: salmon; overflow-y: scroll; display: flex; flex-wrap: wrap;"></div>
+            <div id="delete_enemy" style="width: 412px; height: 16px; background-color: #222; color: ghostwhite; text-align: center; margin: 4px 0px 1px 4px; cursor: pointer;">Delete Enemy</div>
+            <div id="set_encounter" style="width: 412px; height: 16px; background-color: #222; color: ghostwhite; text-align: center; margin: 3px 0px 1px 4px; cursor: pointer;">Set Encounter</div>
+             <div id="see_room_encounters" style="width: 412px; height: 16px; background-color: #222; color: ghostwhite; text-align: center; margin: 3px 0px 1px 4px; cursor: pointer;">See Room Encounters</div>
+        </div>
+        <div id="encounters_set_rate" style="width: 360px; height: 375px; position:absolute; background-color: ghostwhite; border: 1px solid black; top: 0px; display: none; flex-direction: column;">
+            <div style="width: 360px; height: 28px; display: flex; flex-direction: row;">
+                <div id="encounter_set_header" style="width: 326px; border-bottom:  1px grey solid;  margin: 2px; height: 26px; cursor: pointer;" title="Drag to Move"></div>
+                <div id="encounter_set_close" style="width: 26px; height: 26px; border: 1px solid black; font-size: 24px; text-align: center; margin-top: 2px; cursor: pointer;">X</div>     
+            </div>
+            <div id="encounter_holder" style="width: 97%; height: 85%; border: black 1px solid; margin: 4px; overflow-y: scroll;"></div>
+        </div>
         <div id="asset_editor" style="width: 240px; height: 380px; border: 1px solid black; position: absolute; top: 200px; background-color: ghostwhite; left: 120px; display: none; flex-direction: column;">
             <div id="asset_header" style="width: 238px; height: 28px; border-bottom: 1px solid grey; margin-left: 1px; font-size: 24px; margin-top: 4px; display: flex; flex-direction: row;">
                 <div id="asset_name" style="height: 28px; width: 222px; cursor: pointer;"></div>
@@ -240,12 +415,12 @@
             <div style="width: 180px; height: 160px; margin-left: 30px; border: 1px solid black; display: flex; flex-direction: column; justify-content: space-evenly;">
                 <div style="display: flex; flex-direction: row; justify-content: space-around;">
                     X
-                    <input id="asset_x" type="range" min="-60" max="530">
+                    <input id="asset_x" type="range">
                     <output for="asset_x" id="asset_x_output"></output>
                 </div>
                 <div style="display: flex; flex-direction: row; justify-content: space-around;">
                     Y
-                    <input id="asset_y" type="range" min="528" max="920">
+                    <input id="asset_y" type="range">
                     <output for="asset_y" id="asset_y_output"></output>
                 </div>
                 <div style="display: flex; flex-direction: row; justify-content: space-around;">
@@ -302,12 +477,12 @@
                 <div style="width: 254px; height: 174px; border: 1px solid transparent; margin-left: 0px; display: flex; flex-direction: column; flex-wrap: wrap;">
                     <div style="display: flex; flex-direction: row; justify-content: space-around;">
                         X
-                        <input id="npc_x" type="range" min="-60" max="530">
+                        <input id="npc_x" type="range">
                         <output for="npc_x" id="npc_x_output"></output>
                     </div>
                     <div style="display: flex; flex-direction: row; justify-content: space-around;">
                         Y
-                        <input id="npc_y" type="range" min="528" max="920">
+                        <input id="npc_y" type="range">
                         <output for="npc_y" id="npc_y_output"></output>
                     </div>
                     <div style="display: flex; flex-direction: row; justify-content: space-around;">
@@ -360,11 +535,11 @@
                     <div id="set_treasure_box" style="width: 98%; height: 24px; border: 1px inset black; text-align: center; color: ghostwhite; background-color: #222; margin-bottom: 4px; cursor: pointer;">Set</div>
                     <div style="display: flex; flex-direction: row; margin: 4px 0px 0px 0px;">
                         <label>X</label>
-                        <input type="range" id="chest_x"  min="-60" max="530">
+                        <input type="range" id="chest_x">
                     </div>
                     <div style="display: flex; flex-direction: row;  margin: 8px 0px 4px 0px;">
                         <label>Y</label>
-                        <input type="range" id="chest_y" min="528" max="920">
+                        <input type="range" id="chest_y">
                     </div>
                     Chest Style:<br>
                     <select id="chest_style"></select>
@@ -421,7 +596,27 @@
                     
                 </div>
                 <div id="content_asset_holder" style="width: 292px; height: 136px; background-image: linear-gradient(#222, rgb(71, 71, 71)); margin-left: 2px; overflow-y: scroll; display: flex; flex-direction: row; flex-wrap: wrap;"></div>
-                <div id="delete_current_treasue" style=" width: 292; height: 24px; background-color: #222; margin-left: 2px; text-align: center; color: ghostwhite; cursor: pointer; margin-top: 2px;">Delete Treasure</div>
+                <div id="delete_current_treasure" style=" width: 292; height: 24px; background-color: #222; margin-left: 2px; text-align: center; color: ghostwhite; cursor: pointer; margin-top: 2px;">Delete Treasure</div>
+        </div>
+        <div id="set_landmark_window" style="position: absolute; top: 0px; left: 0px; height: 280px; width: 240px; background-color: ghostwhite; border: 1px solid black; display: none; flex-direction: column;">
+            <div style=" width: 99%; height: 32px; margin-left: 1px; display: flex; flex-direction: row;">
+                <div id="landmark_header" style="height: 27px; width: 208px; background-color: ghostwhite; border-bottom: grey 1px solid; cursor: pointer; margin: 0px 4px 0px 0px" title="drag to move"></div>
+                <div id="close_landmark_window" style="width: 26px; height: 26px; border: 1px solid black; justify-content: center; display: flex; flex-direction: column; text-align: center; cursor: pointer;">X</div>
+            </div>
+            <div style="width: 235px; height: 120px; border: 1px solid transparent; margin-left: 2px; display: flex; flex-direction: row;" >
+                <div id="landmark_image_preview" style="width: 114px; height: 114px; background-color: aliceblue; border: 1px solid black; margin: 2px; background-image: url(./images/landmark_0.png); background-size: contain; background-position: center; background-repeat: no-repeat;"></div>
+                <div style="width: 114px; height: 114px; border: 1px solid transparent; margin: 2px; display: flex; flex-direction: column; justify-content: space-evenly;">
+                    <div style="display: flex; flex-direction: row; padding-left: 2px;"> X 
+                        <input id="landmark_x" type="range"  style="width: 96px;">
+                    </div>
+                    <div style="display: flex; flex-direction: row; padding-left: 2px;"> Y 
+                        <input id="landmark_y" type="range"  style="width: 96px;">
+                    </div>
+                    <div id="set_landmark" style="width: 96%; background-color: #222; color: ghostwhite; text-align: center; font-size: 16px; margin: 2px;">Set</div>
+                    <div id="delete_landmark" style="width: 96%; background-color: #222; color: ghostwhite; text-align: center; font-size: 16px; margin: 2px;">Delete</div>
+                </div>
+            </div>
+            <div id="landmark_asset_preview" style="margin-left: 2px; width: 234px; height: 122px; border: 1px solid black; overflow-y: scroll; background-image: linear-gradient(#222, grey);"></div>
         </div>
         <div id="delete_confirm_holder" style="width: 100%; height: 100%; position: absolute; background-color: rgba(0, 0, 0, 0.42); justify-content: center; align-items: center; display: none; flex-direction: column; top: 0px;">
             <div id="confirm_delete" style="width: 240px; height: 240px; border: 1px solid black; background-color: crimson; border-radius: 12px; display: none; flex-direction: column;">
@@ -463,6 +658,8 @@
             objects: [],
             npcs: [],
             treasure_boxes: [],
+            enemy_encounters: [],
+            landmarks: [],
         }
     ];
     var level_pending_delete = null;
@@ -622,12 +819,83 @@
     let nav_equipments = document.getElementById('nav_equipments');
     let nav_weapons = document.getElementById('nav_weapons');
     let nav_skills = document.getElementById('nav_skills');
-    let nav_manifests = document.getElementById('nav_manifest');
+    let nav_manifests = document.getElementById('nav_manifests');
     let nav_keys = document.getElementById('nav_keys');
     let nav_materials = document.getElementById('nav_materials');
     let nav_traps = document.getElementById('nav_traps');
     //chest content screen
     let content_asset_holder = document.getElementById('content_asset_holder');
+    //encounter content screen
+    let encounter_asset_window = document.getElementById('encounter_asset_window');
+    let encounter_header_holder = document.getElementById('encounter_header_holder');
+    let encounter_header = document.getElementById('encounter_header');
+    let encounter_window_close = document.getElementById('encounter_window_close');
+    let encounter_window_preview_holder = document.getElementById('encounter_window_preview_holder');
+    let encounter_preview = document.getElementById('encounter_preview');
+    let ground_setup = document.getElementById('ground_setup');
+    let ground = document.getElementById('ground');
+    //battle positions
+    //front line
+    let front_line = document.getElementById('front_line');
+    let front_position = document.getElementById('front_position');
+    //front mid
+    let front_mid = document.getElementById('mid_center');
+    let mid_1 = document.getElementById('mid_1');
+    let mid_2 = document.getElementById('mid_2');
+    //back mid
+    let back_row = document.getElementById('back_row');
+    let back_1 = document.getElementById('back_1');
+    let back_2 = document.getElementById('back_2');
+    let back_3 = document.getElementById('back_3');
+    //enemy position array
+    let enemy_position_arr = [front_position, mid_1, mid_2, back_1, back_2, back_3];
+    //encounter stats
+    let e_stats_hearts = document.getElementById('e_stats_hearts');
+    let e_stats_def = document.getElementById('e_stats_def');
+    let e_stats_res = document.getElementById('e_stats_res');
+    let e_stats_atk = document.getElementById('e_stats_atk');
+    let e_stats_eva = document.getElementById('e_stats_eva');
+    let e_stats_spATK = document.getElementById('e_stats_spATK');
+    let e_stats_dex = document.getElementById('e_stats_dex');
+    let e_stats_sDEF = document.getElementById('e_stats_spDEF');
+    let e_stats_weak = document.getElementById('e_stats_weak');
+    let e_stats_resists= document.getElementById('e_stats_resists');
+    let e_stats_gold = document.getElementById('e_stats_gold');
+    let e_stats_exp = document.getElementById('e_stats_exp');
+    //preview enemy log
+    let enemy_log = document.getElementById('enemy_log');
+    //delete enemy
+    let delete_enemy = document.getElementById('delete_enemy');
+    //set encounter
+    let set_encounter = document.getElementById('set_encounter');
+    //see all room encounters
+    let see_room_encounters = document.getElementById('see_room_encounters');
+    //encounter preview camera
+    let encounter_preview_rotate_l = document.getElementById('encounter_preview_rotate_l');
+    let encounter_preview_rotate_r = document.getElementById('encounter_preview_rotate_r');
+    //enemy visual layer
+    let top_position_enemy = document.getElementById('top_position_enemy');
+    let mid_1_enemy = document.getElementById('mid_1_enemy');
+    let mid_2_enemy = document.getElementById('mid_2_enemy');
+    let back_1_enemy = document.getElementById('back_1_enemy');
+    let back_2_enemy = document.getElementById('back_2_enemy');
+    let back_3_enemy = document.getElementById('back_3_enemy');
+    //encounter set rate
+    let encounters_set_rate = document.getElementById('encounters_set_rate');
+    let encounter_set_header = document.getElementById('encounter_set_header');
+    encounter_set_header.title = 'drag to move';
+    let encounter_set_close = document.getElementById('encounter_set_close');
+    let encounter_holder = document.getElementById('encounter_holder');
+    //landmarks
+    let set_landmark_window = document.getElementById('set_landmark_window');
+    let landmark_header = document.getElementById('landmark_header');
+    let close_landmark_window = document.getElementById('close_landmark_window');
+    let landmark_image_preview = document.getElementById('landmark_image_preview');
+    let landmark_x = document.getElementById('landmark_x');
+    let landmark_y = document.getElementById('landmark_y');
+    let set_landmark = document.getElementById('set_landmark');
+    let delete_landmark = document.getElementById('delete_landmark');
+    let landmark_asset_preview = document.getElementById('landmark_asset_preview');
     //screen array
     var screens = [start_window, level_stats, level_create_screen,load_level_screen];
     create_new_level.onclick = function(){
@@ -645,7 +913,7 @@
     }
     //pointer on hover array
     var options_arr = [create_new_level,load_level,exit_level,create_level_input,exit_level_stats, close_error, create_save, create_test, create_exit, create_clear, create_delete, delete_confirm_no, delete_confirm_yes,delete_object,delete_object_no, delete_object_yes,
-        move_portrait_left, move_portrait_up, move_portrait_down, move_portrait_right, move_portrait_flip,delete_current_treasue,
+        move_portrait_left, move_portrait_up, move_portrait_down, move_portrait_right, move_portrait_flip,delete_current_treasure, delete_enemy,see_room_encounters,
     ];
     //hover funtion
     options_arr.forEach(option =>{
@@ -657,22 +925,23 @@
     }
     //create new level
     level_create_form.addEventListener("submit", function(e){
-        //stops page reload for dynamic emplimentation
         e.preventDefault();
-        //checks to see if create inputs are empty
+
         error_text.innerHTML = "";
+
         if(level_name_input.value.trim() === ""){
             error_screen.style.display = "flex";
             error_text.innerHTML += "Please Name your creation...<br>";
             return;
         }
+
         if(level_size_input.value === ""){
             error_screen.style.display = "flex";
             error_text.innerHTML += "Please choose a Size...<br>";
             return;
         }
-        //get values from form
-        var newLevel = {
+
+        const newLevel = {
             id: levels.length + 1,
             name: level_name_input.value,
             size: level_size_input.value,
@@ -685,19 +954,23 @@
                 face_top: [],
                 face_bottom: [],
             },
-            objects:[],
+            objects: [],
             npcs: [],
             treasure_boxes: [],
+            enemy_encounters: [],
+            landmarks: [],
         };
-        //push new level values into levels array
+
         levels.push(newLevel);
-        //saves level array
         saveLevel();
+
         current_level = newLevel;
         ensureLevelShape(current_level);
         saveCurrentLevel();
         renderLevelName(current_level);
-        // clearRoomVisuals();
+
+        buildLevel(current_level);
+        applyLevelSliderRanges(current_level);
         showScreen(level_create_screen);
     });
 
@@ -723,6 +996,39 @@
         // save active screen
         localStorage.setItem("activeScreen", screenElement.id);
     }
+    function getLevelSliderRanges(level){
+    let cols = 5;
+
+    if(level?.size === "mid") cols = 10;
+    else if(level?.size === "large") cols = 20;
+
+    const roomWidth = cols * 120;
+
+    return {
+        xMin: -60,
+        xMax: roomWidth - 70,
+        yMin: 528,
+        yMax: 920
+    };
+}
+
+function applyLevelSliderRanges(level){
+    const { xMin, xMax, yMin, yMax } = getLevelSliderRanges(level);
+
+    [asset_x, npc_x, chest_x, landmark_x].forEach(slider => {
+        if(!slider) return;
+        slider.min = xMin;
+        slider.max = xMax;
+        slider.value = Math.min(xMax, Math.max(xMin, Number(slider.value || xMin)));
+    });
+
+    [asset_y, npc_y, chest_y, landmark_y].forEach(slider => {
+        if(!slider) return;
+        slider.min = yMin;
+        slider.max = yMax;
+        slider.value = Math.min(yMax, Math.max(yMin, Number(slider.value || yMin)));
+    });
+}
     //render saved levels to load
     function renderSavedLevels(){
         load_level_holder.innerHTML = "";
@@ -762,6 +1068,7 @@
                 loadRoomVisuals(current_level);
                 saveCurrentLevel();
                 renderLevelName(current_level);
+                applyLevelSliderRanges(current_level);
                 showScreen(level_create_screen);
             }
         });
@@ -782,151 +1089,336 @@
         if(!level) return;
         level_nav_name.textContent = level.name+" Size:"+level.size;
     }
-
     function buildLevel(level){
+        if(!level) return;
+
+        if(level.size === "room" || level.size === "small"){
+            buildSmallRoomLevel(level);   // 5x5
+        } 
+        else if(level.size === "mid"){
+            buildMidLevel(level);         // 10x5
+        } 
+        else if(level.size === "large"){
+            buildLargeLevel(level);       // 20x5
+        }
+    }
+    function createFaces(){
         cube.innerHTML = "";
-            //cubefaces
-    var face_back = document.createElement('div');
-    var face_left = document.createElement('div');
-    var face_right = document.createElement('div');
-    var face_bottom = document.createElement('div');
-    var face_top = document.createElement('div');
-    //faces array
-    cube_sides_array = [face_back, face_left, face_right, face_bottom, face_top];
-        //room size
-        if(level.size == "room"){
-            const cols = 5; 
-            const rows = 5;
-            const tileSize = 120;
-            const COLS = 5;
-            const ROWS = 5;
-            const ROOM_WIDTH = TILE * COLS;   // 600
-            const ROOM_HEIGHT = TILE * ROWS;  // 600
-            const ROOM_DEPTH = ROOM_WIDTH;    // 600
 
-             // Cube Container
-            Object.assign(cube.style, {
-                width: ROOM_WIDTH + 'px',
-                height: ROOM_HEIGHT + 'px',
-                position: 'relative',
-                transformStyle: 'preserve-3d',
-                margin: '0 auto',
-                transform: 'translateZ(0px)', // Adjusted to keep base perspective stable
-                top: '-500px' // Kept as requested for clickability
-            });
+        const face_back = document.createElement('div');
+        const face_left = document.createElement('div');
+        const face_right = document.createElement('div');
+        const face_bottom = document.createElement('div');
+        const face_top = document.createElement('div');
 
-            // Helper for faces to reduce repetition
-            const faceBase = {
-                position: 'absolute',
-                opacity: 1,
-                backgroundSize: TILE + 'px'
-            };
+        face_back.id = 'face_back';
+        face_left.id = 'face_left';
+        face_right.id = 'face_right';
+        face_bottom.id = 'face_bottom';
+        face_top.id = 'face_top';
 
-         // 1. Back Wall (Perpendicular to Depth)
-            face_back.id='face_back';
-            cube.appendChild(face_back);
-            Object.assign(face_back.style, faceBase, {
-                width: ROOM_WIDTH + 'px',
-                height: '480px',
-                // Half of ROOM_DEPTH (600/2)
-                transform: `rotateY(180deg) translateZ(${ROOM_DEPTH / 2}px)`,
-                top: '510px'
-            });
-            // 2. Left Wall (Perpendicular to Width)
-            face_left.id='face_left';
-            cube.appendChild(face_left);
-            Object.assign(face_left.style, faceBase, {
-                width: ROOM_DEPTH + 'px',
-                height: '480px',
-                left: '0px',
-                // Half of ROOM_WIDTH (600/2)
-                transform: `rotateY(-90deg) translateZ(${ROOM_WIDTH / 2}px)`,
-                top: '510px',
-            });
+        cube.appendChild(face_back);
+        cube.appendChild(face_left);
+        cube.appendChild(face_right);
+        cube.appendChild(face_bottom);
+        cube.appendChild(face_top);
 
-            // 3. Right Wall (Perpendicular to Width)
-            face_right.id='face_right';
-            cube.appendChild(face_right);
-            Object.assign(face_right.style, faceBase, {
-                width: ROOM_DEPTH + 'px',
-                height: '480px',
-                // Removed the '13px' left offset to ensure perfect closure
-                left: '60px', 
-                transform: `rotateY(90deg) translateZ(240px)`,
-                top: '510px'
-            });
+        cube_sides_array = [face_back, face_left, face_right, face_bottom, face_top];
 
-            // 4. Floor (Perpendicular to Height)
-            face_bottom.id='face_bottom';
-            cube.appendChild(face_bottom);
-            Object.assign(face_bottom.style, faceBase, {
-                width: ROOM_WIDTH + 'px',
-                height: ROOM_HEIGHT + 'px', // Should be DEPTH for a floor
-                top: '300px', // Offset for height difference
-                transform: `rotateX(-90deg) translateZ(390px)`,
-            });
-
-            // 5. Ceiling (Perpendicular to Height)
-            face_top.id='face_top';
-            cube.appendChild(face_top);
-            Object.assign(face_top.style, faceBase, {
-                width: ROOM_WIDTH + 'px',
-                height: ROOM_HEIGHT + 'px',
-                top: '300px',
-                transform: `rotateX(-90deg) translateZ(0px)`,
-            });
-            
-            //exit build level
-            create_exit.onclick = function(){
-                showScreen(start_window);
-                current_level = null;
-                clearRoomVisuals(cube_sides_array);
-            }
-            cube_sides_array.forEach(face =>{
-                for(let i = 0; i <cols * rows; i++){
-                    const tile = document.createElement('div');
-                    tile.classList.add('tile');
-                    tile.dataset.index = i;
-
-                    Object.assign(tile.style,{
-                        width: tileSize + "px",
-                        height: tileSize + "px",
-                        boxSizing: "border-box",
-                        border: '1px solid rgba(255, 255, 255, 0)'
-                    });
-                    face.appendChild(tile);
-                    //hover to highlight
-                    
-                }
-                face.addEventListener('mouseover', function(e){
-                        if(e.target.classList.contains('tile')){
-                            e.target.style.backgroundColor = "rgba(255,255,0,0.4)";
-                        }
-                    });
-                    face.addEventListener('mouseout',function(e){
-                        if(e.target.classList.contains('tile')){
-                            e.target.style.backgroundColor='';
-                        }
-                    });
-            });    
-                //set up grid
-                makeGrid(face_back, COLS, ROWS, TILE);
-                makeGrid(face_left, COLS, ROWS, TILE);
-                makeGrid(face_right, COLS, ROWS, TILE);
-                makeGrid(face_top, COLS, ROWS, TILE);
-                makeGrid(face_bottom, COLS, ROWS, TILE);
-            }
-
+        return { face_back, face_left, face_right, face_bottom, face_top };
     }
 
-     //make grid funtion
-        function makeGrid(face, cols, rows, tileSize){
-            Object.assign(face.style,{
-                display: 'grid', 
-                gridTemplateColumns : "repeat("+cols+","+ tileSize+"px"+")",
-                gridTemplateRows: "repeat("+rows+","+ tileSize+"px"+")"
+    function makeGrid(face, cols, rows, tileSize){
+        Object.assign(face.style, {
+            display: 'grid',
+            gridTemplateColumns: `repeat(${cols}, ${tileSize}px)`,
+            gridTemplateRows: `repeat(${rows}, ${tileSize}px)`
+        });
+    }
+
+    function addTiles(face, cols, rows, tileSize){
+        face.innerHTML = "";
+
+        for(let i = 0; i < cols * rows; i++){
+            const tile = document.createElement('div');
+            tile.classList.add('tile');
+            tile.dataset.index = i;
+
+            Object.assign(tile.style, {
+                width: tileSize + "px",
+                height: tileSize + "px",
+                boxSizing: "border-box",
+                border: '1px solid rgba(255,255,255,0.15)'
             });
+
+            face.appendChild(tile);
         }
+
+        face.addEventListener('mouseover', function(e){
+            if(e.target.classList.contains('tile')){
+                e.target.style.backgroundColor = "rgba(255,255,0,0.4)";
+            }
+        });
+
+        face.addEventListener('mouseout', function(e){
+            if(e.target.classList.contains('tile')){
+                e.target.style.backgroundColor = '';
+            }
+        });
+    }
+
+    function setupExit(){
+        create_exit.onclick = function(){
+            showScreen(start_window);
+            current_level = null;
+            clearRoomVisuals(cube_sides_array);
+        };
+    }
+    //build small room
+    function buildSmallRoomLevel(level){
+        const cols = 5;
+        const rows = 5;
+        const sideCols = 5;
+        const tileSize = 120;
+
+        const ROOM_WIDTH = tileSize * cols;       // 600
+        const ROOM_HEIGHT = tileSize * rows;      // 600
+        const SIDE_WIDTH = tileSize * sideCols;   // 600
+
+        const { face_back, face_left, face_right, face_bottom, face_top } = createFaces();
+
+        Object.assign(cube.style, {
+            width: ROOM_WIDTH + 'px',
+            height: ROOM_HEIGHT + 'px',
+            position: 'relative',
+            transformStyle: 'preserve-3d',
+            margin: '0 auto',
+            transform: 'translateZ(0px)',
+            top: '-500px'
+        });
+
+        const faceBase = {
+            position: 'absolute',
+            opacity: 1,
+            backgroundSize: tileSize + 'px'
+        };
+
+        Object.assign(face_back.style, faceBase, {
+            width: ROOM_WIDTH + 'px',
+            height: '480px',
+            transform: `rotateY(180deg) translateZ(300px)`,
+            top: '510px'
+        });
+
+        Object.assign(face_left.style, faceBase, {
+            width: SIDE_WIDTH + 'px',
+            height: '480px',
+            left: '0px',
+            transform: `rotateY(-90deg) translateZ(300px)`,
+            top: '510px'
+        });
+
+        Object.assign(face_right.style, faceBase, {
+            width: SIDE_WIDTH + 'px',
+            height: '480px',
+            left: '0px',
+            transform: `rotateY(90deg) translateZ(300px)`,
+            top: '510px'
+        });
+
+        Object.assign(face_bottom.style, faceBase, {
+            width: ROOM_WIDTH + 'px',
+            height: ROOM_HEIGHT + 'px',
+            top: '300px',
+            transform: `rotateX(-90deg) translateZ(390px)`
+        });
+
+        Object.assign(face_top.style, faceBase, {
+            width: ROOM_WIDTH + 'px',
+            height: ROOM_HEIGHT + 'px',
+            top: '300px',
+            transform: `rotateX(-90deg) translateZ(0px)`
+        });
+
+        addTiles(face_back, cols, rows, tileSize);
+        addTiles(face_left, sideCols, rows, tileSize);
+        addTiles(face_right, sideCols, rows, tileSize);
+        addTiles(face_bottom, cols, rows, tileSize);
+        addTiles(face_top, cols, rows, tileSize);
+
+        makeGrid(face_back, cols, rows, tileSize);
+        makeGrid(face_left, sideCols, rows, tileSize);
+        makeGrid(face_right, sideCols, rows, tileSize);
+        makeGrid(face_bottom, cols, rows, tileSize);
+        makeGrid(face_top, cols, rows, tileSize);
+
+        setupExit();
+    }
+    //build mid room
+    function buildMidLevel(level){
+        const cols = 10;
+        const rows = 5;
+        const sideCols = 5;
+        const tileSize = 120;
+
+        const ROOM_WIDTH = tileSize * cols;       // 1200
+        const ROOM_HEIGHT = tileSize * rows;      // 600
+        const SIDE_WIDTH = tileSize * sideCols;   // 600
+
+        const { face_back, face_left, face_right, face_bottom, face_top } = createFaces();
+
+        Object.assign(cube.style, {
+            width: ROOM_WIDTH + 'px',
+            height: ROOM_HEIGHT + 'px',
+            position: 'relative',
+            transformStyle: 'preserve-3d',
+            margin: '0 auto',
+            transform: 'translateZ(0px)',
+            top: '-500px'
+        });
+
+        const faceBase = {
+            position: 'absolute',
+            opacity: 1,
+            backgroundSize: tileSize + 'px'
+        };
+
+        Object.assign(face_back.style, faceBase, {
+            width: ROOM_WIDTH + 'px',
+            height: '480px',
+            transform: `rotateY(180deg) translateZ(300px)`,
+            top: '510px'
+        });
+
+        Object.assign(face_left.style, faceBase, {
+            width: SIDE_WIDTH + 'px',
+            height: '480px',
+            left: '0px',
+            transform: `rotateY(-90deg) translateZ(300px)`,
+            top: '510px'
+        });
+
+        Object.assign(face_right.style, faceBase, {
+            width: SIDE_WIDTH + 'px',
+            height: '480px',
+            left: (ROOM_WIDTH - SIDE_WIDTH) + 'px',
+            transform: `rotateY(90deg) translateZ(300px)`,
+            top: '510px'
+        });
+
+        Object.assign(face_bottom.style, faceBase, {
+            width: ROOM_WIDTH + 'px',
+            height: ROOM_HEIGHT + 'px',
+            top: '300px',
+            transform: `rotateX(-90deg) translateZ(390px)`,
+            backgroundColor: '#222'
+        });
+
+        Object.assign(face_top.style, faceBase, {
+            width: ROOM_WIDTH + 'px',
+            height: ROOM_HEIGHT + 'px',
+            top: '300px',
+            transform: `rotateX(-90deg) translateZ(0px)`,
+            backgroundColor: '#222'
+        });
+
+        addTiles(face_back, cols, rows, tileSize);
+        addTiles(face_left, sideCols, rows, tileSize);
+        addTiles(face_right, sideCols, rows, tileSize);
+        addTiles(face_bottom, cols, rows, tileSize);
+        addTiles(face_top, cols, rows, tileSize);
+
+        makeGrid(face_back, cols, rows, tileSize);
+        makeGrid(face_left, sideCols, rows, tileSize);
+        makeGrid(face_right, sideCols, rows, tileSize);
+        makeGrid(face_bottom, cols, rows, tileSize);
+        makeGrid(face_top, cols, rows, tileSize);
+
+        setupExit();
+    }
+    //build large room
+    function buildLargeLevel(level){
+        const cols = 20;
+        const rows = 5;
+        const sideCols = 5;
+        const tileSize = 120;
+
+        const ROOM_WIDTH = tileSize * cols;       // 2400
+        const ROOM_HEIGHT = tileSize * rows;      // 600
+        const SIDE_WIDTH = tileSize * sideCols;   // 600
+
+        const { face_back, face_left, face_right, face_bottom, face_top } = createFaces();
+
+        Object.assign(cube.style, {
+            width: ROOM_WIDTH + 'px',
+            height: ROOM_HEIGHT + 'px',
+            position: 'relative',
+            transformStyle: 'preserve-3d',
+            margin: '0 auto',
+            transform: 'translateZ(0px)',
+            top: '-500px'
+        });
+
+        const faceBase = {
+            position: 'absolute',
+            opacity: 1,
+            backgroundSize: tileSize + 'px'
+        };
+
+        Object.assign(face_back.style, faceBase, {
+            width: ROOM_WIDTH + 'px',
+            height: '480px',
+            transform: `rotateY(180deg) translateZ(300px)`,
+            top: '510px'
+        });
+
+        Object.assign(face_left.style, faceBase, {
+            width: SIDE_WIDTH + 'px',
+            height: '480px',
+            left: '0px',
+            transform: `rotateY(-90deg) translateZ(300px)`,
+            top: '510px'
+        });
+
+        Object.assign(face_right.style, faceBase, {
+            width: SIDE_WIDTH + 'px',
+            height: '480px',
+            left: (ROOM_WIDTH - SIDE_WIDTH) + 'px',
+            transform: `rotateY(90deg) translateZ(300px)`,
+            top: '510px'
+        });
+
+        Object.assign(face_bottom.style, faceBase, {
+            width: ROOM_WIDTH + 'px',
+            height: ROOM_HEIGHT + 'px',
+            top: '300px',
+            transform: `rotateX(-90deg) translateZ(390px)`,
+            backgroundColor: '#222'
+        });
+
+        Object.assign(face_top.style, faceBase, {
+            width: ROOM_WIDTH + 'px',
+            height: ROOM_HEIGHT + 'px',
+            top: '300px',
+            transform: `rotateX(-90deg) translateZ(0px)`,
+            backgroundColor: '#222'
+        });
+
+        addTiles(face_back, cols, rows, tileSize);
+        addTiles(face_left, sideCols, rows, tileSize);
+        addTiles(face_right, sideCols, rows, tileSize);
+        addTiles(face_bottom, cols, rows, tileSize);
+        addTiles(face_top, cols, rows, tileSize);
+
+        makeGrid(face_back, cols, rows, tileSize);
+        makeGrid(face_left, sideCols, rows, tileSize);
+        makeGrid(face_right, sideCols, rows, tileSize);
+        makeGrid(face_bottom, cols, rows, tileSize);
+        makeGrid(face_top, cols, rows, tileSize);
+
+        setupExit();
+    }
+    //over_here
     //click away function 
     function clickAway(element1,element2){
         element1.addEventListener("click", function(e){
@@ -1256,6 +1748,9 @@ cube.addEventListener('click', (e) => {
     dragWindow(npc_name, npc_asset_window);
     dragWindow(npc_dialogue_header, npc_dialogue_test_window);
     dragWindow(chest_asset_header, chest_asset_window);
+    dragWindow(encounter_header, encounter_asset_window);
+    dragWindow(encounter_set_header, encounters_set_rate);
+    dragWindow(landmark_header, set_landmark_window);
     //apply transforms to objects
     function applyTransforms() {
         if (!current_object) return;
@@ -1809,10 +2304,15 @@ cube.addEventListener('click', (e) => {
                 }
                 if(!level.treasure_boxes){
                     level.treasure_boxes = [];
+                }
+                if(!level.enemy_encounters){
+                    level.enemy_encounters = [];
                 } 
                 level.objects = Array.isArray(level.objects) ? level.objects : [];
                 level.npcs    = Array.isArray(level.npcs)    ? level.npcs    : [];
                 level.treasure_boxes = Array.isArray(level.treasure_boxes) ? level.treasure_boxes : [];
+                level.enemy_encounters = Array.isArray(level.enemy_encounters) ? level.enemy_encounters : [];
+                level.landmarks = Array.isArray(level.landmarks) ? level.landmarks : [];
                 selected_background = level.background;
             });
             saveLevel();
@@ -1825,6 +2325,8 @@ cube.addEventListener('click', (e) => {
         level.objects = Array.isArray(level.objects) ? level.objects : [];
         level.npcs = Array.isArray(level.npcs) ? level.npcs : [];
         level.treasure_boxes = Array.isArray(level.treasure_boxes) ? level.treasure_boxes : [];
+        level.enemy_encounters = Array.isArray(level.enemy_encounters) ? level.enemy_encounters : [];
+        level.landmarks = Array.isArray(level.landmarks) ? level.landmarks : [];
         return level;
     }
     //delete level
@@ -1852,6 +2354,7 @@ cube.addEventListener('click', (e) => {
 
     buildLevel(current_level);
     loadRoomVisuals(current_level);
+    applyLevelSliderRanges(current_level);
     }
     //load tiles on startup
     function generateTiles(){
@@ -1924,8 +2427,18 @@ let selected_chest_content = null;
 // optional: open treasure editor from a menu button
 if(typeof treasure_asset !== "undefined" && treasure_asset){
     treasure_asset.onclick = ()=>{
+        current_treasure = null;
+        selected_chest_content = null;
+
         chest_asset_window.style.display = 'flex';
-        chest_image_preview.style.backgroundImage = `url(./images/chest_${chest_style.value || 0}.png)`;
+        chest_style.value = 0;
+        chest_image_preview.style.backgroundImage = `url(./images/chest_0.png)`;
+
+        chest_x.value = 230;
+        chest_y.value = 750;
+
+        clearChestContentPreview();
+        content_asset_holder.innerHTML = "";
     };
 }
 
@@ -2018,7 +2531,7 @@ nav_equipments.onclick = ()=>{
             border: '3px outset ghostwhite',
             margin: '8px',
             borderRadius: '4px',
-            backgroundImage: `url(./images/equip_${equipment.id}.png)`,
+            // backgroundImage: `url(./images/equip_${equipment.id}.png)`,
             backgroundSize: 'contain',
             backgroundPosition: 'center',
             backgroundRepeat:'no-repeat',
@@ -2047,6 +2560,266 @@ nav_equipments.onclick = ()=>{
         
     });
 };
+//------------Content nav: Manifest -----------
+    nav_manifests.onclick = ()=>{
+        content_asset_holder.innerHTML = "";
+
+            // console.log(mani.name);
+
+        manifest.forEach(mani=>{
+            let mani_card = document.createElement('div');
+            content_asset_holder.appendChild(mani_card);
+
+            Object.assign(mani_card.style,{
+                width: '32px',
+                height: '32px',
+                border: '3px outset ghostwhite',
+                margin: '8px',
+                borderRadius: '4px',
+                // backgroundImage: `url(./images/equip_${equipment.id}.png)`,
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundRepeat:'no-repeat',
+                backgroundColor: 'aliceblue',
+                cursor: 'pointer'
+            });
+            mani_card.title = mani.name;
+
+            mani_card.onclick = ()=>{
+                //content choosen 
+                selected_chest_content = {
+                    type: 'manifest',
+                    id: mani.id
+                };
+
+                //update content preview
+                getContentsDetails("manifest",mani.id);
+                //if editing existing chest
+                const rec = getCurrentTreasureBoxRecord();
+                if(rec){
+                    rec.content_type = 'manifest';
+                    rec.content_id = mani.id;
+                    saveLevel();
+                }
+        };
+        
+    });
+    
+    };
+
+    //------------Content nav: Skill -----------
+    nav_skills.onclick = ()=>{
+        content_asset_holder.innerHTML = "";
+
+        skills.forEach(skill=>{
+            let skill_card = document.createElement('div');
+            content_asset_holder.appendChild(skill_card);
+
+            Object.assign(skill_card.style,{
+                width: '32px',
+                height: '32px',
+                border: '3px outset ghostwhite',
+                margin: '8px',
+                borderRadius: '4px',
+                // backgroundImage: `url(./images/equip_${equipment.id}.png)`,
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundRepeat:'no-repeat',
+                backgroundColor: 'aliceblue',
+                cursor: 'pointer'
+            });
+            skill_card.title = skill.name;
+
+            skill_card.onclick = ()=>{
+                //content choosen 
+                selected_chest_content = {
+                    type: 'skill',
+                    id: skill.id
+                };
+
+                //update content preview
+                getContentsDetails("skill",skill.id);
+                //if editing existing chest
+                const rec = getCurrentTreasureBoxRecord();
+                if(rec){
+                    rec.content_type = 'skill';
+                    rec.content_id = skill.id;
+                    saveLevel();
+                }
+        };
+        
+    });
+    };
+
+        //------------Content nav: Items -----------
+    nav_items.onclick = ()=>{
+        content_asset_holder.innerHTML = "";
+            items.forEach(item=>{
+                let item_card = document.createElement('div');
+                content_asset_holder.appendChild(item_card);
+
+                Object.assign(item_card.style,{
+                    width: '32px',
+                    height: '32px',
+                    border: '3px outset ghostwhite',
+                    margin: '8px',
+                    borderRadius: '4px',
+                    // backgroundImage: `url(./images/equip_${equipment.id}.png)`,
+                    backgroundSize: 'contain',
+                    backgroundPosition: 'center',
+                    backgroundRepeat:'no-repeat',
+                    backgroundColor: 'aliceblue',
+                    cursor: 'pointer'
+                });
+                item_card.title = item.name;
+
+                item_card.onclick = ()=>{
+                    //content choosen 
+                    selected_chest_content = {
+                        type: 'item',
+                        id: item.id
+                    };
+
+                    //update content preview
+                    getContentsDetails("item",item.id);
+                    //if editing existing chest
+                    const rec = getCurrentTreasureBoxRecord();
+                    if(rec){
+                        rec.content_type = 'item';
+                        rec.content_id = item.id;
+                        saveLevel();
+                    }
+            };
+        
+        });
+    };
+        //------------Content nav: Keys -----------
+    nav_keys.onclick = ()=>{
+        content_asset_holder.innerHTML = "";
+
+        keys.forEach(key=>{
+            let key_card = document.createElement('div');
+            content_asset_holder.appendChild(key_card);
+
+            Object.assign(key_card.style,{
+                width: '32px',
+                height: '32px',
+                border: '3px outset gold',
+                margin: '8px',
+                borderRadius: '4px',
+                // backgroundImage: `url(./images/equip_${equipment.id}.png)`,
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundRepeat:'no-repeat',
+                backgroundColor: 'aliceblue',
+                cursor: 'pointer'
+            });
+            key_card.title = key.name;
+
+            key_card.onclick = ()=>{
+                //content choosen 
+                selected_chest_content = {
+                    type: 'key',
+                    id: key.id
+                };
+
+                //update content preview
+                getContentsDetails("key",key.id);
+                //if editing existing chest
+                const rec = getCurrentTreasureBoxRecord();
+                if(rec){
+                    rec.content_type = 'key';
+                    rec.content_id = key.id;
+                    saveLevel();
+                }
+        };
+    });
+    };
+        //------------Content nav: Materials -----------
+    nav_materials.onclick = ()=>{
+        content_asset_holder.innerHTML = "";
+
+        materials.forEach(material=>{
+            let material_card = document.createElement('div');
+            content_asset_holder.appendChild(material_card);
+
+            Object.assign(material_card.style,{
+                width: '32px',
+                height: '32px',
+                border: `3px outset ${material.upgrade_type}`,
+                margin: '8px',
+                borderRadius: '4px',
+                // backgroundImage: `url(./images/equip_${equipment.id}.png)`,
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundRepeat:'no-repeat',
+                backgroundColor: 'aliceblue',
+                cursor: 'pointer'
+            });
+            material_card.title = material.name+" "+material.rarity;
+
+            material_card.onclick = ()=>{
+                //content choosen 
+                selected_chest_content = {
+                    type: 'material',
+                    id: material.id
+                };
+
+                //update content preview
+                getContentsDetails("material",material.id);
+                //if editing existing chest
+                const rec = getCurrentTreasureBoxRecord();
+                if(rec){
+                    rec.content_type = 'material';
+                    rec.content_id = material.id;
+                    saveLevel();
+                }
+        };
+        
+    });
+    };
+    nav_traps.onclick = ()=>{
+
+        content_asset_holder.innerHTML = "";        
+        traps.forEach(trap=>{
+                let trap_card = document.createElement('div');
+                content_asset_holder.appendChild(trap_card);
+
+                Object.assign(trap_card.style,{
+                    width: '32px',
+                    height: '32px',
+                    border: '3px outset ghostwhite',
+                    margin: '8px',
+                    borderRadius: '4px',
+                    // backgroundImage: `url(./images/equip_${equipment.id}.png)`,
+                    backgroundSize: 'contain',
+                    backgroundPosition: 'center',
+                    backgroundRepeat:'no-repeat',
+                    backgroundColor: 'aliceblue',
+                    cursor: 'pointer'
+                });
+                trap_card.title = trap.name;
+
+                trap_card.onclick = ()=>{
+                    //content choosen 
+                    selected_chest_content = {
+                        type: 'trap',
+                        id: trap.id
+                    };
+
+                    //update content preview
+                    getContentsDetails("trap",trap.id);
+                    //if editing existing chest
+                    const rec = getCurrentTreasureBoxRecord();
+                    if(rec){
+                        rec.content_type = 'trap';
+                        rec.content_id = trap.id;
+                        saveLevel();
+                    }
+            };
+        
+        });
+    };
 
 // ---------- CONTENT DETAILS ----------
 function clearChestContentStats(){
@@ -2062,40 +2835,65 @@ function clearChestContentPreview(){
     clearChestContentStats();
 }
 
-function getContentsDetails(type,id){
-    clearChestContentStats();
+function getContentSource(type){
+    const sources = {
+        weapon: weapons,
+        equipment: equipments,
+        item: items,
+        skill: skills,
+        manifest: manifest,
+        key: keys,
+        material: materials,
+        trap: traps
+    };
+    return sources[type] || null;
+}
 
-    const weapon = weapons[id];
-    const equipment = equipments[id];
+function getStatForContent(type, content){
+    if(!content) return null;
 
-    if(weapon){
-        content_desc.innerHTML = weapon.desc || "";
-        item_name_preview.innerHTML = weapon.name || "";
-
-        Object.assign(item_image_preview.style,{
-            backgroundImage: `url(./images/weapon_${id}.png)`,
-            backgroundPosition: 'center',
-            backgroundSize: 'contain',
-            backgroundRepeat: 'no-repeat'
-        });
-
-        let stat = weapon_stats.find(s => s.stat_id === weapon.stat_id);
-
-    }else if(equipment){
-        content_desc.innerHTML = equipment.desc || "";
-        item_name_preview.innerHTML = equipment.name || "";
-
-        Object.assign(item_image_preview.style,{
-            backgroundImage: `url(./images/equip_${id}.png)`,
-            backgroundPosition: 'center',
-            backgroundSize: 'contain',
-            backgroundRepeat: 'no-repeat'
-        });
-
-        let stat = equip_stats.find(s => s.stat_id === equipment.stat_id);
-
+    if(type === 'weapon'){
+        return weapon_stats.find(s => s.stat_id === content.stat_id) || null;
     }
 
+    if(type === 'equipment'){
+        return equip_stats.find(s => s.stat_id === content.stat_id) || null;
+    }
+
+    return null;
+}
+
+function getContentsDetails(type, id){
+    clearChestContentPreview();
+
+    const source = getContentSource(type);
+    if(!source) return;
+
+    const content = source.find(c => Number(c.id) === Number(id));
+    if(!content) return;
+
+    item_name_preview.innerHTML = content.name || "";
+    content_desc.innerHTML = content.desc || "";
+
+    let imagePath = "";
+
+    if(type === 'weapon') imagePath = `./images/weapon_${id}.png`;
+    else if(type === 'equipment') imagePath = `./images/equip_${id}.png`;
+    else if(type === 'item') imagePath = `./images/item_${id}.png`;
+    else if(type === 'skill') imagePath = `./images/skill_${id}.png`;
+    else if(type === 'manifest') imagePath = `./images/manifest_${id}.png`;
+    else if(type === 'key') imagePath = `./images/key_${id}.png`;
+    else if(type === 'material') imagePath = `./images/material_${id}.png`;
+    else if(type === 'trap') imagePath = `./images/trap_${id}.png`;
+
+    Object.assign(item_image_preview.style,{
+        backgroundImage: `url(${imagePath})`,
+        backgroundPosition: 'center',
+        backgroundSize: 'contain',
+        backgroundRepeat: 'no-repeat'
+    });
+
+    const stat = getStatForContent(type, content);
     if(stat){
         content_def_stat.innerHTML = stat.def ?? "";
         content_res_stat.innerHTML = stat.res ?? "";
@@ -2153,8 +2951,13 @@ set_treasure_box.onclick = ()=>{
         sprite_id: Number(chest_style.value),
         left: 230,
         top: 750,
-        content_type: selected_chest_content ? selected_chest_content.type : null,
-        content_id: selected_chest_content ? selected_chest_content.id : null
+        opened: false,
+        content_type: selected_chest_content
+         ? selected_chest_content.type 
+         : null,
+        content_id: selected_chest_content 
+        ? selected_chest_content.id 
+        : null
     });
 
     saveLevel();
@@ -2232,20 +3035,20 @@ cube.addEventListener('click', (e) => {
     chest_style.value = current_treasure.dataset.id || 0;
 
     // content preview
-    if(rec && rec.content_type === 'weapon' && rec.content_id !== null){
-        selected_chest_content = {
-            type: rec.content_type,
-            id: rec.content_id
-        };
-        getContentsDetails("weapon",rec.content_id);
-    } else {
-        selected_chest_content = null;
-        clearChestContentPreview();
-    }
+if(rec && rec.content_type && rec.content_id !== null){
+    selected_chest_content = {
+        type: rec.content_type,
+        id: rec.content_id
+    };
+    getContentsDetails(rec.content_type, rec.content_id);
+} else {
+    selected_chest_content = null;
+    clearChestContentPreview();
+}
 });
 
 // ---------- DELETE CURRENT TREASURE ----------
-delete_current_treasue.onclick = ()=>{
+delete_current_treasure.onclick = ()=>{
     if(!current_level || !current_treasure) return;
 
     const rec = getCurrentTreasureBoxRecord();
@@ -2260,8 +3063,907 @@ delete_current_treasue.onclick = ()=>{
     clearChestContentPreview();
     saveLevel();
 };
+//open chest function
+function openChest(t_id){
+    if(!current_level) return;
 
+    const chest = current_level.treasure_boxes.find(t => t.t_id === t_id);
 
+    if(chest_opened){
+        //chest_empty logic
+        showMessage("Empty Treasure Chest...");
+        return;
+    }
+    //get box content
+    givesChestReward(chest);
+
+    //mark opened
+    chest.opened = true;
+
+    //change treasure_sprite
+    updateVisual(t_id);
+
+    saveLevel();
+}
+
+function updateChestVisual(t_id){
+
+    const chestEl =
+        document.querySelector(
+            `.treasure_box[data-t_id="${t_id}"]`
+        );
+
+    if(!chestEl) return;
+
+    chestEl.style.backgroundImage =
+        `url(./images/chest_open_${t_id}.png)`;
+
+}
+
+function getContentByType(type,id){
+
+    const sources = {
+
+        weapon: weapons,
+        equipment: equipments,
+        item: items,
+        skill: skills,
+        material: materials,
+        key: keys,
+        manifest: manifest,
+        trap: traps
+
+    };
+
+    return sources[type]?.[id];
+
+}
+    //encounters
+    enemy_asset.onclick = () =>{
+        encounter_asset_window.style.display = 'flex';
+    };
+
+    encounter_window_close.onclick = () =>{
+        encounter_asset_window.style.display = 'none';
+        editingEncounterIndex = null;
+    };
+
+    enemy_encounters = [
+        {
+            encounter_id: 0,
+            front_position: null,
+            mid_1: null,
+            mid_2: null,
+            back_1: null,
+            back_2: null,
+            back_3: null,
+            rate:  "common"
+        },
+    ];
+
+    const ENCOUNTER_RATES = [
+        { value: "common", label: "Common", weight: 45 },
+        { value: "uncommon", label: "Uncommon", weight: 25 },
+        { value: "rare", label: "Rare", weight: 15 },
+        { value: "ultra_rare", label: "Ultra Rare", weight: 8 },
+        { value: "legendary", label: "Legendary", weight: 4 },
+        { value: "cosmic", label: "Cosmic", weight: 2 },
+        { value: "paradismic", label: "Paradismic", weight: 1 }
+    ];
+
+    function getEncounterWeight(rateValue){
+        const found = ENCOUNTER_RATES.find(r => r.value === rateValue);
+        return found ? found.weight : 0;
+    }
+    
+    //selected enemy for placement
+    let selected_enemy_id = null;
+    let placing_enemy = false;
+    let deleting_enemy = false;
+    let editingEncounterIndex = null;
+
+    //board tile -> data key
+    const boardSlots = [
+        {tile: front_position, key: "front_position", visual: top_position_enemy },
+        {tile: mid_1, key: "mid_1", visual: mid_1_enemy },
+        {tile: mid_2, key: "mid_2", visual: mid_2_enemy },
+        {tile: back_1, key: "back_1", visual: back_1_enemy },
+        {tile: back_2, key: "back_2", visual: back_2_enemy },
+        {tile: back_3, key: "back_3", visual: back_3_enemy },
+    ];
+    //get enemy image
+    function getEnemyImage(id){
+        return id == null ? "" : `url(./images/enemy_${id}.png)`;
+    }
+    // redraw board tiles + 3D enemy visuals from enemy_encounters
+    function renderEncounterBoard(){
+        const encounter = enemy_encounters[0];
+
+        boardSlots.forEach(slot => {
+            const enemyId = encounter[slot.key];
+
+            // show tile previews in placement mode OR delete mode
+            if (placing_enemy || deleting_enemy) {
+                slot.tile.style.backgroundImage = getEnemyImage(enemyId);
+                slot.tile.style.backgroundPosition = "center";
+                slot.tile.style.backgroundSize = "contain";
+                slot.tile.style.backgroundRepeat = "no-repeat";
+                slot.tile.style.transform = "rotate(90deg)";
+            } else {
+                slot.tile.style.backgroundImage = "";
+                slot.tile.style.backgroundPosition = "";
+                slot.tile.style.backgroundSize = "";
+                slot.tile.style.backgroundRepeat = "";
+                slot.tile.style.transform = "";
+            }
+
+            // only show standing enemies in normal mode
+            if (enemyId != null && !placing_enemy && !deleting_enemy) {
+                slot.visual.style.display = "block";
+                slot.visual.style.backgroundImage = getEnemyImage(enemyId);
+                slot.visual.style.backgroundPosition = "center bottom";
+                slot.visual.style.backgroundSize = "contain";
+                slot.visual.style.backgroundRepeat = "no-repeat";
+            } else {
+                slot.visual.style.display = "none";
+                slot.visual.style.backgroundImage = "";
+            }
+        });
+    }
+    // placement mode on/off
+    function enterPlacementMode(enemyId){
+        selected_enemy_id = enemyId;
+        placing_enemy = true;
+
+        renderEncounterBoard();
+
+        ground.animate(
+            [
+                { transform: 'rotateX(75deg) rotateZ(270deg)' },
+                { transform: 'rotateX(0deg) rotateZ(270deg)' }
+            ],
+            {
+                duration: 420,
+                easing: 'ease-in-out',
+                fill: 'forwards'
+            }
+        );
+
+        showCancelPlacementButton();
+    }
+
+    function exitPlacementMode(){
+        selected_enemy_id = null;
+        placing_enemy = false;
+        
+        ground.animate(
+            [
+                { transform: 'rotateX(0deg) rotateZ(270deg)' },
+                { transform: 'rotateX(75deg) rotateZ(270deg)' }
+            ],
+            {
+                duration: 420,
+                easing: 'ease-in-out',
+                fill: 'forwards'
+            }
+        );
+
+        rebuildEnemyLog();
+        renderEncounterBoard();
+    }
+
+// enemy picker UI
+function rebuildEnemyLog(){
+    enemy_log.innerHTML = "";
+
+    enemies.forEach(enemy => {
+        let enemy_card = document.createElement('div');
+
+        Object.assign(enemy_card.style, {
+            width: '64px',
+            height: '64px',
+            border: '4px outset white',
+            margin: '3px',
+            borderRadius: '4px',
+            backgroundColor: 'black',
+            cursor: 'pointer',
+            backgroundImage: `url(./images/enemy_${enemy.id}.png)`,
+            backgroundSize: 'contain',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+        });
+
+        enemy_card.title = enemy.name;
+        enemy_log.appendChild(enemy_card);
+
+        enemy_card.addEventListener('mouseover', () => {
+            let stats = enemy_stats.find(s => s.stat_id === enemy.stat_id);
+            if(stats){
+                e_stats_hearts.innerHTML = 'Hearts: ' + stats.hearts;
+                e_stats_def.textContent = ': ' + stats.def;
+                e_stats_res.textContent = ': ' + stats.res;
+                e_stats_atk.textContent = ': ' + stats.atk;
+                e_stats_eva.textContent = ': ' + stats.eva;
+                e_stats_spATK.textContent = ': ' + stats.spATK;
+                e_stats_dex.textContent = ': ' + stats.dex;
+                e_stats_spDEF.textContent = ': ' + stats.spDEF;
+                e_stats_weak.textContent = ': ' + stats.weak_type;
+                e_stats_resists.textContent = ': ' + stats.resist_type.join(", ");
+                e_stats_gold.textContent = ': ' + stats.gold;
+                e_stats_exp.textContent = ': ' + stats.exp;
+            }
+        });
+
+        enemy_card.addEventListener('click', () => {
+            enterPlacementMode(enemy.id);
+        });
+    });
+}
+
+function showCancelPlacementButton(){
+    enemy_log.innerHTML = "";
+
+    let cancel_enemy_placement = document.createElement('div');
+    cancel_enemy_placement.textContent = "Cancel Placement";
+    enemy_log.appendChild(cancel_enemy_placement);
+
+    Object.assign(cancel_enemy_placement.style, {
+        border: '1px outset black',
+        position: 'relative',
+        top: '32px',
+        height: '24px',
+        lineHeight: '24px',
+        color: 'ghostwhite',
+        backgroundColor: '#222',
+        cursor: 'pointer',
+        textAlign: 'center',
+        width: '100%'
+    });
+
+    cancel_enemy_placement.onclick = exitPlacementMode;
+}
+
+// one-time tile listeners
+boardSlots.forEach(slot => {
+    slot.tile.addEventListener('mouseover', () => {
+        if(!placing_enemy || selected_enemy_id == null) return;
+
+        slot.tile.style.backgroundImage = getEnemyImage(selected_enemy_id);
+        slot.tile.style.backgroundPosition = "center";
+        slot.tile.style.backgroundSize = "contain";
+        slot.tile.style.backgroundRepeat = "no-repeat";
+        slot.tile.style.transform = "rotate(90deg)";
+    });
+
+    slot.tile.addEventListener('mouseout', () => {
+        if(!placing_enemy) return;
+        renderEncounterBoard();
+    });
+
+    slot.tile.addEventListener('click', () => {
+    // placement mode
+        if (placing_enemy && selected_enemy_id != null) {
+            enemy_encounters[0][slot.key] = selected_enemy_id;
+            renderEncounterBoard();
+            exitPlacementMode();
+            return;
+        }
+
+        // delete mode
+        if (deleting_enemy) {
+            enemy_encounters[0][slot.key] = null;
+            renderEncounterBoard();
+            exitDeleteMode();
+        }
+    });
+});
+
+// delete currently hovered/selected logic can be added later
+delete_enemy.onclick = () => {
+    enterDeleteMode();
+};
+
+// initial draw
+rebuildEnemyLog();
+renderEncounterBoard();
+
+    function enterDeleteMode(){
+        selected_enemy_id = null;
+        placing_enemy = false;
+        deleting_enemy = true;
+
+        renderEncounterBoard();
+
+        ground.animate(
+            [
+                { transform: 'rotateX(75deg) rotateZ(270deg)' },
+                { transform: 'rotateX(0deg) rotateZ(270deg)' }
+            ],
+            {
+                duration: 420,
+                easing: 'ease-in-out',
+                fill: 'forwards'
+            }
+        );
+
+        showCancelDeleteButton();
+    }
+
+    function showCancelDeleteButton(){
+    enemy_log.innerHTML = "";
+
+    let cancel_delete = document.createElement('div');
+    cancel_delete.textContent = "Cancel Delete";
+    enemy_log.appendChild(cancel_delete);
+
+    Object.assign(cancel_delete.style, {
+        border: '1px outset black',
+        position: 'relative',
+        top: '32px',
+        height: '24px',
+        lineHeight: '24px',
+        color: 'ghostwhite',
+        backgroundColor: '#522',
+        cursor: 'pointer',
+        textAlign: 'center',
+        width: '100%'
+    });
+
+    cancel_delete.onclick = exitDeleteMode;
+}
+
+function exitDeleteMode(){
+    deleting_enemy = false;
+
+    ground.animate(
+        [
+            { transform: 'rotateX(0deg) rotateZ(270deg)' },
+            { transform: 'rotateX(75deg) rotateZ(270deg)' }
+        ],
+        {
+            duration: 420,
+            easing: 'ease-in-out',
+            fill: 'forwards'
+        }
+    );
+
+    rebuildEnemyLog();
+    renderEncounterBoard();
+}
+
+    // encounter preview camera
+    let ground_rotate = 0;
+    encounter_preview_rotate_l.onclick = ()=>{
+        let ground_rotate_next = ground_rotate - 30;
+        if(ground_rotate_next >= 360){
+            ground_rotate_next -= 360;
+        }
+        const gc = ground_setup.animate(
+            [
+                {transform: `rotateY(${ground_rotate}deg)`},
+                {transform: `rotateY(${ground_rotate_next}deg)`}
+            ], 
+            {
+                iterations: 1,
+                duration: 400, 
+                easing: 'linear',
+                fill: 'forwards'
+            }
+        );
+        gc.onfinish =()=>{
+            ground_rotate = ground_rotate_next;
+            console.log(ground_rotate);
+        }
+    };
+
+        encounter_preview_rotate_r.onclick = ()=>{
+        let ground_rotate_next = ground_rotate + 30;
+        if(ground_rotate_next >= 360){
+            ground_rotate_next -= 360;
+        }
+        const gc = ground_setup.animate(
+            [
+                {transform: `rotateY(${ground_rotate}deg)`},
+                {transform: `rotateY(${ground_rotate_next}deg)`}
+            ], 
+            {
+                iterations: 1,
+                duration: 400, 
+                easing: 'linear',
+                fill: 'forwards'
+            }
+        );
+        gc.onfinish =()=>{
+            ground_rotate = ground_rotate_next;
+            console.log(ground_rotate);
+        }
+    };
+    //set enocunter window
+    set_encounter.onclick = () =>{
+        saveEncounterToCurrentLevel();
+        renderSavedEncounters();
+        resetEncounterBoard();
+
+        encounter_asset_window.style.display = 'none';
+        encounters_set_rate.style.display = 'flex';
+
+        console.log(current_level.enemy_encounters);
+    };
+
+    //close set_encounter_window 
+    encounter_set_close.onclick = () =>{
+            encounters_set_rate.style.display = 'none';
+    };
+
+    //see all encounters
+    see_room_encounters.onclick = ()=>{
+        renderSavedEncounters();
+
+        encounter_asset_window.style.display = 'none';
+        encounters_set_rate.style.display = 'flex';
+    };
+
+    //save current encounter board
+    function cloneCurrentEncounter(){
+        const src = enemy_encounters[0];
+
+        return {
+            encounter_id: src.encounter_id ?? Date.now(),
+            front_position: src.front_position,
+            mid_1: src.mid_1,
+            mid_2: src.mid_2,
+            back_1: src.back_1,
+            back_2: src.back_2,
+            back_3: src.back_3,
+            rate: src.rate
+        };
+    }
+
+    function saveEncounterToCurrentLevel(){
+        if(!current_level) return;
+
+        ensureLevelShape(current_level);
+
+        const encounterData = cloneCurrentEncounter();
+
+        if(editingEncounterIndex === null){
+            current_level.enemy_encounters.push(encounterData);
+        } else {
+            current_level.enemy_encounters[editingEncounterIndex] = encounterData;
+        }
+
+        saveLevel();
+        saveCurrentLevel();
+
+        editingEncounterIndex = null;
+    }
+
+    //reset encounter board
+    function resetEncounterBoard(){
+        enemy_encounters[0] = {
+            encounter_id: 0,
+            front_position: null,
+            mid_1: null,
+            mid_2: null,
+            back_1: null,
+            back_2: null,
+            back_3: null, 
+            rate: "common"
+        };
+
+        renderEncounterBoard();
+    }
+    //render level encounters
+function renderSavedEncounters(){
+    encounter_holder.innerHTML = "";
+
+    if(!current_level) return;
+    ensureLevelShape(current_level);
+
+    current_level.enemy_encounters.forEach((encounter, index) => {
+
+        const card = document.createElement('div');
+        card.classList.add('saved_encounter_card');
+
+        Object.assign(card.style, {
+            border: '1px solid black',
+            margin: '4px',
+            padding: '6px',
+            backgroundColor: 'white',
+        });
+
+        const title = document.createElement('div');
+        title.textContent = `Encounter ${index + 1}`;
+        title.style.fontWeight = 'bold';
+        title.style.marginBottom = '4px';
+        card.appendChild(title);
+
+        const slots = [
+            { label: 'Front', value: encounter.front_position },
+            { label: 'Mid 1', value: encounter.mid_1 },
+            { label: 'Mid 2', value: encounter.mid_2 },
+            { label: 'Back 1', value: encounter.back_1 },
+            { label: 'Back 2', value: encounter.back_2 },
+            { label: 'Back 3', value: encounter.back_3 }
+        ];
+
+        let slot_holder = document.createElement('div');
+
+        Object.assign(slot_holder.style,{
+            width: '99%',
+            height:'30%',
+            backgroundColor: 'aliceblue',
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap:'wrap'
+        });
+
+        card.appendChild(slot_holder);
+
+        slots.forEach(slot => {
+
+            const row = document.createElement('div');
+
+            // SAFE lookup
+            let enemyName = "Empty";
+
+            if(slot.value !== null && enemies[slot.value]){
+                enemyName = enemies[slot.value].name;
+            }
+
+            row.title = `${slot.label}: ${enemyName}`;
+
+            Object.assign(row.style,{
+                width: '32px',
+                height: '32px',
+                backgroundColor: 'black',
+                margin: '4px',
+                border: 'outset crimson 4px',
+                borderRadius: '4px'
+            });
+            // Only show image if enemy exists
+            if(slot.value !== null && enemies[slot.value]){
+                row.style.backgroundImage =
+                    `url(./images/enemy_${slot.value}.png)`;
+                row.style.backgroundSize = 'contain';
+            }
+
+            slot_holder.appendChild(row);
+        });
+
+        encounter_holder.appendChild(card);
+
+        let encounter_rate_holder = document.createElement('select');
+        slot_holder.appendChild(encounter_rate_holder);
+
+        Object.assign(encounter_rate_holder.style,{
+            width: '120px', height: '32px', margin: '8px 0px 0px 4px', paddingLeft: '8px'
+        });
+        //build options
+        ENCOUNTER_RATES.forEach(rate_option =>{
+            const option = document.createElement('option');
+            option.value = rate_option.value;
+            option.textContent = rate_option.label;
+            encounter_rate_holder.appendChild(option);
+        });
+        //show saved rate
+        // show saved rate
+    encounter_rate_holder.value = encounter.rate || "common";
+
+    // save when changed
+    encounter_rate_holder.addEventListener('change', () => {
+        encounter.rate = encounter_rate_holder.value;
+
+        saveLevel();
+        saveCurrentLevel();
+    });
+    const rateLabel = document.createElement('div');
+    rateLabel.textContent = `Rate: ${ENCOUNTER_RATES.find(r => r.value === (encounter.rate || "common"))?.label || "Common"}`;
+    rateLabel.style.margin = '6px 0';
+    rateLabel.style.fontSize = '14px';
+    card.appendChild(rateLabel);
+
+    encounter_rate_holder.addEventListener('change', () => {
+        encounter.rate = encounter_rate_holder.value;
+        rateLabel.textContent = `Rate: ${ENCOUNTER_RATES.find(r => r.value === encounter.rate)?.label || "Common"}`;
+
+        saveLevel();
+        saveCurrentLevel();
+    });
+
+        let edit_encounter = document.createElement('div');
+        card.appendChild(edit_encounter);
+        Object.assign(edit_encounter.style,{ width: '96%', height: '16px', backgroundColor: '#222', color: 'ghostwhite', textAlign: 'center', cursor:'pointer'});
+        onHover(edit_encounter,'yellow','ghostwhite');
+        edit_encounter.textContent = 'Edit Encounter';
+
+        edit_encounter.onclick = ()=>{
+            loadEncounterForEditing(index);
+        };
+        let delete_encounter = document.createElement('div');
+        card.appendChild(delete_encounter);
+        Object.assign(delete_encounter.style,{ width: '96%', height: '16px', backgroundColor: '#222', color: 'ghostwhite', textAlign: 'center', cursor:'pointer', marginTop: '4px'});
+        onHover(delete_encounter,'yellow','ghostwhite');
+        delete_encounter.textContent = 'Delete Encounter';
+
+        delete_encounter.onclick = () => {
+            if(!current_level) return;
+            ensureLevelShape(current_level);
+
+            current_level.enemy_encounters.splice(index, 1);
+
+            if(editingEncounterIndex === index){
+                editingEncounterIndex = null;
+                resetEncounterBoard();
+            } else if(
+                editingEncounterIndex !== null &&
+                editingEncounterIndex > index
+            ){
+                editingEncounterIndex--;
+            }
+            saveLevel();
+            saveCurrentLevel();
+            renderSavedEncounters();
+        };
+        //test encounter 
+        let test_encounter = document.createElement('div');
+            card.appendChild(test_encounter);
+            Object.assign(test_encounter.style,{ width: '96%', height: '16px', backgroundColor: '#222', color: 'ghostwhite', textAlign: 'center', cursor:'pointer', marginTop: '4px'});
+            onHover(test_encounter,'yellow','ghostwhite');
+            test_encounter.textContent = 'Test Encounter';
+    });
+}
+    function loadEncounterForEditing(index){
+        if(!current_level) return;
+        ensureLevelShape(current_level);
+
+        const saved = current_level.enemy_encounters[index];
+        if(!saved) return;
+
+        editingEncounterIndex = index;
+
+        enemy_encounters[0] = {
+            encounter_id: saved.encounter_id,
+            front_position: saved.front_position,
+            mid_1: saved.mid_1,
+            mid_2: saved.mid_2,
+            back_1: saved.back_1,
+            back_2: saved.back_2,
+            back_3: saved.back_3,
+            rate : saved.rate || "common"
+        };
+
+        placing_enemy = false;
+        deleting_enemy = false;
+        selected_enemy_id = null;
+
+        rebuildEnemyLog();
+        renderEncounterBoard();
+
+        encounters_set_rate.style.display = 'none';
+        encounter_asset_window.style.display = 'flex';
+    }
+    //LANDMARKS
+    landmark_asset.onclick = () =>{
+        set_landmark_window.style.display = 'flex';
+    };
+    let total_landmarks = 1;
+    let current_landmark = null;
+    let selected_landmark_sprite = 0;
+
+    //landmark id helper
+    function nextLandmarkPid(level){
+        if(!level || !Array.isArray(level.landmarks) || level.landmarks.length === 0){
+            return 1;
+        }
+        return Math.max(...level.landmarks.map(l => Number(l.landmark_id) || 0)) + 1;
+    }
+
+    //current landmark record
+    function getCurrentLandmarkRecord(){
+        if(!current_level || !current_landmark) return null;
+
+        const landmarkId = Number(current_landmark.dataset.landmark_id);
+        return current_level.landmarks.find(l => l.landmark_id === landmarkId) || null;
+    }
+
+    //place landmark
+set_landmark.onclick = () => {
+    if(!current_level) return;
+
+    ensureLevelShape(current_level);
+
+    const landmark_id = nextLandmarkPid(current_level);
+
+    const new_landmark = document.createElement('div');
+    new_landmark.classList.add('landmark');
+    new_landmark.dataset.id = selected_landmark_sprite;
+    new_landmark.dataset.landmark_id = landmark_id;
+
+    Object.assign(new_landmark.style, {
+        position: 'absolute',
+        left: '230px',
+        top: '750px',
+        width: '120px',
+        height: '240px',
+        backgroundImage: `url(./images/landmark_${selected_landmark_sprite}.png)`,
+        backgroundPosition: 'center',
+        backgroundSize: 'contain',
+        backgroundRepeat: 'no-repeat',
+        cursor: 'pointer'
+    });
+
+    cube.appendChild(new_landmark);
+    current_landmark = new_landmark;
+
+    current_level.landmarks.push({
+        landmark_id: landmark_id,
+        sprite_id: Number(selected_landmark_sprite),
+        left: 230,
+        top: 750
+    });
+
+    landmark_x.value = 230;
+    landmark_y.value = 750;
+
+    saveLevel();
+    saveCurrentLevel();
+    renderLandmarks();
+
+    set_landmark_window.style.display = 'flex';
+};
+
+    //move current landmark
+    landmark_x.addEventListener('input', function(){
+        if(!current_landmark) return;
+
+        current_landmark.style.left = `${this.value}px`;
+
+        const rec = getCurrentLandmarkRecord();
+        if(rec){
+            rec.left = Number(this.value);
+            saveLevel();
+            saveCurrentLevel();
+        }
+    });
+
+    landmark_y.addEventListener('input', function(){
+        if(!current_landmark) return;
+
+        current_landmark.style.top = `${this.value}px`;
+
+        const rec = getCurrentLandmarkRecord();
+        if(rec){
+            rec.top = Number(this.value);
+            saveLevel();
+            saveCurrentLevel();
+        }
+    });
+
+    //change landmark image
+    function setLandmarkImage(spriteId){
+        selected_landmark_sprite = Number(spriteId);
+
+        landmark_image_preview.style.backgroundImage = `url(./images/landmark_${selected_landmark_sprite}.png)`;
+        landmark_image_preview.style.backgroundSize = 'contain';
+        landmark_image_preview.style.backgroundPosition = 'center';
+        landmark_image_preview.style.backgroundRepeat = 'no-repeat';
+
+        if(!current_landmark) return;
+
+        current_landmark.dataset.id = selected_landmark_sprite;
+        current_landmark.style.backgroundImage = `url(./images/landmark_${selected_landmark_sprite}.png)`;
+
+        const rec = getCurrentLandmarkRecord();
+        if(rec){
+            rec.sprite_id = selected_landmark_sprite;
+            saveLevel();
+            saveCurrentLevel();
+        }
+    }
+
+    //click to edit
+    cube.addEventListener('click', (e) => {
+        const landmarkEl = e.target.closest('.landmark');
+        if(!landmarkEl || !cube.contains(landmarkEl)) return;
+
+        current_landmark = landmarkEl;
+        set_landmark_window.style.display = 'flex';
+
+        landmark_image_preview.style.backgroundImage = `url(./images/landmark_${landmarkEl.dataset.id}.png)`;
+        landmark_image_preview.style.backgroundSize = 'contain';
+        landmark_image_preview.style.backgroundPosition = 'center';
+        landmark_image_preview.style.backgroundRepeat = 'no-repeat';
+
+        landmark_x.value = parseInt(landmarkEl.style.left) || 0;
+        landmark_y.value = parseInt(landmarkEl.style.top) || 0;
+
+        selected_landmark_sprite = Number(landmarkEl.dataset.id) || 0;
+    });
+
+    //delete landmark
+    delete_landmark.onclick = () => {
+        if(!current_level || !current_landmark) return;
+
+        const rec = getCurrentLandmarkRecord();
+        if(!rec) return;
+
+        current_level.landmarks = current_level.landmarks.filter(
+            l => l.landmark_id !== rec.landmark_id
+        );
+
+        current_landmark.remove();
+        current_landmark = null;
+
+        set_landmark_window.style.display = 'none';
+
+        saveLevel();
+        saveCurrentLevel();
+    };
+
+    //close editor
+    close_landmark_window.onclick = () => {
+        set_landmark_window.style.display = 'none';
+    };
+
+    //render saved landmarks
+    function renderLandmarks(){
+        cube.querySelectorAll('.landmark').forEach(el => el.remove());
+
+        if(!current_level) return;
+        ensureLevelShape(current_level);
+
+        current_level.landmarks.forEach(landmark => {
+            const el = document.createElement('div');
+            el.classList.add('landmark');
+            el.dataset.id = landmark.sprite_id;
+            el.dataset.landmark_id = landmark.landmark_id;
+
+            Object.assign(el.style, {
+                position: 'absolute',
+                left: `${landmark.left}px`,
+                top: `${landmark.top}px`,
+                width: '120px',
+                height: '240px',
+                backgroundImage: `url(./images/landmark_${landmark.sprite_id}.png)`,
+                backgroundPosition: 'center',
+                backgroundSize: 'contain',
+                backgroundRepeat: 'no-repeat',
+                cursor: 'pointer'
+            });
+
+            cube.appendChild(el);
+        });
+    }
+    //landmark asset preview
+    function buildLandmarkAssetPreview(){
+        landmark_asset_preview.innerHTML = "";
+
+        for(let i = 0; i < total_landmarks; i++){
+            const card = document.createElement('div');
+            landmark_asset_preview.appendChild(card);
+
+            Object.assign(card.style, {
+                width: '64px',
+                height: '64px',
+                margin: '4px',
+                display: 'inline-block',
+                border: '2px solid white',
+                cursor: 'pointer',
+                backgroundImage: `url(./images/landmark_${i}.png)`,
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                backgroundColor: '#111'
+            });
+
+            card.onclick = () => {
+                setLandmarkImage(i);
+            };
+        }
+        }
+        buildLandmarkAssetPreview();
+setLandmarkImage(0);
     create_test.onclick = () => {
     if(!current_level){
         console.warn("No current_level selected to test.");
@@ -2271,7 +3973,6 @@ delete_current_treasue.onclick = ()=>{
     // make sure latest edits are saved
     saveLevel();
     saveCurrentLevel();
-
     // store what to load
     localStorage.setItem("test_level_id", String(current_level.id));
 
@@ -2399,6 +4100,8 @@ delete_current_treasue.onclick = ()=>{
 
             cube.appendChild(el);
         });
+        //render saved landmarks
+        renderLandmarks();
 
     }
 
@@ -2407,7 +4110,10 @@ delete_current_treasue.onclick = ()=>{
         loadCurrentLevel();
         loadScreen();
         if(current_level){
+            ensureLevelShape(current_level);
             renderLevelName(current_level);
+            
+            renderSavedEncounters();
         }
         renderSavedLevels();
         generateTiles();

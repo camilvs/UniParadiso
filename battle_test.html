@@ -1,0 +1,87 @@
+<html>
+    <head>
+        <title>test battle</title>
+        <!-- <style>
+          .scrolling-background {
+          background-repeat: repeat-x;
+        
+          animation: scrollBackground 20s linear infinite;
+        }
+
+        @keyframes scrollBackground {
+            from {
+                background-position: 0 0;
+            }
+            to {
+                background-position: -888.5 0; 
+            }
+        }
+        #level_test_preview{
+            animation: scrollBackground 20s linear infinite;
+        }
+        </style> -->
+    </head>
+    <body>
+        <div id="battle_test_screen" style="width: 908px; height: 908px; border: #222 1px solid; display: flex; flex-direction: column; margin: auto; margin-top: 24px;">
+            <div id="battle_test_nav" style="width: 98%; height: 72px; border: 1px solid #222; display: flex; flex-direction: column; margin-left: 8px;">
+                <div style="width: 280px; height: 32px; border: solid #222 1px; display: flex; flex-direction: row;">
+                    <div id="level_test_exit" style="background-color: rgb( 87, 50, 114); width: 28px; height: 28px; margin: 2px; border-radius: 3px; cursor: pointer;" title="Exit Test"></div>
+                    <div id="level_test_level_name" style="position: relative; top: 6px;  left: 12px; width: 240px;"></div>
+                </div>
+                <div id="player_hud" style="display: flex; flex-direction: row; border: 1px solid black; width: 884px; height: 32px; margin: 2px; background-color: gold; justify-content: space-between;">
+                    <div id="user_name_display" style="width: 120px; height: 28px; background-image: linear-gradient(#222, grey);margin: 2px; border-radius: 5px 0px 0px 5px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex; cursor: pointer;" title="Username" ></div>
+                    <div id="user_character_portrait" style="width: 120px; height: 28px; background-color: #222; margin: 2px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex;"></div>
+                    <div id="user_hearts"  style="width: 240px; height: 28px; background-image: linear-gradient(#222, grey);margin: 2px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex;" title="Hearts"></div>
+                    <div id="pause_menu" style="width: 120px; height: 28px; background-image: linear-gradient(#222, grey);margin: 2px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex; cursor: pointer;" title="Open Menu">Menu</div>
+                    <div id="save_menu" style="width: 120px; height: 28px; background-image: linear-gradient(#222, grey);margin: 2px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex; cursor: pointer;" title="Save Menu">&#128427;</div>
+                    <div id="exit_menu" style="width: 120px; height: 28px; background-image: linear-gradient(#222, grey);margin: 2px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex; cursor: pointer; border-radius: 0px 5px 5px 0px;" title="Exit">Exit</div>
+                </div>
+            </div>
+            <div id="battle_test_level_holder" style="display: flex; flex-direction: column; ">
+                <div id="battle_test_preview" style=" width: 98%; height: 600px; border: 1px solid black; margin-left: 8px; margin-top: 2px; perspective: 800px; overflow: hidden; overflow: hidden;">
+                    <!--World goes here-->
+                </div>
+                <div id="commands_holder" style="position: relative; display: flex; flex-direction: row; top: -122px; left: 15px;">
+                    <div id="start_commands" style="width: 120px; height: 120px; background-color: #222; border-radius: 4px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; margin-left: 4px;">
+                        <div style="color: yellow; margin: 4px; border-bottom: 1px ghostwhite inset;">Commands</div>
+                        <div id="command_move" style="width: 100px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin: 4px; cursor: pointer; border-radius: 4px;" title="Change Position">Move</div>
+                        <div id="command_cards" style="width: 100px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin: 4px; cursor: pointer; border-radius: 4px;" title="Use Cards">Cards</div>
+                        <div id="command_escape" style="width: 100px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin: 4px; cursor: pointer; border-radius: 4px;" title="Attempt Escape">Escape</div>
+                    </div>
+                    <div id="move_commands" style="width: 120px; height: 96px; background-color: #222; border-radius: 4px; display: none; flex-direction: column; justify-content: space-between; align-items: center; margin-left: 4px; position: relative; top: 24px;">
+                        <div style="color: yellow; margin: 4px; border-bottom: 1px ghostwhite inset;">Movement</div>
+                        <div id="move_confirmed" style="width: 100px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin: 4px; cursor: pointer; border-radius: 4px;" title="Confirm Move">Move</div>
+                        <div id="move_canceled" style="width: 100px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin: 4px; cursor: pointer; border-radius: 4px;" title="Back to Commands">Back</div>
+                    </div>
+                    <div id="card_commands" style="width: 520px; height: 240px; background-color: #222; border-radius: 4px; display: none; flex-direction: column; justify-content: space-between; align-items: center; margin-left: 4px; position: relative; top: -120px;">
+                        <div style="width: 518px; height: 24px; border-bottom: 1px solid white; margin-top: 2px; display: flex; flex-direction: row;">
+                            <div id="command_all_cards" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Select Weapon Cards">All</div>
+                            <div id="command_weapons" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Select Weapon Cards">Weapons</div>
+                            <div id="command_items" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Select Item Cards">Items</div>
+                            <div id="command_manifest" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Select Manifest Cards">Manifest</div>
+                            <div id="command_skills" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Select Skill Cards">Skills</div>
+                            <div id="queue_holder" style="width: 165px; height: 16px; border: 1px outset ghostwhite; margin-left: 4px; padding: 2px; border-radius: 4px; display: flex; flex-direction: row; align-items: center; justify-content: space-evenly;">
+                                <div id="queue_slot_6" style="width: 16px; height: 16px; border: 1px solid yellow; background-color: black; border-radius: 4px; cursor: pointer;" title="Click to Remove"></div>
+                                <div id="queue_slot_5" style="width: 16px; height: 16px; border: 1px solid yellow; background-color: black; border-radius: 4px; cursor: pointer;" title="Click to Remove"></div>
+                                <div id="queue_slot_4" style="width: 16px; height: 16px; border: 1px solid yellow; background-color: black; border-radius: 4px; cursor: pointer;" title="Click to Remove"></div>
+                                <div id="queue_slot_3" style="width: 16px; height: 16px; border: 1px solid yellow; background-color: black; border-radius: 4px; cursor: pointer;" title="Click to Remove"></div>
+                                <div id="queue_slot_2" style="width: 16px; height: 16px; border: 1px solid yellow; background-color: black; border-radius: 4px; cursor: pointer;" title="Click to Remove"></div>
+                                <div id="queue_slot_1" style="width: 16px; height: 16px; border: 1px solid yellow; background-color: black; border-radius: 4px; cursor: pointer;" title="Click to Remove"></div>
+                                <div id="queue_slot_0" style="width: 16px; height: 16px; border: 1px solid yellow; background-color: black; border-radius: 4px; cursor: pointer;" title="Click to Remove"></div>
+                            </div>
+                        </div>
+                        <div style="width: 98%; height: 180px; border: 1px solid white; margin-bottom: 4px; display: flex; flex-direction: row;">
+                            <div id="equipped_card_inventory" style="width: 294px; height: 180px; background-image: linear-gradient(black, #2e2e2e); overflow-y: scroll;"></div>
+                            <div id="card_preview" style="width: 120px; height: 172px; background-color: black; border-radius: 4px; margin: auto; color: ghostwhite; justify-content: center; align-items: center; text-align: center; display: flex; flex-direction: column;">Card Preview</div>
+                        </div>
+                        <div id="to_commands" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Back to Commands">Back</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>    
+</html>
+<script src="./data_base.js" id="data_base"></script>
+<script src="./level_shared.js"></script>
+<script src="./game_play.js"></script>
+<script src="./battle_test.js"></script>

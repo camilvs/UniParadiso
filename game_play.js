@@ -55,10 +55,6 @@ function initializeCurrentUser(){
         return;
     }
 
-    console.log("Current user loaded from squad:", current_user);
-    console.log("Current avatar loaded from squad:", current_avatar);
-    console.log("Current avatar link:", current_user_avatar_link);
-    console.log("Current hearts:", current_user_avatar_link.base_stats.hearts);
 }
 
 function getEmptyStatBlock(){

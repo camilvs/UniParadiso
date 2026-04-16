@@ -237,7 +237,7 @@
                     </div>
                 </div>
                 <div id="commands_holder" style="position: relative; display: flex; flex-direction: row; top: -122px; left: 15px;">
-                    <div id="start_commands" style="width: 120px; height: 120px; background-color: black; border-radius: 4px; display: none; flex-direction: column; justify-content: space-between; align-items: center; margin-left: 4px;">
+                    <div id="start_commands" style="width: 120px; height: 120px; background-color: black; border-radius: 4px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; margin-left: 4px;">
                         <div style="color: yellow; margin: 4px; border-bottom: 1px ghostwhite inset;">Commands</div>
                         <div id="command_move" style="width: 100px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin: 4px; cursor: pointer; border-radius: 4px;" title="Change Position">Move</div>
                         <div id="command_cards" style="width: 100px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin: 4px; cursor: pointer; border-radius: 4px;" title="Use Cards">Cards</div>
@@ -248,7 +248,6 @@
                         <div id="move_confirmed" style="width: 100px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin: 4px; cursor: pointer; border-radius: 4px;" title="Confirm Move">Move</div>
                         <div id="move_canceled" style="width: 100px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin: 4px; cursor: pointer; border-radius: 4px;" title="Back to Commands">Back</div>
                     </div>
-
                     <div id="card_commands" style="width: 520px; height: 240px; background-color: black; border-radius: 4px; display: none; flex-direction: column; justify-content: space-between; align-items: center; margin-left: 4px; position: relative; top: -120px;">
                         <div style="width: 518px; height: 24px; border-bottom: 1px solid white; margin-top: 2px; display: flex; flex-direction: row;">
                             <div id="command_all_cards" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="All Cards">All</div>
@@ -274,6 +273,88 @@
                             <div id="to_commands" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Back to Commands">Back</div>
                             <div id="to_battle" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Start Battle">Battle</div>
                         </div>
+                    </div>
+                    <div id="battle_queue_window" style="width: 253px; height: 270px; background-color: black; border-radius: 4px; position: relative; top: -148px; display: none; flex-direction: column; align-items: center; justify-content: space-evenly; text-align: center;">
+                        <div id="target_battle_stats" style="position: absolute; width: 120px; height: 260px; border: 1px solid black; background-color: ghostwhite; left: -128px; top: 0px; display: flex; flex-direction: column-reverse; align-items:self-start; justify-content: space-evenly;">
+                            <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-around;">
+                                <div style="background-color: red; height: 16px; width: 16px; border-radius: 16px; margin: 3px;"></div>
+                                <div style="font-size: 12px; margin-right: 4px;">DEF :</div>
+                                <div id="battle_target_def"></div>
+                            </div>
+                            <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-around;">
+                                <div style="background-color: orange; height: 16px; width: 16px; border-radius: 16px; margin: 3px;"></div>
+                                <div style="font-size: 12px; margin-right: 4px;">RES :</div>
+                                <div id="battle_target_res"></div>
+                            </div>
+                            <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-around;">
+                                <div style="background-color: yellow; height: 16px; width: 16px; border-radius: 16px; margin: 3px;"></div>
+                                <div style="font-size: 12px; margin-right: 4px;">ATK :</div>
+                                <div id="battle_target_atk"></div>
+                            </div>
+                            <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-around;">
+                                <div style="background-color: green; height: 16px; width: 16px; border-radius: 16px; margin: 3px;"></div>
+                                <div style="font-size: 12px; margin-right: 4px;">EVA :</div>
+                                <div id="battle_target_eva"></div>
+                            </div>
+                            <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-around;">
+                                <div style="background-color: blue; height: 16px; width: 16px; border-radius: 16px; margin: 3px;"></div>
+                                <div style="font-size: 12px; margin-right: 4px;">spATK :</div>
+                                <div id="battle_target_spATK"></div>
+                            </div>
+                            <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-around;">
+                                <div style="background-color: indigo; height: 16px; width: 16px; border-radius: 16px; margin: 3px;"></div>
+                                <div style="font-size: 12px; margin-right: 4px;">DEX :</div>
+                                <div id="battle_target_dex"></div>
+                            </div>
+                            <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-around;">
+                                <div style="background-color: violet; height: 16px; width: 16px; border-radius: 16px; margin: 3px;"></div>
+                                <div style="font-size: 12px; margin-right: 4px;">spDEF :</div>
+                                <div id="battle_target_spDEF"></div>
+                            </div>
+                            <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-around; width: 96%; height: 28px;">
+                                <div id="battle_target_hearts" style="margin: 3px; color: black; width: 100%; height: 16px; display: flex; flex-direction: row;"></div>
+                            </div>
+                        </div>
+                        <div style="color: yellow;">Choose Target</div>
+                        <div id="enemy_side_battle" style="display: none; flex-direction: column; align-items: center; justify-content: space-evenly;">
+                            <div style="display: flex; flex-direction: row; justify-content: space-between; width: 210px; height: 32px; border: 1px solid transparent;">
+                                <div id="battle_choice_back_1" style="width: 32px; height: 32px; border-radius: 5px; border: ghostwhite 1px solid; cursor: pointer;" title="enemy name here"></div>
+                                <div id="battle_choice_back_2" style="width: 32px; height: 32px; border-radius: 5px; border: ghostwhite 1px solid; cursor: pointer;" title="enemy name here"></div>
+                                <div id="battle_choice_back_3" style="width: 32px; height: 32px; border-radius: 5px; border: ghostwhite 1px solid; cursor: pointer;" title="enemy name here"></div>
+                            </div>
+                            <div style="display: flex; flex-direction: row; justify-content: space-around; width: 210px; height: 32px; border: 1px solid transparent;">
+                                <div id="battle_choice_mid_1" style="width: 32px; height: 32px; border-radius: 5px; border: ghostwhite 1px solid; cursor: pointer;" title="enemy name here"></div>
+                                <div id="battle_choice_mid_2" style="width: 32px; height: 32px; border-radius: 5px; border: ghostwhite 1px solid; cursor: pointer;" title="enemy name here"></div>
+                            </div>
+                            <div style="display: flex; flex-direction: row; justify-content: space-around; width: 210px; height: 32px; border: 1px solid transparent;">
+                                <div id="battle_choice_front_position" style="width: 32px; height: 32px; border-radius: 5px; border: ghostwhite 1px solid; cursor: pointer;" title="enemy name here"></div>
+                            </div>
+                        </div>
+                        <div id="battle_player_side" style="display: none; flex-direction: column-reverse;">
+                            <div style="display: flex; flex-direction: row; justify-content: space-between; width: 210px; height: 32px; border: 1px solid transparent;">
+                                <div id="battle_squad_back_1" style="width: 32px; height: 32px; border-radius: 5px; border: ghostwhite 1px solid; cursor: pointer;" title="squad name here"></div>
+                                <div id="battle_squad_back_2" style="width: 32px; height: 32px; border-radius: 5px; border: ghostwhite 1px solid; cursor: pointer;" title="enemy name here"></div>
+                                <div id="battle_squad_back_3" style="width: 32px; height: 32px; border-radius: 5px; border: ghostwhite 1px solid; cursor: pointer;" title="enemy name here"></div>
+                            </div>
+                            <div style="display: flex; flex-direction: row; justify-content: space-around; width: 210px; height: 32px; border: 1px solid transparent;">
+                                <div id="battle_squad_mid_1" style="width: 32px; height: 32px; border-radius: 5px; border: ghostwhite 1px solid; cursor: pointer;" title="squad name here"></div>
+                                <div id="battle_squad_mid_2" style="width: 32px; height: 32px; border-radius: 5px; border: ghostwhite 1px solid; cursor: pointer;" title="squad name here"></div>
+                            </div>
+                            <div style="display: flex; flex-direction: row; justify-content: space-around; width: 210px; height: 32px; border: 1px solid transparent;">
+                                <div id="battle_squad_front_position" style="width: 32px; height: 32px; border-radius: 5px; border: ghostwhite 1px solid; cursor: pointer;" title="squad name here"></div>
+                            </div>
+                        </div>
+                        
+                        <div id="card_battle_queue" style="width: 242px; display: flex; flex-direction: row-reverse; justify-content: space-evenly; align-items: center;">
+                            <div id="battle_queue_0" style="width: 32px; height: 32px; border: 1px solid yellow; border-radius: 5px;"></div>
+                            <div id="battle_queue_1" style="width: 32px; height: 32px; border: 1px solid yellow; border-radius: 5px;"></div>
+                            <div id="battle_queue_2" style="width: 32px; height: 32px; border: 1px solid yellow; border-radius: 5px;"></div>
+                            <div id="battle_queue_3" style="width: 32px; height: 32px; border: 1px solid yellow; border-radius: 5px;"></div>
+                            <div id="battle_queue_4" style="width: 32px; height: 32px; border: 1px solid yellow; border-radius: 5px;"></div>
+                            <div id="battle_queue_5" style="width: 32px; height: 32px; border: 1px solid yellow; border-radius: 5px;"></div>
+                            <div id="battle_queue_6" style="width: 32px; height: 32px; border: 1px solid yellow; border-radius: 5px;"></div>
+                        </div>
+                        <div id="to_cards" style="display: flex; flex-direction: column; text-align: center; align-items: center; justify-content: center; border: 1px outset white; border-radius: 4px; padding: 3px; color: ghostwhite; cursor: pointer;" title="To Card Selection">Back</div>
                     </div>
                 </div>
             </div>

@@ -698,6 +698,7 @@ let items = [
         durability: null,
         effects: { type: "heart", amount: 1 },
         cp_cost: 1,
+        target_type: "ally_single"
     },
     {
         id: 1,
@@ -713,6 +714,7 @@ let items = [
         durability: null,
         effects: { type: "cooldown", amount: -1 },
         cp_cost: 1,
+        target_type: "ally_single"
     },
     {
         id: 2,
@@ -728,6 +730,7 @@ let items = [
         durability: null,
         effects: { type: "cleanse", amount: 1 },
         cp_cost: 1,
+        target_type: "ally_single"
     },
     {
         id: 3,
@@ -743,6 +746,7 @@ let items = [
         durability: null,
         effects: { type: "barrier", amount: 2 },
         cp_cost: 1,
+        target_type: "ally_single"
     },
     {
         id: 4,
@@ -758,6 +762,7 @@ let items = [
         durability: null,
         effects: { type: "regen", amount: 0.2 },
         cp_cost: 1,
+        target_type: "ally_single"
     },
     {
         id: 5,
@@ -773,6 +778,7 @@ let items = [
         durability: null,
         effects: { type: "revive", amount: 1 },
         cp_cost: 3,
+        target_type: "ally_single"
     },
 
     // BASIC FIELD ITEM
@@ -788,7 +794,8 @@ let items = [
         consume_on_use: true,
         reload_type: "none",
         durability: 1,
-        effects: { type: "recovery", amount: 1 }
+        effects: { type: "recovery", amount: 1 },
+        target_type: "self"
     },
 
     // MID BATTLE ITEMS
@@ -806,6 +813,7 @@ let items = [
         durability: null,
         effects: { type: "heart", amount: 2 },
         cp_cost: 2,
+        target_type: "ally_single"
     },
     {
         id: 8,
@@ -821,6 +829,7 @@ let items = [
         durability: null,
         effects: { type: "cooldown", amount: -2 },
         cp_cost: 2,
+        target_type: "ally_single"
     },
     {
         id: 9,
@@ -836,6 +845,7 @@ let items = [
         durability: null,
         effects: { type: "cleanse", amount: 2 },
         cp_cost: 2,
+        target_type: "ally_single"
     },
     {
         id: 10,
@@ -851,6 +861,7 @@ let items = [
         durability: null,
         effects: { type: "barrier", amount: 2 },
         cp_cost: 2,
+        target_type: "ally_single"
     },
     {
         id: 11,
@@ -866,6 +877,7 @@ let items = [
         durability: null,
         effects: { type: "regen", amount: 0.5 },
         cp_cost: 2,
+        target_type: "ally_single"
     },
     {
         id: 12,
@@ -881,6 +893,7 @@ let items = [
         durability: null,
         effects: { type: "revive", amount: 2 },
         cp_cost: 3,
+        target_type: "ally_single"
     },
 
     // MID FIELD ITEM
@@ -896,7 +909,8 @@ let items = [
         consume_on_use: false,
         reload_type: "none",
         durability: 2,
-        effects: { type: "recovery", amount: 2 }
+        effects: { type: "recovery", amount: 2 },
+        target_type: "self"
     },
 
     // HIGH BATTLE ITEMS
@@ -914,6 +928,7 @@ let items = [
         durability: null,
         effects: { type: "heart", amount: 3 },
         cp_cost: 3,
+        target_type: "ally_single"
     },
     {
         id: 15,
@@ -929,6 +944,7 @@ let items = [
         durability: null,
         effects: { type: "cooldown", amount: -3 },
         cp_cost: 3,
+        target_type: "ally_single"
     },
     {
         id: 16,
@@ -944,6 +960,7 @@ let items = [
         durability: null,
         effects: { type: "cleanse", amount: 3 },
         cp_cost: 3,
+        target_type: "ally_single"
     },
     {
         id: 17,
@@ -959,6 +976,7 @@ let items = [
         durability: null,
         effects: { type: "barrier", amount: 3 },
         cp_cost: 3,
+        target_type: "ally_single"
     },
     {
         id: 18,
@@ -974,6 +992,7 @@ let items = [
         durability: null,
         effects: { type: "regen", amount: 1.0 },
         cp_cost: 3,
+        target_type: "ally_single"
     },
     {
         id: 19,
@@ -989,6 +1008,7 @@ let items = [
         durability: null,
         effects: { type: "revive", amount: 3 },
         cp_cost: 4,
+        target_type: "ally_single"
     },
 
     // HIGH FIELD ITEM
@@ -1004,7 +1024,8 @@ let items = [
         consume_on_use: false,
         reload_type: "none",
         durability: 3,
-        effects: { type: "recovery", amount: 3 }
+        effects: { type: "recovery", amount: 3 },
+        target_type: "self"
     },
 
     // EPIC BATTLE ITEMS
@@ -1022,6 +1043,7 @@ let items = [
         durability: null,
         effects: { type: "heart", amount: "full" },
         cp_cost: 4,
+        target_type: "ally_all"
     },
     {
         id: 22,
@@ -1037,6 +1059,7 @@ let items = [
         durability: null,
         effects: { type: "cooldown", amount: "reset_all" },
         cp_cost: 4,
+        target_type: "ally_all"
     },
     {
         id: 23,
@@ -1052,6 +1075,7 @@ let items = [
         durability: null,
         effects: { type: "cleanse", amount: "all" },
         cp_cost: 4,
+        target_type: "ally_all"
     },
     {
         id: 24,
@@ -1067,6 +1091,7 @@ let items = [
         durability: null,
         effects: { type: "barrier", amount: "3turn" },
         cp_cost: 4,
+        target_type: "ally_all"
     },
     {
         id: 25,
@@ -1082,6 +1107,7 @@ let items = [
         durability: null,
         effects: { type: "regen", amount: "max" },
         cp_cost: 4,
+        target_type: "ally_all"
     },
     {
         id: 26,
@@ -1097,6 +1123,7 @@ let items = [
         durability: null,
         effects: { type: "revive", amount: 4 },
         cp_cost: 5,
+        target_type: "ally_all"
     },
 
     // LEGENDARY FIELD ITEM
@@ -1112,7 +1139,8 @@ let items = [
         consume_on_use: false,
         reload_type: "none",
         durability: 4,
-        effects: { type: "recovery", amount: 4 }
+        effects: { type: "recovery", amount: 4 },
+        target_type: "self"
     }
 ];
 

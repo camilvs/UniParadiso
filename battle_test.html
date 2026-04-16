@@ -1,65 +1,261 @@
 <html>
     <head>
         <title>test battle</title>
-        <!-- <style>
-          .scrolling-background {
-          background-repeat: repeat-x;
-        
-          animation: scrollBackground 20s linear infinite;
-        }
+        <style>
+            .scrolling-background {
+                background-repeat: repeat-x;
+                animation: scrollBackground 20s linear infinite;
+            }
 
-        @keyframes scrollBackground {
-            from {
-                background-position: 0 0;
+            @keyframes scrollBackground {
+                from {
+                    background-position: 0 0;
+                }
+                to {
+                    background-position: -888.5 0;
+                }
             }
-            to {
-                background-position: -888.5 0; 
+
+            #battle_test_preview {
+                animation: scrollBackground 20s linear infinite;
             }
-        }
-        #level_test_preview{
-            animation: scrollBackground 20s linear infinite;
-        }
-        </style> -->
+        </style>
     </head>
     <body>
         <div id="battle_test_screen" style="width: 908px; height: 908px; border: #222 1px solid; display: flex; flex-direction: column; margin: auto; margin-top: 24px;">
             <div id="battle_test_nav" style="width: 98%; height: 72px; border: 1px solid #222; display: flex; flex-direction: column; margin-left: 8px;">
                 <div style="width: 280px; height: 32px; border: solid #222 1px; display: flex; flex-direction: row;">
-                    <div id="level_test_exit" style="background-color: rgb( 87, 50, 114); width: 28px; height: 28px; margin: 2px; border-radius: 3px; cursor: pointer;" title="Exit Test"></div>
-                    <div id="level_test_level_name" style="position: relative; top: 6px;  left: 12px; width: 240px;"></div>
+                    <div id="level_test_exit" style="background-color: rgb(87, 50, 114); width: 28px; height: 28px; margin: 2px; border-radius: 3px; cursor: pointer;" title="Exit Test"></div>
+                    <div id="level_test_level_name" style="position: relative; top: 6px; left: 12px; width: 240px;"></div>
                 </div>
                 <div id="player_hud" style="display: flex; flex-direction: row; border: 1px solid black; width: 884px; height: 32px; margin: 2px; background-color: gold; justify-content: space-between;">
-                    <div id="user_name_display" style="width: 120px; height: 28px; background-image: linear-gradient(#222, grey);margin: 2px; border-radius: 5px 0px 0px 5px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex; cursor: pointer;" title="Username" ></div>
+                    <div id="user_name_display" style="width: 120px; height: 28px; background-image: linear-gradient(#222, grey); margin: 2px; border-radius: 5px 0px 0px 5px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex; cursor: pointer;" title="Username"></div>
                     <div id="user_character_portrait" style="width: 120px; height: 28px; background-color: #222; margin: 2px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex;"></div>
-                    <div id="user_hearts"  style="width: 240px; height: 28px; background-image: linear-gradient(#222, grey);margin: 2px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex;" title="Hearts"></div>
-                    <div id="pause_menu" style="width: 120px; height: 28px; background-image: linear-gradient(#222, grey);margin: 2px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex; cursor: pointer;" title="Open Menu">Menu</div>
-                    <div id="save_menu" style="width: 120px; height: 28px; background-image: linear-gradient(#222, grey);margin: 2px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex; cursor: pointer;" title="Save Menu">&#128427;</div>
-                    <div id="exit_menu" style="width: 120px; height: 28px; background-image: linear-gradient(#222, grey);margin: 2px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex; cursor: pointer; border-radius: 0px 5px 5px 0px;" title="Exit">Exit</div>
+                    <div id="user_hearts" style="width: 240px; height: 28px; background-image: linear-gradient(#222, grey); margin: 2px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex;" title="Hearts"></div>
+                    <div id="handler_menu" style="width: 120px; height: 28px; background-image: linear-gradient(#222, grey); margin: 2px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex; cursor: pointer;" title="Move Elements">Handler</div>
+                    <div id="save_menu" style="width: 120px; height: 28px; background-image: linear-gradient(#222, grey); margin: 2px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex; cursor: pointer;" title="Save Menu">&#128427;</div>
+                    <div id="exit_test_battle" style="width: 120px; height: 28px; background-image: linear-gradient(#222, grey); margin: 2px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex; cursor: pointer; border-radius: 0px 5px 5px 0px;" title="Exit">Exit</div>
                 </div>
             </div>
-            <div id="battle_test_level_holder" style="display: flex; flex-direction: column; ">
-                <div id="battle_test_preview" style=" width: 98%; height: 600px; border: 1px solid black; margin-left: 8px; margin-top: 2px; perspective: 800px; overflow: hidden; overflow: hidden;">
-                    <!--World goes here-->
+            <div id="battle_test_level_holder" style="display: flex; flex-direction: column;">
+                <div id="battle_test_preview" style="width: 98%; height: 600px; border: 1px solid black; margin-left: 8px; margin-top: 2px; perspective: 800px; overflow: hidden; background-image: url(./images/background3.png); position: relative;">
+                    <div style="width: 100%; height: 34px; display: flex; flex-direction: row; justify-content: space-between; position: relative; z-index: 20;">
+                        <div id="battle_camera_left" style="background-color: black; width: 32px; height: 32px; border: 2px inset #222; border-radius: 12px; color: white; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;" title="camera left">L</div>
+                        <div id="battle_camera_right" style="background-color: black; width: 32px; height: 32px; border: 2px inset #222; border-radius: 12px; color: white; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;" title="camera right">R</div>
+                    </div>
+
+                    <!-- Shared 3D rig -->
+                    <div id="battle_rig" style="
+                        width: 420px;
+                        height: 840px;
+                        position: absolute;
+                        left: 0px;
+                        top: 0px;
+                        transform-style: preserve-3d;
+                        transform: rotateY(0deg) rotateX(80deg) translateZ(120px) rotateZ(0deg) translateX(240px) translateY(56px);
+                    ">
+                        <!-- Visual layer lives INSIDE the same rig -->
+                        <div id="battle_visual_layer" style="
+                            width: 420px;
+                            height: 420px;
+                            position: absolute;
+                            left: 0px;
+                            top: 0px;
+                            pointer-events: none;
+                            transform-style: preserve-3d;
+                            z-index: 5;
+                        ">
+                            <!-- Enemy visuals -->
+                            <div id="visual_e_front_position" style="
+                                position: absolute;
+                                width: 180px; height: 180px;
+                                background-size: contain;
+                                background-repeat: no-repeat;
+                                background-position: center bottom;
+                                display: none;
+                                transform-origin: bottom center;
+                            "></div>
+
+                            <div id="visual_e_mid_1" style="
+                                position: absolute;
+                                width: 96px; height: 96px;
+                                background-size: contain;
+                                background-repeat: no-repeat;
+                                background-position: center bottom;
+                                display: none;
+                                transform-origin: bottom center;
+                            "></div>
+
+                            <div id="visual_e_mid_2" style="
+                                position: absolute;
+                                width: 96px; height: 96px;
+                                background-size: contain;
+                                background-repeat: no-repeat;
+                                background-position: center bottom;
+                                display: none;
+                                transform-origin: bottom center;
+                            "></div>
+
+                            <div id="visual_e_back_1" style="
+                                position: absolute;
+                                width: 110px; height: 110px;
+                                background-size: contain;
+                                background-repeat: no-repeat;
+                                background-position: center bottom;
+                                display: none;
+                                transform-origin: bottom center;
+                            "></div>
+
+                            <div id="visual_e_back_2" style="
+                                position: absolute;
+                                width: 180px; height: 180px;
+                                background-size: contain;
+                                background-repeat: no-repeat;
+                                background-position: center bottom;
+                                display: none;
+                                transform-origin: bottom center;
+                            "></div>
+
+                            <div id="visual_e_back_3" style="
+                                position: absolute;
+                                width: 110px; height: 110px;
+                                background-size: contain;
+                                background-repeat: no-repeat;
+                                background-position: center bottom;
+                                display: none;
+                                transform-origin: bottom center;
+                            "></div>
+
+                            <!-- Player visuals -->
+                            <div id="visual_p_front_position" style="
+                                position: absolute;
+                                width: 96px; height: 96px;
+                                background-size: contain;
+                                background-repeat: no-repeat;
+                                background-position: center bottom;
+                                display: none;
+                                transform-origin: bottom center;
+                                
+                            "></div>
+
+                            <div id="visual_p_mid_1" style="
+                                position: absolute;
+                                width: 96px; height: 96px;
+                                background-size: contain;
+                                background-repeat: no-repeat;
+                                background-position: center bottom;
+                                display: none;
+                                transform-origin: bottom center;
+                            "></div>
+
+                            <div id="visual_p_mid_2" style="
+                                position: absolute;
+                                width: 96px; height: 96px;
+                                background-size: contain;
+                                background-repeat: no-repeat;
+                                background-position: center bottom;
+                                display: none;
+                                transform-origin: bottom center;
+                            "></div>
+
+                            <div id="visual_p_back_1" style="
+                                position: absolute;
+                                width: 110px; height: 110px;
+                                background-size: contain;
+                                background-repeat: no-repeat;
+                                background-position: center bottom;
+                                display: none;
+                                transform-origin: bottom center;
+                            "></div>
+
+                            <div id="visual_p_back_2" style="
+                                position: absolute;
+                                width: 110px; height: 110px;
+                                background-size: contain;
+                                background-repeat: no-repeat;
+                                background-position: center bottom;
+                                display: none;
+                                transform-origin: bottom center;
+                            "></div>
+
+                            <div id="visual_p_back_3" style="
+                                position: absolute;
+                                width: 110px; height: 110px;
+                                background-size: contain;
+                                background-repeat: no-repeat;
+                                background-position: center bottom;
+                                display: none;
+                                transform-origin: bottom center;
+                            "></div>
+                        </div>
+
+                        <!-- Board -->
+                        <div id="battle_board" style="
+                            width: 420px;
+                            height: 840px;
+                            background-color: #222;
+                            font-size: 183px;
+                            color: white;
+                            display: flex;
+                            flex-direction: column;
+                            position: absolute;
+                            left: 0px;
+                            top: 0px;
+                            z-index: 1;
+                            transform: translateX(-5px) translateY(62px);
+                        ">
+                            <div id="enemy_side" style="width: 640px; height: 420px; background-image: linear-gradient(grey, black); position: relative; top: 142px; left: -112px;">
+                                <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+                                    <div id="e_back_1" style="width: 120px; height: 120px; background-color: red; margin: 12px;"></div>
+                                    <div id="e_back_2" style="width: 120px; height: 120px; background-color: red; margin: 12px;"></div>
+                                    <div id="e_back_3" style="width: 120px; height: 120px; background-color: red; margin: 12px;"></div>
+                                </div>
+                                <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;">
+                                    <div id="e_mid_1" style="width: 120px; height: 120px; background-color: red; margin: 12px;"></div>
+                                    <div id="e_mid_2" style="width: 120px; height: 120px; background-color: red; margin: 12px;"></div>
+                                </div>
+                                <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;">
+                                    <div id="e_front_position" style="width: 120px; height: 120px; background-color: red; margin: 12px;"></div>
+                                </div>
+                            </div>
+                            <div style="height:226px; width: 32px;"></div>
+                            <div id="player_side" style="width: 200px; height: 192px; background-image: linear-gradient(blue, red); display: flex; flex-direction: column; margin-left: 110px;">
+                                <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;">
+                                    <div id="p_front_position" style="width: 120px; height: 60px; background-color: blue; margin: 2px;"></div>
+                                </div>
+                                <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;">
+                                    <div id="p_mid_1" style="width: 120px; height: 60px; background-color: blue; margin: 2px;"></div>
+                                    <div id="p_mid_2" style="width: 120px; height: 60px; background-color: blue; margin: 2px;"></div>
+                                </div>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+                                    <div id="p_back_1" style="width: 120px; height: 60px; background-color: blue; margin: 2px;"></div>
+                                    <div id="p_back_2" style="width: 120px; height: 60px; background-color: blue; margin: 2px;"></div>
+                                    <div id="p_back_3" style="width: 120px; height: 60px; background-color: blue; margin: 2px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div id="commands_holder" style="position: relative; display: flex; flex-direction: row; top: -122px; left: 15px;">
-                    <div id="start_commands" style="width: 120px; height: 120px; background-color: #222; border-radius: 4px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; margin-left: 4px;">
+                    <div id="start_commands" style="width: 120px; height: 120px; background-color: black; border-radius: 4px; display: none; flex-direction: column; justify-content: space-between; align-items: center; margin-left: 4px;">
                         <div style="color: yellow; margin: 4px; border-bottom: 1px ghostwhite inset;">Commands</div>
                         <div id="command_move" style="width: 100px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin: 4px; cursor: pointer; border-radius: 4px;" title="Change Position">Move</div>
                         <div id="command_cards" style="width: 100px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin: 4px; cursor: pointer; border-radius: 4px;" title="Use Cards">Cards</div>
                         <div id="command_escape" style="width: 100px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin: 4px; cursor: pointer; border-radius: 4px;" title="Attempt Escape">Escape</div>
                     </div>
-                    <div id="move_commands" style="width: 120px; height: 96px; background-color: #222; border-radius: 4px; display: none; flex-direction: column; justify-content: space-between; align-items: center; margin-left: 4px; position: relative; top: 24px;">
+                    <div id="move_commands" style="width: 120px; height: 96px; background-color: black; border-radius: 4px; display: none; flex-direction: column; justify-content: space-between; align-items: center; margin-left: 4px; position: relative; top: 24px;">
                         <div style="color: yellow; margin: 4px; border-bottom: 1px ghostwhite inset;">Movement</div>
                         <div id="move_confirmed" style="width: 100px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin: 4px; cursor: pointer; border-radius: 4px;" title="Confirm Move">Move</div>
                         <div id="move_canceled" style="width: 100px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin: 4px; cursor: pointer; border-radius: 4px;" title="Back to Commands">Back</div>
                     </div>
-                    <div id="card_commands" style="width: 520px; height: 240px; background-color: #222; border-radius: 4px; display: none; flex-direction: column; justify-content: space-between; align-items: center; margin-left: 4px; position: relative; top: -120px;">
+
+                    <div id="card_commands" style="width: 520px; height: 240px; background-color: black; border-radius: 4px; display: none; flex-direction: column; justify-content: space-between; align-items: center; margin-left: 4px; position: relative; top: -120px;">
                         <div style="width: 518px; height: 24px; border-bottom: 1px solid white; margin-top: 2px; display: flex; flex-direction: row;">
-                            <div id="command_all_cards" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Select Weapon Cards">All</div>
-                            <div id="command_weapons" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Select Weapon Cards">Weapons</div>
-                            <div id="command_items" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Select Item Cards">Items</div>
-                            <div id="command_manifest" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Select Manifest Cards">Manifest</div>
-                            <div id="command_skills" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Select Skill Cards">Skills</div>
+                            <div id="command_all_cards" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="All Cards">All</div>
+                            <div id="command_weapons" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Weapon Cards">Weapons</div>
+                            <div id="command_items" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Item Cards">Items</div>
+                            <div id="command_manifest" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Manifest Cards">Manifest</div>
+                            <div id="command_skills" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Skill Cards">Skills</div>
                             <div id="queue_holder" style="width: 165px; height: 16px; border: 1px outset ghostwhite; margin-left: 4px; padding: 2px; border-radius: 4px; display: flex; flex-direction: row; align-items: center; justify-content: space-evenly;">
                                 <div id="queue_slot_6" style="width: 16px; height: 16px; border: 1px solid yellow; background-color: black; border-radius: 4px; cursor: pointer;" title="Click to Remove"></div>
                                 <div id="queue_slot_5" style="width: 16px; height: 16px; border: 1px solid yellow; background-color: black; border-radius: 4px; cursor: pointer;" title="Click to Remove"></div>
@@ -74,12 +270,71 @@
                             <div id="equipped_card_inventory" style="width: 294px; height: 180px; background-image: linear-gradient(black, #2e2e2e); overflow-y: scroll;"></div>
                             <div id="card_preview" style="width: 120px; height: 172px; background-color: black; border-radius: 4px; margin: auto; color: ghostwhite; justify-content: center; align-items: center; text-align: center; display: flex; flex-direction: column;">Card Preview</div>
                         </div>
-                        <div id="to_commands" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Back to Commands">Back</div>
+                        <div style="display: flex; flex-direction: row; width: 100%; height: 64px; justify-content: space-evenly; align-items: center;">
+                            <div id="to_commands" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Back to Commands">Back</div>
+                            <div id="to_battle" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Start Battle">Battle</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </body>    
+        <div id="element_handler" style="position: absolute; width: 240px; height: 280px; border: 1px solid black; background-color: ghostwhite; top: 0px; left:0px; display: none; flex-direction: column;">
+            <div style="display: flex; flex-direction: row;">
+                <div id="handler_header" style="height: 26px; width: 210px; border-bottom: 1px solid grey;margin-top: 4px;" title="click to drag"></div>
+                <div id="handler_closer" style="width: 26px; height: 26px; border: 1px solid black; text-align: center; justify-content: center; align-items: center; display: flex; flex-direction: column; margin-top: 2px; cursor: pointer;" title="close handler">X</div>
+            </div>
+            <div style="width: 230px; height: 90px; margin: 4px; display: flex; flex-direction: column; justify-content: space-evenly; align-items: center;">
+                <div style="width: 96%; height: 32px; border: solid 1px transparent; margin: 2px 4px; display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;">
+                    <div id="get_e_front_position" style="width:32px; height: 32px; border: 1px black inset; border-radius: 4px; background-color: black; cursor: pointer; color:ghostwhite; display: flex; flex-direction: column; text-align: center; justify-content: center;" title="Enemy Front Position">F1</div>
+                    <div id="get_e_mid_1" style="width:32px; height: 32px; border: 1px black inset; border-radius: 4px; background-color: black; cursor: pointer; color:ghostwhite; display: flex; flex-direction: column; text-align: center; justify-content: center;" title="Enemy Mid 1"><Main>M1</Main></div>
+                    <div id="get_e_mid_2" style="width:32px; height: 32px; border: 1px black inset; border-radius: 4px; background-color: black; cursor: pointer; color:ghostwhite; display: flex; flex-direction: column; text-align: center; justify-content: center;" title="Enemy Mid 2">M2</div>
+                    <div id="get_e_back_1" style="width:32px; height: 32px; border: 1px black inset; border-radius: 4px; background-color: black; cursor: pointer; color:ghostwhite; display: flex; flex-direction: column; text-align: center; justify-content: center;" title="Enemy Back 1">B1</div>
+                    <div id="get_e_back_2" style="width:32px; height: 32px; border: 1px black inset; border-radius: 4px; background-color: black; cursor: pointer; color:ghostwhite; display: flex; flex-direction: column; text-align: center; justify-content: center;" title="Enemy Back 2">B2</div>
+                    <div id="get_e_back_3" style="width:32px; height: 32px; border: 1px black inset; border-radius: 4px; background-color: black; cursor: pointer; color:ghostwhite; display: flex; flex-direction: column; text-align: center; justify-content: center;" title="Enemy Back 3">B3</div>
+                </div>
+                <div style="width: 96%; height: 32px; border: solid 1px transparent; margin: 2px 4px; display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;">
+                    <div id="get_p_front_position" style="width:32px; height: 32px; border: 1px black inset; border-radius: 4px; background-color: black; cursor: pointer;" title="Enemy Front Position"></div>
+                    <div id="get_p_mid_1" style="width:32px; height: 32px; border: 1px black inset; border-radius: 4px; background-color: black; cursor: pointer;" title="Player Mid 1"></div>
+                    <div id="get_p_mid_2" style="width:32px; height: 32px; border: 1px black inset; border-radius: 4px; background-color: black; cursor: pointer;" title="Player Mid 2"></div>
+                    <div id="get_p_back_1" style="width:32px; height: 32px; border: 1px black inset; border-radius: 4px; background-color: black; cursor: pointer;" title="Player Back 1"></div>
+                    <div id="get_p_back_2" style="width:32px; height: 32px; border: 1px black inset; border-radius: 4px; background-color: black; cursor: pointer;" title="Player Back 2"></div>
+                    <div id="get_p_back_3" style="width:32px; height: 32px; border: 1px black inset; border-radius: 4px; background-color: black; cursor: pointer;" title="Player Back 3"></div>
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;">
+                <div>X</div>
+                <input id="element_x" type="range">
+            </div>
+            <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;">
+                <div>Y</div>
+                <input id="element_y" type="range">
+            </div>
+            <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;">
+                <div>Z</div>
+                <input id="element_z" type="range">
+            </div>
+            <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;">
+                <div>rx</div>
+                <input id="element_rx" type="range">
+            </div>
+            <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;">
+                <div>ry</div>
+                <input id="element_ry" type="range">
+            </div>
+            <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;">
+                <div>rz</div>
+                <input id="element_rz" type="range">
+            </div>
+            <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;">
+                <div>Scale</div>
+                <input id="element_scale" type="range">
+            </div>
+            <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center; position: relative; left: -36px;">
+                <div>Element: </div>
+                <div id="element_name"></div>
+            </div>
+        </div>
+    </body>
 </html>
 <script src="./data_base.js" id="data_base"></script>
 <script src="./level_shared.js"></script>

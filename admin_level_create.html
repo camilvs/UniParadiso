@@ -3714,10 +3714,35 @@ function renderSavedEncounters(){
         };
         //test encounter 
         let test_encounter = document.createElement('div');
-            card.appendChild(test_encounter);
-            Object.assign(test_encounter.style,{ width: '96%', height: '16px', backgroundColor: '#222', color: 'ghostwhite', textAlign: 'center', cursor:'pointer', marginTop: '4px'});
-            onHover(test_encounter,'yellow','ghostwhite');
-            test_encounter.textContent = 'Test Encounter';
+                card.appendChild(test_encounter);
+                Object.assign(test_encounter.style,{ width: '96%', height: '16px', backgroundColor: '#222', color: 'ghostwhite', textAlign: 'center', cursor:'pointer', marginTop: '4px'});
+                onHover(test_encounter,'yellow','ghostwhite');
+                test_encounter.textContent = 'Test Encounter';
+                test_encounter.onclick = () => {
+            if(!current_level) return;
+
+            const encounterToTest = {
+                level_id: current_level.id,
+                level_name: current_level.name || "Test Level",
+                encounter_index: index,
+                encounter_data: {
+                    front_position: encounter.front_position,
+                    mid_1: encounter.mid_1,
+                    mid_2: encounter.mid_2,
+                    back_1: encounter.back_1,
+                    back_2: encounter.back_2,
+                    back_3: encounter.back_3,
+                    rate: encounter.rate || "common"
+                }
+            };
+
+            localStorage.setItem(
+                "battle_test_encounter",
+                JSON.stringify(encounterToTest)
+            );
+
+            window.location.href = "./battle_test.html";
+        };
     });
 }
     function loadEncounterForEditing(index){

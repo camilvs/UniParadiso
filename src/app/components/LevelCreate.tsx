@@ -38,7 +38,7 @@ const NAV_BUTTONS: { id: AssetCategory; label: string }[] = [
   { id: 'landmarks',   label: 'Landmarks' },
 ];
 
-export function AdminLevelCreate() {
+export function LevelCreate() {
   const navigate = useNavigate();
   const store    = useLevelStore();
 

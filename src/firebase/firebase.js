@@ -27,7 +27,7 @@
 // src/firebase/firebase.js
 import { initializeApp } from "firebase/app";
 import { getAuth, setPersistence, browserSessionPersistence } from "firebase/auth";
-
+import{ getFirestore } from "firebase/firestore";
 const firebaseConfig = {
   apiKey: "AIzaSyAszOa_Ovjacm4jdyAwbEBgVhEtSft6c_Q",
   authDomain: "uniparadiso.firebaseapp.com",
@@ -40,3 +40,5 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 setPersistence(auth, browserSessionPersistence);
+
+export const db = getFirestore(app);

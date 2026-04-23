@@ -35,13 +35,13 @@ export function SinglePlayMenu() {
       </div>
 
       {/* Logout button */}
-      <button
+      {/* <button
         onClick={() => navigate('/')}
         className="absolute top-6 right-6 z-20 flex items-center gap-2 text-pink-300 hover:text-pink-100 font-['VT323'] text-xl transition-colors"
       >
         <LogOut className="w-5 h-5" />
         LOGOUT
-      </button>
+      </button> */}
 
       <div className="relative z-10 max-w-2xl mx-auto px-6 py-20 text-center">
         <div className="mb-12">
@@ -66,20 +66,19 @@ export function SinglePlayMenu() {
               <div className="flex items-center justify-center gap-4">
                 <User className="w-8 h-8 text-white" />
                 <span className="text-white font-['Press_Start_2P'] text-xl">
-                  Story Mode
+                  Load Game
                 </span>
               </div>
             </div>
             <div className="absolute -bottom-1 -right-1 w-full h-full bg-purple-900 border-4 border-purple-900 -z-10"></div>
           </button>
 
-          {/* Multiplayer */}
           <button className="w-full group relative">
             <div className="bg-gradient-to-r from-pink-600 to-pink-800 border-4 border-white p-6 transition-all hover:shadow-[0_0_30px_rgba(236,72,153,0.8)] hover:scale-105">
               <div className="flex items-center justify-center gap-4">
                 <Users className="w-8 h-8 text-white" />
                 <span className="text-white font-['Press_Start_2P'] text-xl">
-                  Create Level
+                 New Game
                 </span>
               </div>
             </div>
@@ -89,7 +88,7 @@ export function SinglePlayMenu() {
   
 
           {/* Options */}
-          <button className="w-full group relative">
+          {/* <button className="w-full group relative">
             <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 border-4 border-white p-6 transition-all hover:shadow-[0_0_30px_rgba(99,102,241,0.8)] hover:scale-105">
               <div className="flex items-center justify-center gap-4">
                 <Settings className="w-8 h-8 text-white" />
@@ -99,7 +98,7 @@ export function SinglePlayMenu() {
               </div>
             </div>
             <div className="absolute -bottom-1 -right-1 w-full h-full bg-indigo-900 border-4 border-indigo-900 -z-10"></div>
-          </button>
+          </button> */}
         </div>
 
         <div className="mt-12 font-['VT323'] text-purple-300 text-xl">

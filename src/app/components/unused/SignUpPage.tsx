@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { User, Mail, Lock, ArrowLeft } from 'lucide-react';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 import { useNavigate } from 'react-router-dom';
-import { doCreateUserWithEmailAndPassword } from '../../firebase/auth';
-import { useAuth } from '../../context/authContext';
+import { doCreateUserWithEmailAndPassword } from '../../../firebase/auth';
+import { useAuth } from '../../../context/authContext';
 
 export function SignupPage() {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ export function SignupPage() {
     setError('');
 
     try {
-      await doCreateUserWithEmailAndPassword(email, password);
+      await doCreateUserWithEmailAndPassword(email, password, username);
       navigate('/game-menu');
     } catch (err: any) {
       setError(err.message || 'Signup Failed');

@@ -32,6 +32,9 @@
 
 // src/firebase/auth.js
 import { auth } from "./firebase";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "./firebase";
+
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -39,8 +42,24 @@ import {
   sendEmailVerification,
 } from "firebase/auth";
 
-export const doCreateUserWithEmailAndPassword = (email, password) =>
-  createUserWithEmailAndPassword(auth, email, password);
+export const doCreateUserWithEmailAndPassword = async (email, password, username) =>{
+  const cred = await createUserWithEmailAndPassword(auth, email, password);
+
+  // create Firestore profile
+  const uid = cred.user.uid;
+  const ref = doc(db, "users", uid);
+  await setDoc(ref, {
+    username,
+    level: 1,
+    xp: 0,
+    wins: 0,
+    losses: 0,
+    createdAt: serverTimestamp(),
+  });
+
+  return cred;
+};
+
 
 export const doSignInWithEmailAndPassword = (email, password) =>
   signInWithEmailAndPassword(auth, email, password);
@@ -54,3 +73,14 @@ export const doSendEmailVerification = () =>
   sendEmailVerification(auth.currentUser, {
     url: `${window.location.origin}/login`,
   });
+  export const createUserProfile = async (uid, username) => {
+  const ref = doc(db, "users", uid);
+  await setDoc(ref, {
+    username,
+    level: 1,
+    xp: 0,
+    wins: 0,
+    losses: 0,
+    createdAt: serverTimestamp(),
+  });
+};

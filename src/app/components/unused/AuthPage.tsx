@@ -1,9 +1,9 @@
 import { useState, useEffect, use } from 'react';
 import { User, Mail, Lock, ArrowLeft } from 'lucide-react';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 import { useNavigate } from 'react-router-dom';
-import { doSignInWithEmailAndPassword, doCreateUserWithEmailAndPassword } from '../../firebase/auth';
-import {useAuth} from '../../context/authContext';
+import { doSignInWithEmailAndPassword, doCreateUserWithEmailAndPassword } from '../../../firebase/auth';
+import {useAuth} from '../../../context/authContext';
 
 
 // interface AuthPageProps {
@@ -11,7 +11,7 @@ import {useAuth} from '../../context/authContext';
 //   onLoginSuccess: () => void;
 // }
 
-export function LoginPage(/*{ onBack, onLoginSuccess }: AuthPageProps*/) {
+export function AuthPage(/*{ onBack, onLoginSuccess }: AuthPageProps*/) {
   const navigate = useNavigate();
   const {userLoggedIn} = useAuth();
 

@@ -1,0 +1,112 @@
+[debug] [2026-04-16T18:18:53.959Z] ----------------------------------------------------------------------
+[debug] [2026-04-16T18:18:53.977Z] Command:       C:\Users\Student\.vscode\extensions\node.exe C:\Users\Student\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting --debug
+[debug] [2026-04-16T18:18:53.977Z] CLI Version:   15.7.0
+[debug] [2026-04-16T18:18:53.978Z] Platform:      win32
+[debug] [2026-04-16T18:18:53.978Z] Node Version:  v20.16.0
+[debug] [2026-04-16T18:18:53.978Z] Time:          Thu Apr 16 2026 14:18:53 GMT-0400 (Eastern Daylight Time)
+[debug] [2026-04-16T18:18:53.978Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-04-16T18:18:58.897Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-16T18:18:58.902Z] > authorizing via signed-in user (urenacamila0@gmail.com)
+[debug] [2026-04-16T18:18:58.903Z] [iam] checking project uniparadiso for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-04-16T18:18:58.905Z] Checked if tokens are valid: true, expires at: 1776365665480
+[debug] [2026-04-16T18:18:58.905Z] Checked if tokens are valid: true, expires at: 1776365665480
+[debug] [2026-04-16T18:18:58.907Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/uniparadiso:testIamPermissions [none]
+[debug] [2026-04-16T18:18:58.907Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/uniparadiso:testIamPermissions  x-goog-user-project=uniparadiso
+[debug] [2026-04-16T18:18:58.908Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/uniparadiso:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-04-16T18:18:59.346Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/uniparadiso:testIamPermissions 200
+[debug] [2026-04-16T18:18:59.347Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/uniparadiso:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-04-16T18:18:59.349Z] Checked if tokens are valid: true, expires at: 1776365665480
+[debug] [2026-04-16T18:18:59.350Z] Checked if tokens are valid: true, expires at: 1776365665480
+[debug] [2026-04-16T18:18:59.351Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/uniparadiso [none]
+[debug] [2026-04-16T18:18:59.731Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/uniparadiso 200
+[debug] [2026-04-16T18:18:59.732Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/uniparadiso {"projectId":"uniparadiso","projectNumber":"866621121472","displayName":"UniParadiso","name":"projects/uniparadiso","resources":{"hostingSite":"uniparadiso","realtimeDatabaseInstance":"uniparadiso-default-rtdb"},"state":"ACTIVE","etag":"1_52aa2f1b-0539-4d1f-915c-c69451d25f36"}
+[info] 
+[info] === Deploying to 'uniparadiso'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2026-04-16T18:18:59.747Z] Checked if tokens are valid: true, expires at: 1776365665480
+[debug] [2026-04-16T18:18:59.748Z] Checked if tokens are valid: true, expires at: 1776365665480
+[debug] [2026-04-16T18:18:59.748Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/uniparadiso/versions [none]
+[debug] [2026-04-16T18:18:59.749Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/uniparadiso/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2026-04-16T18:19:00.743Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/uniparadiso/versions 200
+[debug] [2026-04-16T18:19:00.744Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/uniparadiso/versions {"name":"projects/866621121472/sites/uniparadiso/versions/796e9133fb13d9be","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[uniparadiso]: beginning deploy... 
+[info] i  hosting[uniparadiso]: found 3 files in dist 
+[debug] [2026-04-16T18:19:00.775Z] [hosting] uploading with 200 concurrency
+[debug] [2026-04-16T18:19:00.777Z] [hosting] hash cache [ZGlzdA] not populated
+[debug] [2026-04-16T18:19:00.835Z] Checked if tokens are valid: true, expires at: 1776365665480
+[debug] [2026-04-16T18:19:00.836Z] Checked if tokens are valid: true, expires at: 1776365665480
+[debug] [2026-04-16T18:19:00.838Z] [hosting] hash cache [ZGlzdA] stored for 3 files
+[debug] [2026-04-16T18:19:00.838Z] [hosting][hash queue][FINAL] {"max":53,"min":11,"avg":26,"active":0,"complete":3,"success":3,"errored":0,"retried":0,"total":3,"elapsed":60}
+[debug] [2026-04-16T18:19:00.839Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/866621121472/sites/uniparadiso/versions/796e9133fb13d9be:populateFiles [none]
+[debug] [2026-04-16T18:19:00.840Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/866621121472/sites/uniparadiso/versions/796e9133fb13d9be:populateFiles {"files":{"/index.html":"c2ed09c2b2be64d14e062deff9a4003efa800a7ff7cb495fb5692d6e8299296f","/assets/index-De7il_aW.css":"f9eeb2fbc1f8a07a484703cce124ae023cd39b9758296fd59632cb3c46f91234","/assets/index-C4slRtrf.js":"7f12036b5f309ef88f17720f199fba29b2d6c3833832ec84eb1deb44eb4346c9"}}
+[debug] [2026-04-16T18:19:01.165Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/866621121472/sites/uniparadiso/versions/796e9133fb13d9be:populateFiles 200
+[debug] [2026-04-16T18:19:01.165Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/866621121472/sites/uniparadiso/versions/796e9133fb13d9be:populateFiles {"uploadRequiredHashes":["7f12036b5f309ef88f17720f199fba29b2d6c3833832ec84eb1deb44eb4346c9","c2ed09c2b2be64d14e062deff9a4003efa800a7ff7cb495fb5692d6e8299296f","f9eeb2fbc1f8a07a484703cce124ae023cd39b9758296fd59632cb3c46f91234"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/uniparadiso/versions/796e9133fb13d9be/files"}
+[debug] [2026-04-16T18:19:01.167Z] Checked if tokens are valid: true, expires at: 1776365665480
+[debug] [2026-04-16T18:19:01.167Z] Checked if tokens are valid: true, expires at: 1776365665480
+[debug] [2026-04-16T18:19:01.168Z] Checked if tokens are valid: true, expires at: 1776365665480
+[debug] [2026-04-16T18:19:01.168Z] Checked if tokens are valid: true, expires at: 1776365665480
+[debug] [2026-04-16T18:19:01.169Z] Checked if tokens are valid: true, expires at: 1776365665480
+[debug] [2026-04-16T18:19:01.169Z] Checked if tokens are valid: true, expires at: 1776365665480
+[debug] [2026-04-16T18:19:01.170Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/uniparadiso/versions/796e9133fb13d9be/files/7f12036b5f309ef88f17720f199fba29b2d6c3833832ec84eb1deb44eb4346c9 [none]
+[debug] [2026-04-16T18:19:01.170Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/uniparadiso/versions/796e9133fb13d9be/files/7f12036b5f309ef88f17720f199fba29b2d6c3833832ec84eb1deb44eb4346c9 [stream]
+[debug] [2026-04-16T18:19:01.176Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/uniparadiso/versions/796e9133fb13d9be/files/c2ed09c2b2be64d14e062deff9a4003efa800a7ff7cb495fb5692d6e8299296f [none]
+[debug] [2026-04-16T18:19:01.178Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/uniparadiso/versions/796e9133fb13d9be/files/c2ed09c2b2be64d14e062deff9a4003efa800a7ff7cb495fb5692d6e8299296f [stream]
+[debug] [2026-04-16T18:19:01.182Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/uniparadiso/versions/796e9133fb13d9be/files/f9eeb2fbc1f8a07a484703cce124ae023cd39b9758296fd59632cb3c46f91234 [none]
+[debug] [2026-04-16T18:19:01.182Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/uniparadiso/versions/796e9133fb13d9be/files/f9eeb2fbc1f8a07a484703cce124ae023cd39b9758296fd59632cb3c46f91234 [stream]
+[debug] [2026-04-16T18:19:01.184Z] [hosting][populate queue][FINAL] {"max":335,"min":335,"avg":335,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":349}
+[debug] [2026-04-16T18:19:01.189Z] [hosting] uploads queued: 3
+[debug] [2026-04-16T18:19:01.813Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/uniparadiso/versions/796e9133fb13d9be/files/f9eeb2fbc1f8a07a484703cce124ae023cd39b9758296fd59632cb3c46f91234 200
+[debug] [2026-04-16T18:19:01.813Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/uniparadiso/versions/796e9133fb13d9be/files/f9eeb2fbc1f8a07a484703cce124ae023cd39b9758296fd59632cb3c46f91234 [stream]
+[debug] [2026-04-16T18:19:01.917Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/uniparadiso/versions/796e9133fb13d9be/files/7f12036b5f309ef88f17720f199fba29b2d6c3833832ec84eb1deb44eb4346c9 200
+[debug] [2026-04-16T18:19:01.918Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/uniparadiso/versions/796e9133fb13d9be/files/7f12036b5f309ef88f17720f199fba29b2d6c3833832ec84eb1deb44eb4346c9 [stream]
+[debug] [2026-04-16T18:19:01.927Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/uniparadiso/versions/796e9133fb13d9be/files/c2ed09c2b2be64d14e062deff9a4003efa800a7ff7cb495fb5692d6e8299296f 200
+[debug] [2026-04-16T18:19:01.927Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/uniparadiso/versions/796e9133fb13d9be/files/c2ed09c2b2be64d14e062deff9a4003efa800a7ff7cb495fb5692d6e8299296f [stream]
+[debug] [2026-04-16T18:19:01.928Z] [hosting][upload queue][FINAL] {"max":761,"min":645,"avg":719.3333333333334,"active":0,"complete":3,"success":3,"errored":0,"retried":0,"total":3,"elapsed":762}
+[info] i  hosting: upload complete 
+[info] +  hosting[uniparadiso]: file upload complete 
+[debug] [2026-04-16T18:19:01.930Z] [hosting] deploy completed after 1181ms
+[debug] [2026-04-16T18:19:01.930Z] [
+  {
+    "config": {
+      "public": "dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "site": "uniparadiso"
+    },
+    "version": "projects/866621121472/sites/uniparadiso/versions/796e9133fb13d9be"
+  }
+]
+[info] i  hosting[uniparadiso]: finalizing version... 
+[debug] [2026-04-16T18:19:01.933Z] Checked if tokens are valid: true, expires at: 1776365665480
+[debug] [2026-04-16T18:19:01.934Z] Checked if tokens are valid: true, expires at: 1776365665480
+[debug] [2026-04-16T18:19:01.937Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/uniparadiso/versions/796e9133fb13d9be updateMask=status%2Cconfig
+[debug] [2026-04-16T18:19:01.938Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/uniparadiso/versions/796e9133fb13d9be {"status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]}}
+[debug] [2026-04-16T18:19:02.499Z] <<< [apiv2][status] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/uniparadiso/versions/796e9133fb13d9be 200
+[debug] [2026-04-16T18:19:02.499Z] <<< [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/uniparadiso/versions/796e9133fb13d9be {"name":"projects/866621121472/sites/uniparadiso/versions/796e9133fb13d9be","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-04-16T18:19:00.408195Z","createUser":{"email":"urenacamila0@gmail.com"},"finalizeTime":"2026-04-16T18:19:02.642612Z","finalizeUser":{"email":"urenacamila0@gmail.com"}}
+[debug] [2026-04-16T18:19:02.500Z] [hosting] finalized version for uniparadiso:[object Object]
+[info] +  hosting[uniparadiso]: version finalized 
+[info] i  hosting[uniparadiso]: releasing new version... 
+[debug] [2026-04-16T18:19:02.501Z] Checked if tokens are valid: true, expires at: 1776365665480
+[debug] [2026-04-16T18:19:02.501Z] Checked if tokens are valid: true, expires at: 1776365665480
+[debug] [2026-04-16T18:19:02.502Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/uniparadiso/channels/live/releases versionName=projects%2F866621121472%2Fsites%2Funiparadiso%2Fversions%2F796e9133fb13d9be
+[debug] [2026-04-16T18:19:02.502Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/uniparadiso/channels/live/releases {}
+[debug] [2026-04-16T18:19:03.108Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/uniparadiso/channels/live/releases 200
+[debug] [2026-04-16T18:19:03.109Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/uniparadiso/channels/live/releases {"name":"projects/866621121472/sites/uniparadiso/channels/live/releases/1776363542574000","version":{"name":"projects/866621121472/sites/uniparadiso/versions/796e9133fb13d9be","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-04-16T18:19:00.408195Z","createUser":{"email":"urenacamila0@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocI1L3Kjq-veJlVRiRgmjUTNCgEtIiwV9uLnkmNYZIXsKWMetnFI"},"finalizeTime":"2026-04-16T18:19:02.642612Z","finalizeUser":{"email":"urenacamila0@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocI1L3Kjq-veJlVRiRgmjUTNCgEtIiwV9uLnkmNYZIXsKWMetnFI"}},"type":"DEPLOY","releaseTime":"2026-04-16T18:19:02.574Z","releaseUser":{"email":"urenacamila0@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocI1L3Kjq-veJlVRiRgmjUTNCgEtIiwV9uLnkmNYZIXsKWMetnFI"}}
+[debug] [2026-04-16T18:19:03.112Z] [hosting] release: {"name":"projects/866621121472/sites/uniparadiso/channels/live/releases/1776363542574000","version":{"name":"projects/866621121472/sites/uniparadiso/versions/796e9133fb13d9be","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-04-16T18:19:00.408195Z","createUser":{"email":"urenacamila0@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocI1L3Kjq-veJlVRiRgmjUTNCgEtIiwV9uLnkmNYZIXsKWMetnFI"},"finalizeTime":"2026-04-16T18:19:02.642612Z","finalizeUser":{"email":"urenacamila0@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocI1L3Kjq-veJlVRiRgmjUTNCgEtIiwV9uLnkmNYZIXsKWMetnFI"}},"type":"DEPLOY","releaseTime":"2026-04-16T18:19:02.574Z","releaseUser":{"email":"urenacamila0@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocI1L3Kjq-veJlVRiRgmjUTNCgEtIiwV9uLnkmNYZIXsKWMetnFI"}}
+[info] +  hosting[uniparadiso]: release complete 
+[info] 
+[info] +  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/uniparadiso/overview
+[info] Hosting URL: https://uniparadiso.web.app

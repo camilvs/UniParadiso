@@ -10,8 +10,9 @@ let users = [
         profile: {
             title: "",
             created_at: ""
-        }
-    }
+        },
+        email: "clown1N@email.com"
+    },
 ];
 
 let avatars = [
@@ -21,8 +22,30 @@ let avatars = [
         type: "Red",
         image_portrait: "spr_character_0_dialogue.png",
         image_idle: "spr_character_idle_0.gif",
-        image_walk: "spr_character_0_walk.gif"
-    }
+        image_walk: "spr_character_0_walk.gif",
+        image_battle_idle: "spr_character_0_up.png",
+        image_battle_hurt: "",
+    },
+    {
+        id: 1,
+        name: "Rikki Ravager",
+        type: "Orange",
+        image_portrait: "spr_character_1_dialogue.png",
+        image_idle: "spr_character_idle_1.png",
+        image_walk: "spr_character_1_walk.gif",
+        image_battle_idle: "spr_character_1_up.png",
+        image_battle_hurt: "",
+    },
+        {
+        id: 2,
+        name: "Edith Eigh",
+        type: "Yellow",
+        image_portrait: "spr_character_2_dialogue.png",
+        image_idle: "spr_character_idle_2.png",
+        image_walk: "spr_character_2_walk.gif",
+        image_battle_idle: "spr_character_2_up.png",
+        image_battle_hurt: "",
+    },
 ];
 
 let users_avatars = [
@@ -40,14 +63,51 @@ let users_avatars = [
             spATK: 0,
             dex: 0,
             spDEF: 2,
-            cp: 7
+            cp: 7,
+            slots: 3,
         }
-    }
+    },
+        {
+        id: 1,
+        user_id: 0,
+        avatar_id: 1,
+        avatar_level: 1,
+        base_stats: {
+            hearts: 3,
+            def: 4,
+            res: 12,
+            atk: 1,
+            eva: 0,
+            spATK: 3,
+            dex: 0,
+            spDEF: 4,
+            cp: 7,
+            slots: 3,
+        }
+    },
+            {
+        id: 2,
+        user_id: 0,
+        avatar_id: 2,
+        avatar_level: 1,
+        base_stats: {
+            hearts: 3,
+            def: 0,
+            res: 2,
+            atk: 12,
+            eva: 0,
+            spATK: 0,
+            dex: 3,
+            spDEF: 0,
+            cp: 7,
+            slots: 3,
+        }
+    },
 ];
 let current_squad = [
     {slot: 0, user_id: 0, avatar_id: 0, ready: true},
-    {slot: 1, user_id: null, avatar_id: null, ready: false},
-    {slot: 2, user_id: null, avatar_id: null, ready: false}
+    {slot: 1, user_id: 0, avatar_id: 1, ready: true},
+    {slot: 2, user_id: 0, avatar_id: 2, ready: true}
 ];
 
 const rank_reload_turns = {
@@ -157,7 +217,7 @@ let weapons = [
         name: "Wooden Club",
         desc: "Though it is wooden, it really hurts.",
         image: "weapon_6.png",
-        color: "yellow",
+        color: "red",
         rarity: "common",
         cp_cost: 1,
         reload_type: "rank_based",
@@ -337,15 +397,15 @@ let weapons = [
         name: "Leather Whip",
         desc: "Crack that whip.",
         image: "weapon_18.png",
-        color: "green",
+        color: "orange",
         rarity: "common",
         cp_cost: 1,
         reload_type: "rank_based",
         use_phase: "battle",
         target_type: "enemy_single",
         uses_per_battle: null,
-        stat_requirements: { dex: 7, eva: 6 },
-        effects: { def: 1, res: 2, atk: 3, eva: 6, spATK: 0, dex: 7, spDEF: 0 }
+        stat_requirements: { res: 7},
+        effects: { def: 1, res: 14, atk: 3, eva: 6, spATK: 0, dex: 7, spDEF: 0 }
     },
     {
         id: 19,
@@ -423,6 +483,7 @@ let weapons = [
         effects: { def: 1, res: 1, atk: 4, eva: 5, spATK: 0, dex: 6, spDEF: 0 }
     }
 ];
+
 let equipments = [
     {
         id: 0,
@@ -2354,6 +2415,7 @@ let enemy_stats = [
 
 //ownership tables for every card category
 let users_weapons = [
+    // Avatar 0 owns 3 copies
     {
         id: 0,
         user_id: 0,
@@ -2364,7 +2426,8 @@ let users_weapons = [
         quantity: 1,
         locked: false,
         favorite: false
-    },{
+    },
+    {
         id: 1,
         user_id: 0,
         avatar_id: 0,
@@ -2385,28 +2448,79 @@ let users_weapons = [
         quantity: 1,
         locked: false,
         favorite: false
-    }
-];
-let users_equipments = [
+    },
+
+    // Avatar 1 owns 3 copies
     {
-        id: 0,
+        id: 3,
         user_id: 0,
-        equipment_id: 0,
+        avatar_id: 1,
+        weapon_id: 18,
+        level: 1,
+        rank: "F",
+        quantity: 1,
+        locked: false,
+        favorite: false
+    },
+    {
+        id: 4,
+        user_id: 0,
+        avatar_id: 1,
+        weapon_id: 18,
+        level: 1,
+        rank: "F",
+        quantity: 1,
+        locked: false,
+        favorite: false
+    },
+    {
+        id: 5,
+        user_id: 0,
+        avatar_id: 1,
+        weapon_id: 18,
+        level: 1,
+        rank: "F",
+        quantity: 1,
+        locked: false,
+        favorite: false
+    },
+
+    // Avatar 2 owns 3 copies
+    {
+        id: 6,
+        user_id: 0,
+        avatar_id: 2,
+        weapon_id: 2,
+        level: 1,
+        rank: "F",
+        quantity: 1,
+        locked: false,
+        favorite: false
+    },
+    {
+        id: 7,
+        user_id: 0,
+        avatar_id: 2,
+        weapon_id: 2,
+        level: 1,
+        rank: "F",
+        quantity: 1,
+        locked: false,
+        favorite: false
+    },
+    {
+        id: 8,
+        user_id: 0,
+        avatar_id: 2,
+        weapon_id: 2,
+        level: 1,
+        rank: "F",
         quantity: 1,
         locked: false,
         favorite: false
     }
 ];
-let users_items = [
-    {
-        id: 0,
-        user_id: 0,
-        item_id: 0,
-        quantity: 3,
-        locked: false,
-        favorite: false
-    }
-];
+
 let users_manifest = [
     {
         id: 0,
@@ -2418,8 +2532,31 @@ let users_manifest = [
         quantity: 1,
         locked: false,
         favorite: false
+    },
+    {
+        id: 1,
+        user_id: 0,
+        avatar_id: 1,
+        manifest_id: 1,
+        level: 1,
+        rank: "F",
+        quantity: 1,
+        locked: false,
+        favorite: false
+    },
+    {
+        id: 2,
+        user_id: 0,
+        avatar_id: 2,
+        manifest_id: 2,
+        level: 1,
+        rank: "F",
+        quantity: 1,
+        locked: false,
+        favorite: false
     }
 ];
+
 let users_skills = [
     {
         id: 0,
@@ -2436,26 +2573,124 @@ let users_skills = [
         id: 1,
         user_id: 0,
         avatar_id: 0,
-        skill_id: 0,
+        skill_id: 1,
         level: 1,
         rank: "F",
         quantity: 1,
         locked: false,
         favorite: false
     },
+    {
+        id: 2,
+        user_id: 0,
+        avatar_id: 1,
+        skill_id: 3,
+        level: 1,
+        rank: "F",
+        quantity: 1,
+        locked: false,
+        favorite: false
+    },
+    {
+        id: 3,
+        user_id: 0,
+        avatar_id: 2,
+        skill_id: 2,
+        level: 1,
+        rank: "F",
+        quantity: 1,
+        locked: false,
+        favorite: false
+    }
 ];
 
-//deck/loadout tables 
+let users_items = [
+    {
+        id: 0,
+        user_id: 0,
+        item_id: 0,
+        quantity: 3,
+        locked: false,
+        favorite: false
+    },
+    {
+        id: 1,
+        user_id: 0,
+        item_id: 1,
+        quantity: 2,
+        locked: false,
+        favorite: false
+    },
+    {
+        id: 2,
+        user_id: 0,
+        item_id: 2,
+        quantity: 1,
+        locked: false,
+        favorite: false
+    }
+];
+
+let users_equipments = [
+    {
+        id: 0,
+        user_id: 0,
+        equipment_id: 0,
+        quantity: 1,
+        locked: false,
+        favorite: false
+    },
+    {
+        id: 1,
+        user_id: 0,
+        equipment_id: 1,
+        quantity: 1,
+        locked: false,
+        favorite: false
+    },
+    {
+        id: 2,
+        user_id: 0,
+        equipment_id: 2,
+        quantity: 1,
+        locked: false,
+        favorite: false
+    }
+];
+
+// =====================================
+// LOADOUT TABLES
+// one loadout per owned avatar
+// these use OWNED CARD IDS, not definition IDs
+// =====================================
+
 let squad_loadouts = [
     {
         id: 0,
         user_id: 0,
         avatar_id: 0,
-
-        weapons: [],
+        weapons: [0, 1, 2],
+        battle_items: [0],
+        manifest: [0],
+        skills: [0, 1]
+    },
+    {
+        id: 1,
+        user_id: 0,
+        avatar_id: 1,
+        weapons: [3, 4, 5],
         battle_items: [],
-        manifest: [],
-        skills: []
+        manifest: [1],
+        skills: [2]
+    },
+    {
+        id: 2,
+        user_id: 0,
+        avatar_id: 2,
+        weapons: [6, 7, 8],
+        battle_items: [],
+        manifest: [2],
+        skills: [3]
     }
 ];
 
@@ -2464,7 +2699,45 @@ let squad_equipment_loadouts = [
         id: 0,
         user_id: 0,
         avatar_id: 0,
-
-        slots: [null, null, null]
+        slots: [0, null, null]
+    },
+    {
+        id: 1,
+        user_id: 0,
+        avatar_id: 1,
+        slots: [1, null, null]
+    },
+    {
+        id: 2,
+        user_id: 0,
+        avatar_id: 2,
+        slots: [2, null, null]
     }
 ];
+
+
+let battle_snaphot = {
+    actor_key: "player-0",
+    side: "player",
+    squad_slot: 0,
+    battle_position: "front_position",
+    user_id: 0,
+    avatar_id: 0,
+    name: "Tahdah Hihat",
+    hearts: 3,
+    max_hearts: 3,
+    stats: {
+        def: 12,
+        res: 4,
+        atk: 3,
+        eva: 0,
+        spATK: 0,
+        dex: 0,
+        spDEF: 2,
+        cp: 7
+    },
+    speed: 0,
+    alive: true,
+    guarding: false,
+    queued_actions: [],
+}

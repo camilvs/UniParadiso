@@ -2,6 +2,8 @@
 let levels = [];
 let current_level = null;
 
+
+
 const level_test_level_name = document.getElementById("level_test_level_name");
 const level_test_preview = document.getElementById("level_test_preview");
 
@@ -22,6 +24,7 @@ const pause_nav_squad = document.getElementById("pause_nav_squad");
 const squad_pause_display = document.getElementById("squad_pause_display");
 const deck_pause_display = document.getElementById("deck_pause_display");
 const equipment_pause_display = document.getElementById("equipment_pause_display");
+
 
 const level_test_exit = document.getElementById("level_test_exit");
 
@@ -108,6 +111,7 @@ window.onload = function(){
     // prepare pause menu content
     renderDeckPauseDisplay();
     renderEquipmentPauseDisplay();
+    renderSquadMembers();
 
     // start game loop
     gameLoop();

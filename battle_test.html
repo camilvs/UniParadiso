@@ -41,9 +41,10 @@
                 <div id="battle_test_preview" style="width: 98%; height: 600px; border: 1px solid black; margin-left: 8px; margin-top: 2px; perspective: 800px; overflow: hidden; background-image: url(./images/background3.png); position: relative;">
                     <div style="width: 100%; height: 34px; display: flex; flex-direction: row; justify-content: space-between; position: relative; z-index: 20;">
                         <div id="battle_camera_left" style="background-color: black; width: 32px; height: 32px; border: 2px inset #222; border-radius: 12px; color: white; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;" title="camera left">L</div>
+                        <div id="battle_order" style=" padding: 3px; width: auto; height: 40px; background-color: black; border: black 3px inset; border-radius: 12px; justify-content: space-evenly; align-content: center; display: flex; flex-direction: row; flex-wrap: nowrap;">
+                        </div>
                         <div id="battle_camera_right" style="background-color: black; width: 32px; height: 32px; border: 2px inset #222; border-radius: 12px; color: white; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;" title="camera right">R</div>
                     </div>
-
                     <!-- Shared 3D rig -->
                     <div id="battle_rig" style="
                         width: 420px;
@@ -74,7 +75,9 @@
                                 background-position: center bottom;
                                 display: none;
                                 transform-origin: bottom center;
-                            "></div>
+                                flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                                <div class="pop_up" style="width:120px; font-size: 28px; color: white; font-weight: bolder; border: 1px solid transparent; text-align: center; position: relative; top: 120px; left: 32px; display: none; flex-direction: column;">BREAK</div>
+                            </div>
 
                             <div id="visual_e_mid_1" style="
                                 position: absolute;
@@ -84,7 +87,10 @@
                                 background-position: center bottom;
                                 display: none;
                                 transform-origin: bottom center;
-                            "></div>
+                                 flex-direction: column; justify-content: center; align-items: center; text-align: center;
+                            ">
+                                <div class="pop_up" style="width:120px; font-size: 24px; color: white; font-weight: bolder; border: 1px solid transparent; text-align: center; position: relative; top: 60px; left: -10px; display: none; flex-direction: column;">BREAK</div>
+                            </div>
 
                             <div id="visual_e_mid_2" style="
                                 position: absolute;
@@ -94,7 +100,9 @@
                                 background-position: center bottom;
                                 display: none;
                                 transform-origin: bottom center;
-                            "></div>
+                            ">
+                                <div class="pop_up" style="width:120px; font-size: 24px; color: white; font-weight: bolder; border: 1px solid transparent; text-align: center; position: relative; top: 60px; left: -10px; display: none; flex-direction: column;">BREAK</div>
+                            </div>
 
                             <div id="visual_e_back_1" style="
                                 position: absolute;
@@ -104,7 +112,9 @@
                                 background-position: center bottom;
                                 display: none;
                                 transform-origin: bottom center;
-                            "></div>
+                            ">
+                                <div class="pop_up" style="width:120px; font-size: 24px; color: white; font-weight: bolder; border: 1px solid transparent; text-align: center; position: relative; top: 60px; left: -10px; display: none; flex-direction: column;">BREAK</div>
+                            </div>
 
                             <div id="visual_e_back_2" style="
                                 position: absolute;
@@ -114,7 +124,9 @@
                                 background-position: center bottom;
                                 display: none;
                                 transform-origin: bottom center;
-                            "></div>
+                            ">
+                                <div class="pop_up" style="width:120px; font-size: 28px; color: white; font-weight: bolder; border: 1px solid transparent; text-align: center; position: relative; top: 60px; left: 30px; display: none; flex-direction: column;">BREAK</div>
+                            </div>
 
                             <div id="visual_e_back_3" style="
                                 position: absolute;
@@ -124,7 +136,9 @@
                                 background-position: center bottom;
                                 display: none;
                                 transform-origin: bottom center;
-                            "></div>
+                            ">
+                                <div class="pop_up" style="width:120px; font-size: 24px; color: white; font-weight: bolder; border: 1px solid transparent; text-align: center; position: relative; top: 60px; left: -10px; display: none; flex-direction: column;">BREAK</div>
+                            </div>
 
                             <!-- Player visuals -->
                             <div id="visual_p_front_position" style="
@@ -136,8 +150,9 @@
                                 display: none;
                                 transform-origin: bottom center;
                                 
-                            "></div>
-
+                            ">
+                            <div class="pop_up" style="width:120px; font-size: 24px; color: white; font-weight: bolder; border: 1px solid transparent; text-align: center; position: relative; top: 60px; left: -10px; display: none; flex-direction: column;">BREAK</div>
+                            </div>
                             <div id="visual_p_mid_1" style="
                                 position: absolute;
                                 width: 96px; height: 96px;
@@ -146,7 +161,9 @@
                                 background-position: center bottom;
                                 display: none;
                                 transform-origin: bottom center;
-                            "></div>
+                            ">
+                                <div class="pop_up" style="width:120px; font-size: 24px; color: white; font-weight: bolder; border: 1px solid transparent; text-align: center; position: relative; top: 60px; left: -10px; display: none; flex-direction: column;">BREAK</div>
+                            </div>
 
                             <div id="visual_p_mid_2" style="
                                 position: absolute;
@@ -156,8 +173,9 @@
                                 background-position: center bottom;
                                 display: none;
                                 transform-origin: bottom center;
-                            "></div>
-
+                            ">
+                                <div class="pop_up" style="width:120px; font-size: 24px; color: white; font-weight: bolder; border: 1px solid transparent; text-align: center; position: relative; top: 60px; left: -10px; display: none; flex-direction: column;">BREAK</div>
+                            </div>
                             <div id="visual_p_back_1" style="
                                 position: absolute;
                                 width: 110px; height: 110px;
@@ -166,8 +184,9 @@
                                 background-position: center bottom;
                                 display: none;
                                 transform-origin: bottom center;
-                            "></div>
-
+                            ">
+                                <div class="pop_up" style="width:120px; font-size: 24px; color: white; font-weight: bolder; border: 1px solid transparent; text-align: center; position: relative; top: 60px; left: -10px; display: none; flex-direction: column;">BREAK</div>
+                            </div>
                             <div id="visual_p_back_2" style="
                                 position: absolute;
                                 width: 110px; height: 110px;
@@ -176,8 +195,9 @@
                                 background-position: center bottom;
                                 display: none;
                                 transform-origin: bottom center;
-                            "></div>
-
+                            ">
+                                <div class="pop_up" style="width:120px; font-size: 24px; color: white; font-weight: bolder; border: 1px solid transparent; text-align: center; position: relative; top: 60px; left: -10px; display: none; flex-direction: column;">BREAK</div>
+                            </div>
                             <div id="visual_p_back_3" style="
                                 position: absolute;
                                 width: 110px; height: 110px;
@@ -186,9 +206,10 @@
                                 background-position: center bottom;
                                 display: none;
                                 transform-origin: bottom center;
-                            "></div>
+                            ">
+                                <div class="pop_up" style="width:120px; font-size: 24px; color: white; font-weight: bolder; border: 1px solid transparent; text-align: center; position: relative; top: 60px; left: -10px; display: none; flex-direction: column;">BREAK</div>
+                            </div>
                         </div>
-
                         <!-- Board -->
                         <div id="battle_board" style="
                             width: 420px;
@@ -203,34 +224,35 @@
                             top: 0px;
                             z-index: 1;
                             transform: translateX(-5px) translateY(62px);
+                            background-image: url(./images/tile38.png);
                         ">
-                            <div id="enemy_side" style="width: 640px; height: 420px; background-image: linear-gradient(grey, black); position: relative; top: 142px; left: -112px;">
-                                <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
-                                    <div id="e_back_1" style="width: 120px; height: 120px; background-color: red; margin: 12px;"></div>
-                                    <div id="e_back_2" style="width: 120px; height: 120px; background-color: red; margin: 12px;"></div>
-                                    <div id="e_back_3" style="width: 120px; height: 120px; background-color: red; margin: 12px;"></div>
+                            <div id="enemy_side" style="width: 640px; height: 447px; background-image: url(./images/tile38.png); position: relative; top: 142px; left: -112px;">
+                                <div style="display: none; flex-direction: row; justify-content: space-between; align-items: center;">
+                                    <div id="e_back_1" style="width: 120px; height: 120px; background-color: rgba(0, 0, 0, 0); margin: 12px;"></div>
+                                    <div id="e_back_2" style="width: 120px; height: 120px; background-color: rgba(0, 0, 0, 0); margin: 12px;"></div>
+                                    <div id="e_back_3" style="width: 120px; height: 120px; background-color: rgba(0, 0, 0, 0); margin: 12px;"></div>
                                 </div>
-                                <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;">
-                                    <div id="e_mid_1" style="width: 120px; height: 120px; background-color: red; margin: 12px;"></div>
-                                    <div id="e_mid_2" style="width: 120px; height: 120px; background-color: red; margin: 12px;"></div>
+                                <div style="display: none; flex-direction: row; justify-content: space-evenly; align-items: center;">
+                                    <div id="e_mid_1" style="width: 120px; height: 120px; background-color: rgba(0, 0, 0, 0); margin: 12px;"></div>
+                                    <div id="e_mid_2" style="width: 120px; height: 120px; background-color: rgba(0, 0, 0, 0); margin: 12px;"></div>
                                 </div>
-                                <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;">
-                                    <div id="e_front_position" style="width: 120px; height: 120px; background-color: red; margin: 12px;"></div>
+                                <div style="display: none; flex-direction: row; justify-content: space-evenly; align-items: center;">
+                                    <div id="e_front_position" style="width: 120px; height: 120px; background-color: rgba(0, 0, 0, 0); margin: 12px;"></div>
                                 </div>
                             </div>
                             <div style="height:226px; width: 32px;"></div>
-                            <div id="player_side" style="width: 200px; height: 192px; background-image: linear-gradient(blue, red); display: flex; flex-direction: column; margin-left: 110px;">
+                            <div id="player_side" style="width: 200px; height: 192px; background-image: none; display: flex; flex-direction: column; margin-left: 110px;">
                                 <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;">
-                                    <div id="p_front_position" style="width: 120px; height: 60px; background-color: blue; margin: 2px;"></div>
+                                    <div id="p_front_position" style="width: 120px; height: 60px; background-color: rgba(0, 0, 0, 0.5); margin: 2px; border: 3px solid yellow; "></div>
                                 </div>
                                 <div style="display: flex; flex-direction: row; justify-content: space-evenly; align-items: center;">
-                                    <div id="p_mid_1" style="width: 120px; height: 60px; background-color: blue; margin: 2px;"></div>
-                                    <div id="p_mid_2" style="width: 120px; height: 60px; background-color: blue; margin: 2px;"></div>
+                                    <div id="p_mid_1" style="width: 120px; height: 60px; background-color: rgba(0, 0, 0, 0.5); border: 3px solid yellow; margin: 2px;"></div>
+                                    <div id="p_mid_2" style="width: 120px; height: 60px; background-color: rgba(0, 0, 0, 0.5); border: 3px solid yellow; margin: 2px;"></div>
                                 </div>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
-                                    <div id="p_back_1" style="width: 120px; height: 60px; background-color: blue; margin: 2px;"></div>
-                                    <div id="p_back_2" style="width: 120px; height: 60px; background-color: blue; margin: 2px;"></div>
-                                    <div id="p_back_3" style="width: 120px; height: 60px; background-color: blue; margin: 2px;"></div>
+                                    <div id="p_back_1" style="width: 120px; height: 60px; background-color: rgba(0, 0, 0, 0.5); border: 3px solid yellow; margin: 2px; margin: 2px;"></div>
+                                    <div id="p_back_2" style="width: 120px; height: 60px; background-color: rgba(0, 0, 0, 0); border: 3px solid yellow; margin: 2px; margin: 2px;"></div>
+                                    <div id="p_back_3" style="width: 120px; height: 60px; background-color: rgba(0, 0, 0, 0.5); border: 3px solid yellow; margin: 2px; margin: 2px;"></div>
                                 </div>
                             </div>
                         </div>
@@ -238,7 +260,14 @@
                 </div>
                 <div id="commands_holder" style="position: relative; display: flex; flex-direction: row; top: -122px; left: 15px;">
                     <div id="start_commands" style="width: 120px; height: 120px; background-color: black; border-radius: 4px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; margin-left: 4px;">
-                        <div style="color: yellow; margin: 4px; border-bottom: 1px ghostwhite inset;">Commands</div>
+                        <div style="width: 120px; height: 64px; position: absolute; background-color: black; top: -68px; left: 4px; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                            <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+                                <div id="squad_portrait_command_tab" style="width: 32px; height: 32px; border: 1px inset white; border-radius: 4px; background-color: #222;"></div>
+                                <div id="members_hearts" style="color: violet; width: auto; height: 24px; background-color: black; padding: 4px; border-radius: 12px;"></div>
+                            </div>
+                            <div id="current_actor_name" style="color: yellow; font-size: 12px; background-color: black; border-radius: 4px;"></div>
+                        </div>
+                        <div style="color: yellow; margin: 8px 0px 0px 4px; border-bottom: 1px ghostwhite inset;">Commands</div>
                         <div id="command_move" style="width: 100px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin: 4px; cursor: pointer; border-radius: 4px;" title="Change Position">Move</div>
                         <div id="command_cards" style="width: 100px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin: 4px; cursor: pointer; border-radius: 4px;" title="Use Cards">Cards</div>
                         <div id="command_escape" style="width: 100px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin: 4px; cursor: pointer; border-radius: 4px;" title="Attempt Escape">Escape</div>
@@ -271,7 +300,7 @@
                         </div>
                         <div style="display: flex; flex-direction: row; width: 100%; height: 64px; justify-content: space-evenly; align-items: center;">
                             <div id="to_commands" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Back to Commands">Back</div>
-                            <div id="to_battle" style="width: 64px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin-left: 4px; cursor: pointer; border-radius: 4px; font-size: 12px;" title="Start Battle">Battle</div>
+                             <div id="command_done" style="width: 100px; height: 16px; padding: 2px; background-color: black; color: ghostwhite; text-align: center; border: 1px white outset; margin: 4px; cursor: pointer; border-radius: 4px;" title="Confirm This Turn">Done</div>
                         </div>
                     </div>
                     <div id="battle_queue_window" style="width: 253px; height: 270px; background-color: black; border-radius: 4px; position: relative; top: -148px; display: none; flex-direction: column; align-items: center; justify-content: space-evenly; text-align: center;">
@@ -355,8 +384,16 @@
                             <div id="battle_queue_6" style="width: 32px; height: 32px; border: 1px solid yellow; border-radius: 5px;"></div>
                         </div>
                         <div id="to_cards" style="display: flex; flex-direction: column; text-align: center; align-items: center; justify-content: center; border: 1px outset white; border-radius: 4px; padding: 3px; color: ghostwhite; cursor: pointer;" title="To Card Selection">Back</div>
+                        <div id="to_battle"></div>
                     </div>
                 </div>
+            </div>
+            <div id="battle_log_window" style="width: 430px; height: 160px; display: none; flex-direction: column; justify-content: center; align-items: center; background-color: ghostwhite; border: 1px solid black; position: absolute; top: 12px; left: 12px;">
+                <div style="display: flex; flex-direction: row;">
+                    <div id="battle_log_header" style="width: 400px; height: 28px; border-bottom: 1px solid grey;"></div>
+                    <div id="battle_log_close" style="width: 26px; height: 26px; border: 1px solid black; align-items: center; justify-content: center; text-align: center; display: flex; flex-direction: column;">X</div>
+                </div>
+                <div id="battle_log" style="width: 412px; height: 112px; background-color: #222; color: ghostwhite; overflow-y: scroll; padding: 7px; font-size: large; font-weight: bolder;"></div>
             </div>
         </div>
         <div id="element_handler" style="position: absolute; width: 240px; height: 280px; border: 1px solid black; background-color: ghostwhite; top: 0px; left:0px; display: none; flex-direction: column;">

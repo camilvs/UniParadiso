@@ -1672,7 +1672,12 @@ let skills = [
         uses_per_battle: null,
         target_type: "self",
         stat_requirements: { def: 10 },
-        effects: { damage_type: "none", d_output: 0, perk_type: "defense_up", p_output: 0.08 }
+        effects: { 
+                    type: "guard",
+                    amount: 0.2,
+                    hit_scope: "next_hit",
+                    damage_type: "physical",
+                 }
     },
     {
         id: 1,
@@ -2601,7 +2606,29 @@ let users_skills = [
         quantity: 1,
         locked: false,
         favorite: false
-    }
+    },
+        {
+        id: 4,
+        user_id: 0,
+        avatar_id: 0,
+        skill_id: 0,
+        level: 1,
+        rank: "F",
+        quantity: 1,
+        locked: false,
+        favorite: false
+    },
+        {
+        id: 5,
+        user_id: 0,
+        avatar_id: 0,
+        skill_id: 0,
+        level: 1,
+        rank: "F",
+        quantity: 1,
+        locked: false,
+        favorite: false
+    },
 ];
 
 let users_items = [

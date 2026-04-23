@@ -334,6 +334,7 @@ function buildPlayerBattleActors(){
                 name: avatar?.name || `Player ${member.slot}`,
                 hearts: Number(stats.hearts || 0),
                 max_hearts: Number(stats.hearts || 0),
+                guard_status: null,
                 stats: {
                     def: Number(stats.def || 0),
                     res: Number(stats.res || 0),
@@ -384,6 +385,7 @@ function buildEnemyBattleActors(){
                 name: enemy.name || slot.position,
                 hearts: Number(stats.hearts || 0),
                 max_hearts: Number(stats.hearts || 0),
+                guard_status: null,
                 stats: {
                     def: Number(stats.def || 0),
                     res: Number(stats.res || 0),
@@ -401,6 +403,56 @@ function buildEnemyBattleActors(){
             };
         })
         .filter(Boolean);
+}
+
+function applyGuardToActor(targetActor, effectData){
+    if(!targetActor || !effectData) return false;
+
+    targetActor.guard_status = {
+        percent: Number(effectData.amount || 0),
+        hit_scope: effectData.hit_scope || "next_hit",
+        damage_type: effectData.damage_type || "physical",
+        remaining_hits: effectData.hit_scope === "next_hit" ? 1 : 1
+    };
+
+    return true;
+}
+
+function applyGuardReductionToIncomingDamage(targetActor, power, incomingDamageType = "physical"){
+    if(!targetActor || !targetActor.guard_status){
+        return {
+            finalPower: power,
+            blockedAmount: 0,
+            guardTriggered: false
+        };
+    }
+
+    const guard = targetActor.guard_status;
+
+    if(guard.damage_type !== "all" && guard.damage_type !== incomingDamageType){
+        return {
+            finalPower: power,
+            blockedAmount: 0,
+            guardTriggered: false
+        };
+    }
+
+    const blockedAmount = Math.floor(Number(power || 0) * Number(guard.percent || 0));
+    const finalPower = Math.max(0, Number(power || 0) - blockedAmount);
+
+    if(guard.hit_scope === "next_hit"){
+        guard.remaining_hits -= 1;
+
+        if(guard.remaining_hits <= 0){
+            targetActor.guard_status = null;
+        }
+    }
+
+    return {
+        finalPower,
+        blockedAmount,
+        guardTriggered: blockedAmount > 0
+    };
 }
 
 function buildBattleTurnOrder(players, enemies){
@@ -685,12 +737,18 @@ function resolveEnemyTurn(actor){
     let result = {
         defReducedBy: 0,
         heartsReducedBy: 0,
-        brokeDefense: false
+        brokeDefense: false,
+        blockedAmount: 0,
+        guardTriggered: false
     };
 
+    let logText = `${actor.name} attacks ${targetName}`;
+
     if(targetPlayer){
+        consumeQueuedGuardForActor(targetPlayer);
+
         const enemyAtk = Number(actor.stats?.atk || 0);
-        result = applyAttackToTarget(targetPlayer, enemyAtk);
+        result = applyAttackToTarget(targetPlayer, enemyAtk, "physical");
 
         if(result.brokeDefense){
             flashBreakVisual(targetPlayer);
@@ -700,10 +758,13 @@ function resolveEnemyTurn(actor){
             flashDefenseLossVisual(targetPlayer, result.defReducedBy);
         }
 
+        if(result.guardTriggered && result.blockedAmount > 0){
+            pushBattleLog(`${targetName} guards and blocks ${result.blockedAmount} damage.`);
+            logText += ` [GUARD -${result.blockedAmount}]`;
+        }
+
         refreshBattleTargetPanelForActor(targetPlayer);
     }
-
-    let logText = `${actor.name} attacks ${targetName}`;
 
     if(result.defReducedBy > 0){
         logText += ` (-${result.defReducedBy} DEF)`;
@@ -723,7 +784,6 @@ function resolveEnemyTurn(actor){
         advanceResolutionTurn();
     }, getEnemyActionDelay(result));
 }
-
 function getEnemyActionDelay(result){
     if(result?.heartsReducedBy > 0) return 700;
     if(result?.defReducedBy > 0) return 580;
@@ -753,6 +813,37 @@ function resolvePlayerTurn(actor){
     renderBattleQueueWindowSlots();
 
     routeTargetingForCard(card);
+}
+
+function consumeQueuedGuardForActor(actor){
+    if(!actor || actor.side !== "player") return null;
+
+    const guardIndex = action_queue.findIndex(card =>
+        card &&
+        Number(card.actor_slot) === Number(actor.squad_slot) &&
+        card.effects?.type === "guard"
+    );
+
+    if(guardIndex === -1){
+        return null;
+    }
+
+    const guardCard = action_queue[guardIndex];
+
+    const applied = applyGuardToActor(actor, guardCard.effects);
+    if(!applied){
+        return null;
+    }
+
+    action_queue[guardIndex] = null;
+    compactQueue();
+    renderQueue();
+    renderEquippedDeck();
+    renderBattleQueueWindowSlots();
+
+    pushBattleLog(`${actor.name}'s ${guardCard.name} activates before the hit.`);
+
+    return guardCard;
 }
 
 function getDeckForActor(slot){
@@ -786,7 +877,8 @@ function renderEquippedDeck(){
 
         const alreadyQueued = action_queue.some(queuedCard =>
             queuedCard &&
-            queuedCard.queue_key === card.queue_key
+            Number(queuedCard.actor_slot) === Number(active_actor_slot) &&
+            queuedCard.queue_key === `${active_actor_slot}-${card.queue_key}`
         );
 
         Object.assign(cardEl.style, {
@@ -833,6 +925,23 @@ function previewCard(card){
 
     const desc = document.createElement("div");
     desc.textContent = card.desc;
+
+    if(card.effects){
+    const effectLine = document.createElement("div");
+
+    if(card.effects.type === "heart"){
+        effectLine.textContent = `HEAL: ${card.effects.amount === "full" ? "FULL" : card.effects.amount}`;
+    }else{
+        effectLine.textContent = `Effect: ${card.effects.type}`;
+    }
+
+    if(card.effects.type === "guard"){
+        effectLine.textContent =
+        `GUARD: ${Math.round((card.effects.amount || 0) * 100)}% ${card.effects.damage_type} (${card.effects.hit_scope})`;
+    }
+
+    card_preview.appendChild(effectLine);
+}
 
     card_preview.appendChild(title);
     card_preview.appendChild(type);
@@ -1077,6 +1186,7 @@ function buildSquadEquippedDecks(){
                 type: "Item",
                 cost: itemDef.cp_cost || 0,
                 atk: itemDef.effects?.atk ?? itemDef.atk ?? 0,
+                effects: itemDef.effects || null,
                 desc: itemDef.desc || "Battle item.",
                 icon: itemDef.image ? `./images/${itemDef.image}` : "",
                 target_type: itemDef.target_type || "ally_single"
@@ -1115,6 +1225,7 @@ function buildSquadEquippedDecks(){
                 queue_key: `Skill-${ownedSkill.id}`,
                 name: skillDef.name,
                 type: "Skill",
+                effects: skillDef.effects || null,
                 cost: skillDef.cp_cost || 0,
                 atk: skillDef.effects?.atk ?? skillDef.atk ?? 0,
                 desc: skillDef.desc || "Skill card.",
@@ -1125,6 +1236,70 @@ function buildSquadEquippedDecks(){
 
         member.equipped_deck = builtDeck;
     });
+}
+
+function healHeartsOnTarget(targetActor, amount){
+    if(!targetActor){
+        return {
+            healedBy: 0,
+            revived: false
+        };
+    }
+
+    // first version: potions do not revive
+    if(Number(targetActor.hearts || 0) <= 0){
+        return {
+            healedBy: 0,
+            revived: false
+        };
+    }
+
+    const beforeHearts = Number(targetActor.hearts || 0);
+    const maxHearts = Number(targetActor.max_hearts || beforeHearts);
+
+    if(amount === "full"){
+        targetActor.hearts = maxHearts;
+    }else{
+        const healAmount = Math.max(0, Number(amount || 0));
+        targetActor.hearts = Math.min(maxHearts, beforeHearts + healAmount);
+    }
+
+    targetActor.alive = targetActor.hearts > 0;
+
+    return {
+        healedBy: targetActor.hearts - beforeHearts,
+        revived: false
+    };
+}
+
+function healAllAlliesHearts(amount){
+    if(!battle_state || !Array.isArray(battle_state.players)){
+        return {
+            totalHealed: 0,
+            targetsHealed: 0
+        };
+    }
+
+    let totalHealed = 0;
+    let targetsHealed = 0;
+
+    battle_state.players.forEach(player => {
+        if(!player) return;
+
+        const result = healHeartsOnTarget(player, amount);
+
+        if(result.healedBy > 0){
+            totalHealed += result.healedBy;
+            targetsHealed++;
+            flashHeartGainVisual(player, result.healedBy);
+            refreshBattleTargetPanelForActor(player);
+        }
+    });
+
+    return {
+        totalHealed,
+        targetsHealed
+    };
 }
 
 function pushBattleLog(message){
@@ -1754,6 +1929,7 @@ function useQueuedCardOnTarget(target){
     if(battle_resolution_wait){
         return;
     }
+
     const actor = getCurrentResolutionActor();
     if(!actor || actor.side !== "player") return;
 
@@ -1770,6 +1946,7 @@ function useQueuedCardOnTarget(target){
     if(target.type === "enemy"){
         const targetEnemy = getBattleEnemyByPosition(target.position);
         targetName = getEnemyNameByPosition(target.position);
+
         if(targetEnemy){
             result = applyAttackToTarget(targetEnemy, card.atk);
 
@@ -1787,7 +1964,47 @@ function useQueuedCardOnTarget(target){
     else if(target.type === "ally"){
         const targetAlly = getBattlePlayerBySlot(target.position);
         targetName = getAllyNameBySlot(target.position);
+
         if(targetAlly){
+            if(card.effects?.type === "heart"){
+                const healResult = healHeartsOnTarget(targetAlly, card.effects.amount);
+
+                if(healResult.healedBy > 0){
+                    flashHeartGainVisual(targetAlly, healResult.healedBy);
+                    refreshBattleTargetPanelForActor(targetAlly);
+                }
+
+                let logText = `${actor.name} uses ${card.name} on ${targetName}`;
+
+                if(healResult.healedBy > 0){
+                    logText += ` (+${healResult.healedBy} HEART)`;
+                }else{
+                    logText += `, but it has no effect.`;
+                }
+
+                pushBattleLog(logText);
+
+                const index = action_queue.findIndex(c =>
+                    c && Number(c.actor_slot) === Number(actor.squad_slot)
+                );
+
+                if(index !== -1){
+                    action_queue[index] = null;
+                }
+
+                compactQueue();
+                renderQueue();
+                renderEquippedDeck();
+                renderBattleQueueWindowSlots();
+
+                battle_queue_window.style.display = "none";
+                enemy_side_battle.style.display = "none";
+                battle_player_side.style.display = "none";
+
+                resolveNextCardForCurrentActorOrAdvance();
+                return;
+            }
+
             result = applyAttackToTarget(targetAlly, card.atk);
 
             if(result.brokeDefense){
@@ -1801,8 +2018,6 @@ function useQueuedCardOnTarget(target){
             refreshBattleTargetPanelForActor(targetAlly);
         }
     }
-
-    console.log("Card Used:", card.name, "Target:", target);
 
     let logText = `${actor.name} uses ${card.name} on ${targetName}`;
 
@@ -1829,7 +2044,6 @@ function useQueuedCardOnTarget(target){
     }
 
     compactQueue();
-
     renderQueue();
     renderEquippedDeck();
     renderBattleQueueWindowSlots();
@@ -2105,6 +2319,46 @@ function flashBreakVisual(actor){
         popUpEl.style.top = startTop;
         popUpEl.style.left = startLeft;
         popUpEl.innerHTML = "";
+    };
+}
+
+function flashHeartGainVisual(actor, amount = 1){
+    const popUpEl = preparePopUp(
+        actor,
+        amount > 1 ? `+${amount} 	&#10084;` : "+1 	&#10084;",
+        {
+            color: "lime",
+            fontSize: "26px"
+        }
+    );
+
+    if(!popUpEl) return;
+
+    popUpEl.style.top = "60px";
+    popUpEl.style.left = "-10px";
+
+    const anim = popUpEl.animate(
+        [
+            { top: "90px", opacity: 0, transform: "scale(0.8)" },
+            { top: "52px", opacity: 1, transform: "scale(1.15)" },
+            { top: "20px", opacity: 1, transform: "scale(1)" },
+            { top: "-2px", opacity: 0, transform: "scale(0.95)" }
+        ],
+        {
+            duration: 700,
+            iterations: 1,
+            easing: "ease-out",
+            fill: "forwards"
+        }
+    );
+
+    anim.onfinish = () => {
+        popUpEl.style.display = "none";
+        popUpEl.innerHTML = "";
+        popUpEl.style.opacity = "1";
+        popUpEl.style.transform = "scale(1)";
+        popUpEl.style.top = "60px";
+        popUpEl.style.left = "-10px";
     };
 }
 
@@ -2429,26 +2683,43 @@ function useQueuedCardOnAutoTarget(target){
     if(battle_resolution_wait){
         return;
     }
+
     const actor = getCurrentResolutionActor();
     if(!actor || actor.side !== "player") return;
 
     const card = getQueuedCardForActor(actor.squad_slot);
     if(!card) return;
 
-    let targetText = "target";
+    let logText = `${actor.name} uses ${card.name}`;
 
     if(target.type === "self"){
-        targetText = actor.name;
+        if(card.effects?.type === "guard"){
+            const applied = applyGuardToActor(actor, card.effects);
+
+            if(applied){
+                logText += ` and braces for the next ${card.effects.damage_type} hit (${Math.round(card.effects.amount * 100)}% blocked).`;
+            }else{
+                logText += `, but it has no effect.`;
+            }
+        }else{
+            logText += `.`;
+        }
     }
     else if(target.type === "ally_all"){
-        targetText = "all allies";
-    }
-    else if(target.type === "enemy_all"){
-        targetText = "all enemies";
+        if(card.effects?.type === "heart"){
+            const healResult = healAllAlliesHearts(card.effects.amount);
+
+            if(healResult.targetsHealed > 0){
+                logText += ` on all allies (+${healResult.totalHealed} HEART total).`;
+            }else{
+                logText += ` on all allies, but it has no effect.`;
+            }
+        }else{
+            logText += `.`;
+        }
     }
 
-    console.log("Card Used:", card.name, "Target:", target);
-    pushBattleLog(`${actor.name} uses ${card.name} on ${targetText}`);
+    pushBattleLog(logText);
 
     const index = action_queue.findIndex(c =>
         c && Number(c.actor_slot) === Number(actor.squad_slot)
@@ -2459,7 +2730,6 @@ function useQueuedCardOnAutoTarget(target){
     }
 
     compactQueue();
-
     renderQueue();
     renderEquippedDeck();
     renderBattleQueueWindowSlots();
@@ -2469,7 +2739,6 @@ function useQueuedCardOnAutoTarget(target){
     battle_player_side.style.display = "none";
 
     resolveNextCardForCurrentActorOrAdvance();
-
 }
 
 function advanceResolutionTurn(){
@@ -2514,16 +2783,18 @@ function getBattlePlayerBySlot(slot){
     ) || null;
 }
 
-function applyAttackToTarget(targetActor, attackPower){
+function applyAttackToTarget(targetActor, attackPower, incomingDamageType = "physical"){
     if(!targetActor || !targetActor.stats){
         return {
             defReducedBy: 0,
             heartsReducedBy: 0,
-            brokeDefense: false
+            brokeDefense: false,
+            blockedAmount: 0,
+            guardTriggered: false
         };
     }
 
-    const power = Math.max(0, Number(attackPower || 0));
+    let power = Math.max(0, Number(attackPower || 0));
     const currentDef = Math.max(0, Number(targetActor.stats.def || 0));
     const currentHearts = Math.max(0, Number(targetActor.hearts || 0));
 
@@ -2531,24 +2802,28 @@ function applyAttackToTarget(targetActor, attackPower){
     let heartsReducedBy = 0;
     let brokeDefense = false;
 
+    const guardResult = applyGuardReductionToIncomingDamage(
+        targetActor,
+        power,
+        incomingDamageType
+    );
+
+    power = guardResult.finalPower;
+
     if(currentDef === 0){
         heartsReducedBy = currentHearts > 0 && power > 0 ? 1 : 0;
         targetActor.hearts = Math.max(0, currentHearts - heartsReducedBy);
         targetActor.alive = targetActor.hearts > 0;
 
-        if(!targetActor.alive && targetActor.side === "player"){
-            clearQueuedCardsForActor(targetActor.squad_slot);
-            pushBattleLog(`${targetActor.name} is down! Queued cards cleared.`);
-        }
-
         return {
             defReducedBy,
             heartsReducedBy,
-            brokeDefense
+            brokeDefense,
+            blockedAmount: guardResult.blockedAmount || 0,
+            guardTriggered: guardResult.guardTriggered || false
         };
     }
 
-    // Otherwise this hit only damages defense
     defReducedBy = Math.min(currentDef, power);
     targetActor.stats.def = Math.max(0, currentDef - power);
 
@@ -2561,7 +2836,9 @@ function applyAttackToTarget(targetActor, attackPower){
     return {
         defReducedBy,
         heartsReducedBy,
-        brokeDefense
+        brokeDefense,
+        blockedAmount: guardResult.blockedAmount || 0,
+        guardTriggered: guardResult.guardTriggered || false
     };
 }
 

@@ -3,7 +3,8 @@ let users = [
     {
         id: 0,
         username: "Tahdah001",
-        rank: "F",
+        rank: "E",
+        rank_exp: 0,
         currency: {
             gil: 0
         },
@@ -25,6 +26,7 @@ let avatars = [
         image_walk: "spr_character_0_walk.gif",
         image_battle_idle: "spr_character_0_up.png",
         image_battle_hurt: "",
+        image_battle_results: "spr_character_idle_0.gif",
     },
     {
         id: 1,
@@ -35,6 +37,7 @@ let avatars = [
         image_walk: "spr_character_1_walk.gif",
         image_battle_idle: "spr_character_1_up.png",
         image_battle_hurt: "",
+        image_battle_results: "spr_character_idle_1.png",
     },
         {
         id: 2,
@@ -45,6 +48,7 @@ let avatars = [
         image_walk: "spr_character_2_walk.gif",
         image_battle_idle: "spr_character_2_up.png",
         image_battle_hurt: "",
+        image_battle_results: "spr_character_idle_2.png",
     },
 ];
 
@@ -54,6 +58,7 @@ let users_avatars = [
         user_id: 0,
         avatar_id: 0,
         avatar_level: 1,
+        avatar_exp: 0,
         base_stats: {
             hearts: 3,
             def: 12,
@@ -72,6 +77,7 @@ let users_avatars = [
         user_id: 0,
         avatar_id: 1,
         avatar_level: 1,
+        avatar_exp: 0,
         base_stats: {
             hearts: 3,
             def: 4,
@@ -90,6 +96,7 @@ let users_avatars = [
         user_id: 0,
         avatar_id: 2,
         avatar_level: 1,
+        avatar_exp: 0,
         base_stats: {
             hearts: 3,
             def: 0,
@@ -120,6 +127,24 @@ const rank_reload_turns = {
     S: 7,
     SS: 7
 };
+
+const avatar_level_requirements = [
+    { level: 1, exp_to_next: 100 },
+    { level: 2, exp_to_next: 125 },
+    { level: 3, exp_to_next: 160 },
+    { level: 4, exp_to_next: 200 },
+    { level: 5, exp_to_next: 260 },
+];
+
+const rank_requirements = [
+    { rank: "F", next_rank: "E", total_exp_required: 500 },
+    { rank: "E", next_rank: "D", total_exp_required: 1400 },
+    { rank: "D", next_rank: "C", total_exp_required: 3000 },
+    { rank: "C", next_rank: "B", total_exp_required: 6000 },
+    { rank: "B", next_rank: "A", total_exp_required: 11000 },
+    { rank: "A", next_rank: "S", total_exp_required: 18000 },
+    { rank: "S", next_rank: "SS", total_exp_required: 30000 },
+];
     
 let weapons = [
     {
@@ -1215,18 +1240,23 @@ let manifest = [
         image: "manifest_0.png",
         color: "red",
         rarity: "common",
+        rank: "E",
         cp_cost: 1,
         use_phase: "battle",
         reload_type: "rank_based",
         uses_per_battle: null,
         target_type: "enemy_all",
+        target_stat: "def",
         stat_requirements: { def: 10 },
         effects: {
+            type: "manifest_damage",
             damage_type: "earth",
-            d_output: 0.40,
-            perk_type: "def_down",
-            p_output: 0.05,
-            special: null
+            amount: 0.30,
+            stat_source: "def",
+            perk: {
+                type: "def_down",
+                amount: 0.05
+            }
         }
     },
     {
@@ -1236,18 +1266,23 @@ let manifest = [
         image: "manifest_1.png",
         color: "orange",
         rarity: "common",
+        rank: "E",
         cp_cost: 1,
         use_phase: "battle",
         reload_type: "rank_based",
         uses_per_battle: null,
         target_type: "enemy_all",
+        target_stat: "all",
         stat_requirements: { res: 10 },
         effects: {
+            type: "manifest_damage",
             damage_type: "water",
-            d_output: 0.40,
-            perk_type: "regen",
-            p_output: 0.05,
-            special: null
+            amount: 0.40,
+            stat_source: "res",
+            perk: {
+                type: "regen",
+                amount: 0.05
+            }
         }
     },
     {
@@ -1257,18 +1292,23 @@ let manifest = [
         image: "manifest_2.png",
         color: "yellow",
         rarity: "common",
+        rank: "E",
         cp_cost: 1,
         use_phase: "battle",
         reload_type: "rank_based",
         uses_per_battle: null,
         target_type: "enemy_single",
+        target_stat: "atk",
         stat_requirements: { atk: 10 },
         effects: {
+            type: "manifest_damage",
             damage_type: "fire",
-            d_output: 0.40,
-            perk_type: "atk_down",
-            p_output: 0.05,
-            special: null
+            amount: 0.40,
+            stat_source: "atk",
+            perk: {
+                type: "atk_down",
+                amount: 0.05
+            }
         }
     },
     {
@@ -1692,7 +1732,11 @@ let skills = [
         uses_per_battle: null,
         target_type: "ally_single",
         stat_requirements: { res: 10 },
-        effects: { damage_type: "none", d_output: 0, perk_type: "restore_stat", p_output: 0.20 }
+        effects: {
+            type: "restore_stat",
+            amount: 0.50,
+            stat_source: "res"
+        },
     },
     {
         id: 2,
@@ -1707,14 +1751,14 @@ let skills = [
         uses_per_battle: null,
         target_type: "self",
         stat_requirements: { atk: 10 },
-        effects: { damage_type: "none", d_output: 0, perk_type: "next_attack_up", p_output: 0.25 }
+        effects: { type: "focus", amount: 0.25, hit_scope: "next_attack", stacks: true }
     },
     {
         id: 3,
         name: "Dodge",
         desc: "Dodge an oncoming attack.",
         image: "skill_3.png",
-        color: "green",
+        color: "orange",
         rarity: "common",
         cp_cost: 1,
         use_phase: "battle",
@@ -1722,7 +1766,7 @@ let skills = [
         uses_per_battle: null,
         target_type: "self",
         stat_requirements: { eva: 10 },
-        effects: { damage_type: "none", d_output: 0, perk_type: "evasion_up", p_output: 0.30 }
+        effects: { type: "dodge", amount: 1, hit_scope: "next_hit", damage_type: "physical"},
     },
     {
         id: 4,
@@ -2622,7 +2666,18 @@ let users_skills = [
         id: 5,
         user_id: 0,
         avatar_id: 0,
-        skill_id: 0,
+        skill_id: 3,
+        level: 1,
+        rank: "F",
+        quantity: 1,
+        locked: false,
+        favorite: false
+    },
+            {
+        id: 6,
+        user_id: 0,
+        avatar_id: 1,
+        skill_id: 1,
         level: 1,
         rank: "F",
         quantity: 1,
@@ -2699,7 +2754,7 @@ let squad_loadouts = [
         weapons: [0, 1, 2],
         battle_items: [0],
         manifest: [0],
-        skills: [0, 1]
+        skills: [0, 3,]
     },
     {
         id: 1,

@@ -41,8 +41,7 @@
                 <div id="battle_test_preview" style="width: 98%; height: 600px; border: 1px solid black; margin-left: 8px; margin-top: 2px; perspective: 800px; overflow: hidden; background-image: url(./images/background3.png); position: relative;">
                     <div style="width: 100%; height: 34px; display: flex; flex-direction: row; justify-content: space-between; position: relative; z-index: 20;">
                         <div id="battle_camera_left" style="background-color: black; width: 32px; height: 32px; border: 2px inset #222; border-radius: 12px; color: white; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;" title="camera left">L</div>
-                        <div id="battle_order" style=" padding: 3px; width: auto; height: 40px; background-color: black; border: black 3px inset; border-radius: 12px; justify-content: space-evenly; align-content: center; display: flex; flex-direction: row; flex-wrap: nowrap;">
-                        </div>
+                        <div id="battle_order" style=" padding: 3px; width: auto; height: 40px; background-color: black; border: black 3px inset; border-radius: 12px; justify-content: space-evenly; align-content: center; display: flex; flex-direction: row; flex-wrap: nowrap;"></div>
                         <div id="battle_camera_right" style="background-color: black; width: 32px; height: 32px; border: 2px inset #222; border-radius: 12px; color: white; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;" title="camera right">R</div>
                     </div>
                     <!-- Shared 3D rig -->
@@ -386,6 +385,60 @@
                         <div id="to_cards" style="display: flex; flex-direction: column; text-align: center; align-items: center; justify-content: center; border: 1px outset white; border-radius: 4px; padding: 3px; color: ghostwhite; cursor: pointer;" title="To Card Selection">Back</div>
                         <div id="to_battle"></div>
                     </div>
+                    <div id="stat_restore_screen" style="width: 120px; height: 240px; background-color: black; position: relative; border-radius: 4px; top: -120px; display: none; flex-direction: column; justify-content: center; align-items: center; margin-left: 12px;">
+                        <div id="restore_portrait" style="width: 32px; height: 32px; border: 2px outset white; border-radius: 4px; background-color: #222; margin: 8px;"></div>
+                        <div id="restore_member_name" style="font-size: 10px; color: yellow; margin-bottom: 2px;"></div>
+                        <!-- DEF -->
+                        <div style="display: flex; flex-direction: row; margin: 2px;">
+                            <div id="res_def_button" style="color: ghostwhite; font-size: 10px; justify-content: center; display: flex; flex-direction: column; cursor: pointer; border: 1px solid yellow; border-radius: 7px 0px 0px 7px; width: 28px; text-align: center;" title="Restore Defense">DEF</div>
+                            <div id="restore_def_display" style="width: 78px; height: 12px; border: 1px solid white; border-radius: 0px 12px 12px 0px; overflow: hidden;">
+                                <div id="restore_def_current" style="width: 0px; height: 14px; background-color: red; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+                        <!-- RES -->
+                        <div style="display: flex; flex-direction: row; margin: 2px;">
+                            <div id="res_res_button" style="color: ghostwhite; font-size: 10px; justify-content: center; display: flex; flex-direction: column; border: 1px solid yellow; border-radius: 7px 0px 0px 7px; width: 28px; text-align: center; cursor: pointer;" title="Restore Resoration">RES</div>
+                            <div id="restore_res_display" style="width: 78px; height: 12px; border: 1px solid white; border-radius: 0px 12px 12px 0px; overflow: hidden;">
+                                <div id="restore_res_current" style="width: 0px; height: 14px; background-color: orange; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+                        <!-- ATK -->
+                        <div style="display: flex; flex-direction: row; margin: 2px;">
+                            <div id="atk_def_button" style="color: ghostwhite; font-size: 10px; justify-content: center; display: flex; flex-direction: column; border: 1px solid yellow; border-radius: 7px 0px 0px 7px; width: 28px; text-align: center; cursor: pointer;" title="Restore Attack">ATK</div>
+                            <div id="restore_atk_display" style="width: 78px; height: 12px; border: 1px solid white; border-radius: 0px 12px 12px 0px; overflow: hidden;">
+                                <div id="restore_atk_current" style="width: 0px; height: 14px; background-color: yellow; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+                        <!-- EVA -->
+                        <div style="display: flex; flex-direction: row; margin: 2px;">
+                            <div id="res_eva_button" style="color: ghostwhite; font-size: 10px; justify-content: center; display: flex; flex-direction: column; border: 1px solid yellow; border-radius: 7px 0px 0px 7px; width: 28px; text-align: center; cursor: pointer;" title="Restore Evasion">EVA</div>
+                            <div id="restore_eva_display" style="width: 78px; height: 12px; border: 1px solid white; border-radius: 0px 12px 12px 0px; overflow: hidden;">
+                                <div id="restore_eva_current" style="width: 0px; height: 14px; background-color: green; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+                        <!-- spATK -->
+                        <div style="display: flex; flex-direction: row; margin: 2px;">
+                            <div id="res_spATK_button" style="color: ghostwhite; font-size: 10px; justify-content: center; display: flex; flex-direction: column; border: 1px solid yellow; border-radius: 7px 0px 0px 7px; width: 28px; text-align: center; cursor: pointer;" title="Restore Special Attack">spATK</div>
+                            <div id="restore_spATK_display" style="width: 78px; height: 12px; border: 1px solid white; border-radius: 0px 12px 12px 0px; overflow: hidden;">
+                                <div id="restore_spATK_current" style="width: 0px; height: 14px; background-color: blue; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+                        <!-- DEX -->
+                        <div style="display: flex; flex-direction: row; margin: 2px;">
+                            <div id="res_dex_button" style="color: ghostwhite; font-size: 10px; justify-content: center; display: flex; flex-direction: column; border: 1px solid yellow; border-radius: 7px 0px 0px 7px; width: 28px; text-align: center; cursor: pointer;" title="Restore Special Dexterity">DEX</div>
+                            <div id="restore_dex_display" style="width: 78px; height: 12px; border: 1px solid white; border-radius: 0px 12px 12px 0px; overflow: hidden;">
+                                <div id="restore_dex_current" style="width: 0px; height: 14px; background-color: indigo; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+                        <!-- spDEF -->
+                        <div style="display: flex; flex-direction: row; margin: 2px;">
+                            <div id="res_spDEF_button" style="color: ghostwhite; font-size: 10px; justify-content: center; display: flex; flex-direction: column; border: 1px solid yellow; border-radius: 7px 0px 0px 7px; width: 28px; text-align: center; cursor: pointer;" title="Restore Special Defense">spDEF</div>
+                            <div id="restore_spDEF_display" style="width: 78px; height: 12px; border: 1px solid white; border-radius: 0px 12px 12px 0px; overflow: hidden;">
+                                <div id="restore_spDEF_current" style="width: 0px; height: 14px; background-color: violet; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+                        <div id="back_to_queue" style="color: ghostwhite; border: 1px inset ghostwhite; padding: 5px; border-radius: 5px; margin-top: 12px;">Back</div>
+                    </div>
                 </div>
             </div>
             <div id="battle_log_window" style="width: 430px; height: 160px; display: none; flex-direction: column; justify-content: center; align-items: center; background-color: ghostwhite; border: 1px solid black; position: absolute; top: 12px; left: 12px;">
@@ -452,6 +505,56 @@
                 <div id="element_name"></div>
             </div>
         </div>
+        <div id="battle_results_screen" style="width: 420px; height: 320px; position: absolute; background-color: ghostwhite; border: 1px solid black; display: none; flex-direction: column; left: 120px;top: 42px;">
+            <div style="display: flex; flex-direction: row; width: 100%; height: 28px; border-bottom: 1px solid grey;">
+                    <div id="results_header" style="width: 391px; height: 26px;" title="drag to move"></div>
+                    <div id="results_close" style="width: 26px; height: 26px; border: 1px solid black; justify-content: center; display: flex; flex-direction: column; text-align: center; cursor: pointer;" title="Exit Battle">X</div>
+                </div>
+                <div id="members_window" style="height: 320px; background-color: rgb(254, 240, 255); width: 96%; margin: 4px; display: flex; flex-direction: column; align-items: flex-start;">
+                    <div style="display: flex; flex-direction: row; position: absolute; width: 180px; border: 1px solid black;justify-content: flex-end; left: 224px; background-color: #222;">
+                        <div id="gold_won"  style="color: gold"></div>
+                        <div style="color: gold">/</div>
+                        <div id="gold_total" style="color: gold"></div>
+                        <div style="color: gold">gil</div>
+                    </div>
+                        <div id="member_1_results" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+                            <div id="results_1_portrait" style="width: 64px; height: 64px; background-color: #222;"></div>
+                                <div id="results_1_stats" style="height:64px; width: 120px; border: 1px solid transparent; display: flex; flex-direction: column;  justify-content: space-evenly; text-align: left; padding-left: 4px;">
+                                    <div id="result_1_name">name</div>
+                                    <div id="result_1_level">level</div>
+                                    <div  id="result_1_rank">Rank</div>
+                            </div>
+                        </div>
+                                <div id="member_1_level_up_display" style="display: flex; flex-direction: column; position: absolute; height: 16px; background-color: yellow; padding: 3px; border-radius: 4px; left: 320px; top: 100px; opacity: 0;">LEVEL UP</div>
+                                <div id="member_1_exp_bar" style="width: 390px; height: 16px; border: outset 3px yellow; background-color: #222; border-radius: 12px; margin-top: 4px; overflow: hidden; align-items: center; justify-content: flex-start; display: flex; flex-direction: row;">
+                                    <div id="member_1_exp_bar_fill" style=" width: 0px; background-image: linear-gradient(#222, violet); height: 24px; border: 1px solid white; border-radius: 12px; color: ghostwhite; font: 12px; text-align: right; justify-content: flex-end; align-items: center; display: flex; flex-direction: row; padding-top: 3px; color: gold; font-size: 10px;"></div>
+                                </div>
+                                <div id="member_2_results" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+                                    <div id="results_2_portrait" style="width: 64px; height: 64px; background-color: #222;"></div>
+                                    <div id="results_2_stats" style="height:64px; width: 120px; border: 1px solid transparent; display: flex; flex-direction: column;  justify-content: space-evenly; text-align: left; padding-left: 4px;">
+                                        <div id="result_2_name">name</div>
+                                        <div id="result_2_level">level</div>
+                                        <div  id="result_2_rank">Rank</div>
+                                    </div>
+                                </div>
+                                <div id="member_2_level_up_display" style="display: flex; flex-direction: column; position: absolute; height: 16px; background-color: yellow; padding: 3px; border-radius: 4px; left: 320px; top: 100px; opacity: 0;">LEVEL UP</div>
+                                <div id="member_2_exp_bar" style="width: 390px; height: 16px; border: outset 3px yellow; background-color: #222; border-radius: 12px; margin-top: 4px; overflow: hidden; align-items: center; justify-content: flex-start; display: flex; flex-direction: row;">
+                                    <div id="member_2_exp_bar_fill" style=" width: 0px; background-image: linear-gradient(#222, violet); height: 24px; border: 1px solid white; border-radius: 12px; color: ghostwhite; font: 12px; text-align: right; justify-content: flex-end; align-items: center; display: flex; flex-direction: row; padding-top: 3px; color: gold; font-size: 10px;"></div>
+                                </div>
+                                <div id="member_3_results" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+                                    <div id="results_3_portrait" style="width: 64px; height: 64px; background-color: #222;"></div>
+                                    <div id="results_3_stats" style="height:64px; width: 120px; border: 1px solid transparent; display: flex; flex-direction: column;  justify-content: space-evenly; text-align: left; padding-left: 4px;">
+                                        <div id="result_3_name">name</div>
+                                        <div id="result_3_level">level</div>
+                                        <div  id="result_3_rank">Rank</div>
+                                    </div>
+                                </div>
+                                <div id="member_3_level_up_display" style="display: flex; flex-direction: column; position: absolute; height: 16px; background-color: yellow; padding: 3px; border-radius: 4px; left: 320px; top: 100px; opacity: 0;">LEVEL UP</div>
+                                <div id="member_3_exp_bar" style="width: 390px; height: 16px; border: outset 3px yellow; background-color: #222; border-radius: 12px; margin-top: 4px; overflow: hidden; align-items: center; justify-content: flex-start; display: flex; flex-direction: row;">
+                                    <div id="member_3_exp_bar_fill" style=" width: 0px; background-image: linear-gradient(#222, violet); height: 24px; border: 1px solid white; border-radius: 12px; color: ghostwhite; font: 12px; text-align: right; justify-content: flex-end; align-items: center; display: flex; flex-direction: row; padding-top: 3px; color: gold; font-size: 10px;"></div>
+                                </div>
+                            </div>
+                        </div>
     </body>
 </html>
 <script src="./data_base.js" id="data_base"></script>

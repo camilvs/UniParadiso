@@ -144,6 +144,180 @@ let battle_log_header = document.getElementById("battle_log_header");
 let battle_log_close = document.getElementById("battle_log_close");
 const battle_log_el = document.getElementById("battle_log");
 
+let results_header = document.getElementById("results_header");
+
+let pending_restore_target = null;
+let pending_restore_card = null;
+let pending_restore_actor = null;
+
+const restore_stat_screen = document.getElementById("stat_restore_screen");
+
+const restore_stat_button_map = [
+    { id: "res_def_button", stat: "def" },
+    { id: "res_res_button", stat: "res" },
+    { id: "res_atk_button", stat: "atk" },
+    { id: "res_eva_button", stat: "eva" },
+    { id: "res_spatk_button", stat: "spATK" },
+    { id: "res_dex_button", stat: "dex" },
+    { id: "res_spdef_button", stat: "spDEF" },
+    { id: "res_cp_button", stat: "cp" }
+];
+
+function getRestoreEffectAmount(card){
+    return Number(
+        card?.effects?.amount ??
+        card?.effects?.p_output ??
+        0.20
+    );
+}
+
+function showRestoreStatScreen(casterActor, targetActor, card){
+    pending_restore_actor = casterActor;
+    pending_restore_target = targetActor;
+    pending_restore_card = card;
+
+    battle_player_side.style.display = "none";
+    enemy_side_battle.style.display = "none";
+
+    const nameEl = document.getElementById("restore_member_name");
+    const portraitEl = document.getElementById("restore_portrait");
+
+    if(nameEl){
+        nameEl.textContent = targetActor?.name || "Target";
+    }
+
+    if(portraitEl){
+        const avatar = findAvatarById(targetActor?.avatar_id);
+        portraitEl.style.backgroundImage = avatar?.image_portrait
+            ? `url(./images/${avatar.image_portrait})`
+            : "";
+        portraitEl.style.backgroundSize = "cover";
+        portraitEl.style.backgroundPosition = "center";
+        portraitEl.style.backgroundRepeat = "no-repeat";
+    }
+
+    renderRestoreStatBars(targetActor);
+
+    if(restore_stat_screen){
+        restore_stat_screen.style.display = "flex";
+    }
+}
+
+function getRestoreBarFill(statKey){
+    return document.getElementById(`restore_${statKey}_current`);
+}
+
+function renderRestoreStatBars(targetActor){
+    const statKeys = ["def", "res", "atk", "eva", "spATK", "dex", "spDEF", "cp"];
+
+    statKeys.forEach(statKey => {
+        const bar = getRestoreBarFill(statKey);
+        if(!bar || !targetActor?.stats || !targetActor?.max_stats) return;
+
+        const current = Number(targetActor.stats[statKey] || 0);
+        const max = Number(targetActor.max_stats[statKey] || 0);
+        const percent = max > 0 ? Math.min(100, Math.floor((current / max) * 100)) : 0;
+
+        bar.style.width = `${percent}%`;
+        bar.title = `${statKey}: ${current}/${max}`;
+    });
+}
+
+function animateRestoreStatBar(statKey, fromPercent, toPercent){
+    const bar = getRestoreBarFill(statKey);
+    if(!bar) return;
+
+    bar.style.transition = "none";
+    bar.style.width = `${fromPercent}%`;
+
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            bar.style.transition = "width 650ms cubic-bezier(.2, .9, .2, 1.15)";
+            bar.style.width = `${toPercent}%`;
+        });
+    });
+
+    bar.animate(
+        [
+            { filter: "brightness(1)", transform: "scaleY(1)" },
+            { filter: "brightness(1.8)", transform: "scaleY(1.3)" },
+            { filter: "brightness(1)", transform: "scaleY(1)" }
+        ],
+        {
+            duration: 650,
+            easing: "ease-out"
+        }
+    );
+}
+
+function finishRestoreStatSelection(statKey){
+    const casterActor = pending_restore_actor;
+    const targetActor = pending_restore_target;
+    const card = pending_restore_card;
+
+    if(!casterActor || !targetActor || !card) return;
+
+    const before = Number(targetActor.stats?.[statKey] || 0);
+    const max = Number(targetActor.max_stats?.[statKey] || 0);
+    const beforePercent = max > 0 ? Math.min(100, Math.floor((before / max) * 100)) : 0;
+
+    const effectData = {
+        ...card.effects,
+        amount: getRestoreEffectAmount(card)
+    };
+
+    const result = restoreChosenStat(casterActor, targetActor, statKey, effectData);
+
+    const after = Number(targetActor.stats?.[statKey] || 0);
+    const afterPercent = max > 0 ? Math.min(100, Math.floor((after / max) * 100)) : 0;
+
+    animateRestoreStatBar(statKey, beforePercent, afterPercent);
+    refreshBattleTargetPanelForActor(targetActor);
+
+    if(result.restoredBy > 0){
+        pushBattleLog(`${casterActor.name} restores ${targetActor.name}'s ${statKey.toUpperCase()} by ${result.restoredBy}.`);
+    }else{
+        pushBattleLog(`${casterActor.name} uses ${card.name}, but ${targetActor.name}'s ${statKey.toUpperCase()} is already full.`);
+    }
+
+    const index = action_queue.findIndex(c =>
+        c && Number(c.actor_slot) === Number(casterActor.squad_slot)
+    );
+
+    if(index !== -1){
+        action_queue[index] = null;
+    }
+
+    compactQueue();
+    renderQueue();
+    renderEquippedDeck();
+    renderBattleQueueWindowSlots();
+
+    setTimeout(() => {
+        if(restore_stat_screen){
+            restore_stat_screen.style.display = "none";
+        }
+
+        pending_restore_actor = null;
+        pending_restore_target = null;
+        pending_restore_card = null;
+
+        hideBattleTargetingWindows();
+        advanceResolutionTurn();
+    }, 700);
+}
+
+function initializeRestoreStatControls(){
+    restore_stat_button_map.forEach(entry => {
+        const button = document.getElementById(entry.id);
+        if(!button) return;
+
+        button.onclick = function(){
+            finishRestoreStatSelection(entry.stat);
+        };
+    });
+}
+
 let phase_turn_order = [];
 let current_turn_index = 0;
 
@@ -335,7 +509,24 @@ function buildPlayerBattleActors(){
                 hearts: Number(stats.hearts || 0),
                 max_hearts: Number(stats.hearts || 0),
                 guard_status: null,
+                dodge_status: null,
+                break_penalty_applied: false,
+                break_original_stats: null,
+                focus_status: {
+                    bonus_percent: 0,
+                    stacks: 0
+                },
                 stats: {
+                    def: Number(stats.def || 0),
+                    res: Number(stats.res || 0),
+                    atk: Number(stats.atk || 0),
+                    eva: Number(stats.eva || 0),
+                    spATK: Number(stats.spATK || 0),
+                    dex: Number(stats.dex || 0),
+                    spDEF: Number(stats.spDEF || 0),
+                    cp: Number(stats.cp || 0)
+                },
+                max_stats: {
                     def: Number(stats.def || 0),
                     res: Number(stats.res || 0),
                     atk: Number(stats.atk || 0),
@@ -386,6 +577,13 @@ function buildEnemyBattleActors(){
                 hearts: Number(stats.hearts || 0),
                 max_hearts: Number(stats.hearts || 0),
                 guard_status: null,
+                dodge_status: null,
+                break_penalty_applied: false,
+                break_original_stats: null,
+                focus_status: {
+                    bonus_percent: 0,
+                    stacks: 0
+                },
                 stats: {
                     def: Number(stats.def || 0),
                     res: Number(stats.res || 0),
@@ -395,6 +593,16 @@ function buildEnemyBattleActors(){
                     dex: Number(stats.dex || 0),
                     spDEF: Number(stats.spDEF || 0),
                     cp: 0
+                },
+                max_stats: {
+                def: Number(stats.def || 0),
+                res: Number(stats.res || 0),
+                atk: Number(stats.atk || 0),
+                eva: Number(stats.eva || 0),
+                spATK: Number(stats.spATK || 0),
+                dex: Number(stats.dex || 0),
+                spDEF: Number(stats.spDEF || 0),
+                cp: 0
                 },
                 speed: getBattleSpeedFromStats(stats),
                 alive: Number(stats.hearts || 0) > 0,
@@ -418,12 +626,68 @@ function applyGuardToActor(targetActor, effectData){
     return true;
 }
 
+function applyDodgeToActor(targetActor, effectData){
+    if(!targetActor || !effectData) return false;
+
+    targetActor.dodge_status = {
+        hit_scope: effectData.hit_scope || "next_hit",
+        damage_type: effectData.damage_type || "physical",
+        remaining_hits: effectData.hit_scope === "next_hit" ? 1 : 1
+    };
+
+    return true;
+}
+
+function restoreActorStats(actor){
+    if(!actor || !actor.alive || !actor.stats || !actor.max_stats){
+        return 0;
+    }
+
+    const restoreAmount = Math.max(
+        1,
+        Math.floor(Number(actor.stats.res || 0) / 4)
+    );
+
+    const statKeys = ["def", "res", "atk", "eva", "spATK", "dex", "spDEF", "cp"];
+    let totalRestored = 0;
+
+    statKeys.forEach(key => {
+        const current = Number(actor.stats[key] || 0);
+        const max = Number(actor.max_stats[key] || 0);
+
+        if(current < max){
+            const next = Math.min(max, current + restoreAmount);
+            totalRestored += next - current;
+            actor.stats[key] = next;
+        }
+    });
+
+    return totalRestored;
+}
+
+function applyEndPhaseRestoration(){
+    const actors = [
+        ...(battle_state.players || []),
+        ...(battle_state.enemies || [])
+    ];
+
+    actors.forEach(actor => {
+        const totalRestored = restoreActorStats(actor);
+
+        if(totalRestored > 0){
+            pushBattleLog(`${actor.name} restores ${totalRestored} total stats.`);
+            refreshBattleTargetPanelForActor(actor);
+        }
+    });
+}
+
 function applyGuardReductionToIncomingDamage(targetActor, power, incomingDamageType = "physical"){
     if(!targetActor || !targetActor.guard_status){
         return {
             finalPower: power,
             blockedAmount: 0,
-            guardTriggered: false
+            guardTriggered: false,
+            guardWasBrokenState: false
         };
     }
 
@@ -433,12 +697,30 @@ function applyGuardReductionToIncomingDamage(targetActor, power, incomingDamageT
         return {
             finalPower: power,
             blockedAmount: 0,
-            guardTriggered: false
+            guardTriggered: false,
+            guardWasBrokenState: false
         };
     }
 
-    const blockedAmount = Math.floor(Number(power || 0) * Number(guard.percent || 0));
-    const finalPower = Math.max(0, Number(power || 0) - blockedAmount);
+    const rawPower = Math.max(0, Number(power || 0));
+    const isBroken = Number(targetActor?.stats?.def || 0) <= 0;
+
+    // Normal Guard uses its card amount.
+    // Break-state Guard is capped at 10%.
+    let effectivePercent = Number(guard.percent || 0);
+
+    if(isBroken){
+        effectivePercent = Math.min(effectivePercent, 0.10);
+    }
+
+    const reducedPower = rawPower * (1 - effectivePercent);
+
+    // If anything less than 1 would sneak through, Guard blocks it all.
+    const finalPower = reducedPower < 1
+        ? 0
+        : Math.floor(reducedPower);
+
+    const blockedAmount = rawPower - finalPower;
 
     if(guard.hit_scope === "next_hit"){
         guard.remaining_hits -= 1;
@@ -451,7 +733,8 @@ function applyGuardReductionToIncomingDamage(targetActor, power, incomingDamageT
     return {
         finalPower,
         blockedAmount,
-        guardTriggered: blockedAmount > 0
+        guardTriggered: blockedAmount > 0,
+        guardWasBrokenState: isBroken
     };
 }
 
@@ -521,6 +804,46 @@ function logBattleTurnOrder(){
             `pos=${actor.battle_position}`
         );
     });
+}
+
+function restoreChosenStat(casterActor, targetActor, statKey, effectData){
+    if(!casterActor || !targetActor || !statKey || !effectData){
+        return {
+            restoredBy: 0
+        };
+    }
+
+    if(!targetActor.stats || !targetActor.max_stats){
+        return {
+            restoredBy: 0
+        };
+    }
+
+    const currentValue = Number(targetActor.stats[statKey] || 0);
+    const maxValue = Number(targetActor.max_stats[statKey] || 0);
+
+    if(currentValue >= maxValue){
+        return {
+            restoredBy: 0
+        };
+    }
+
+    const casterRes = Number(casterActor.stats?.res || 0);
+    const restorePercent = Number(effectData.amount || 0.20);
+
+    const restoreAmount = Math.max(
+        1,
+        Math.ceil(casterRes * restorePercent)
+    );
+
+    const nextValue = Math.min(maxValue, currentValue + restoreAmount);
+
+    targetActor.stats[statKey] = nextValue;
+
+    return {
+        restoredBy: nextValue - currentValue,
+        statKey
+    };
 }
 
 function renderBattleOrder() {
@@ -745,34 +1068,58 @@ function resolveEnemyTurn(actor){
     let logText = `${actor.name} attacks ${targetName}`;
 
     if(targetPlayer){
-        consumeQueuedGuardForActor(targetPlayer);
+        consumeQueuedDodgeForActor(targetPlayer);
 
-        const enemyAtk = Number(actor.stats?.atk || 0);
-        result = applyAttackToTarget(targetPlayer, enemyAtk, "physical");
+        if(consumeDodgeStatusIfValid(targetPlayer, "physical")){
+            flashDodgeVisual(targetPlayer);
+            pushBattleLog(`${targetName} dodges ${actor.name}'s attack.`);
+            refreshBattleTargetPanelForActor(targetPlayer);
 
-        if(result.brokeDefense){
-            flashBreakVisual(targetPlayer);
-        }else if(result.heartsReducedBy > 0){
-            flashHeartLossVisual(targetPlayer, result.heartsReducedBy);
-        }else if(result.defReducedBy > 0){
-            flashDefenseLossVisual(targetPlayer, result.defReducedBy);
+            setTimeout(() => {
+                advanceResolutionTurn();
+            }, 500);
+
+            return;
         }
 
-        if(result.guardTriggered && result.blockedAmount > 0){
-            pushBattleLog(`${targetName} guards and blocks ${result.blockedAmount} damage.`);
-            logText += ` [GUARD -${result.blockedAmount}]`;
+        if(checkNaturalDodge(targetPlayer, actor, "physical")){
+            flashDodgeVisual(targetPlayer);
+            pushBattleLog(`${targetName} naturally dodges ${actor.name}'s attack.`);
+            refreshBattleTargetPanelForActor(targetPlayer);
+
+            setTimeout(() => {
+                advanceResolutionTurn();
+            }, 500);
+
+            return;
         }
 
-        refreshBattleTargetPanelForActor(targetPlayer);
-    }
+    consumeQueuedGuardForActor(targetPlayer);
+
+    const enemyAtk = Number(actor.stats?.atk || 0);
+    result = applyAttackToTarget(targetPlayer, enemyAtk, "physical");
 
     if(result.defReducedBy > 0){
         logText += ` (-${result.defReducedBy} DEF)`;
     }
 
     if(result.brokeDefense){
-        logText += ` [DEF BROKEN]`;
+        flashBreakVisual(targetPlayer);
+    }else if(result.heartsReducedBy > 0){
+        flashHeartLossVisual(targetPlayer, result.heartsReducedBy);
+    }else if(result.defReducedBy > 0){
+        flashDefenseLossVisual(targetPlayer, result.defReducedBy);
     }
+
+    if(result.guardTriggered && result.blockedAmount > 0){
+        flashGuardBlockVisual(targetPlayer, result.blockedAmount);
+
+        const breakText = result.guardWasBrokenState ? " while broken" : "";
+        pushBattleLog(`${targetName} guards${breakText} and blocks ${result.blockedAmount} damage.`);
+        logText += ` [GUARD -${result.blockedAmount}]`;
+    }
+
+    refreshBattleTargetPanelForActor(targetPlayer);
 
     if(result.heartsReducedBy > 0){
         logText += ` (-${result.heartsReducedBy} HEART)`;
@@ -783,6 +1130,7 @@ function resolveEnemyTurn(actor){
     setTimeout(() => {
         advanceResolutionTurn();
     }, getEnemyActionDelay(result));
+}
 }
 function getEnemyActionDelay(result){
     if(result?.heartsReducedBy > 0) return 700;
@@ -797,9 +1145,72 @@ function resolvePlayerTurn(actor){
     }
     const card = getQueuedCardForActor(actor.squad_slot);
 
+    
+
     if(!card){
         console.log(`${actor.name} has no queued action.`);
         advanceResolutionTurn();
+        return;
+    }
+
+    // AUTO-ACTIVATE GUARD
+    if(card.effects?.type === "guard"){
+        const applied = applyGuardToActor(actor, card.effects);
+
+        if(applied){
+            flashGuardBlockVisual(actor, 0);
+            pushBattleLog(`${actor.name} prepares to guard.`);
+        }else{
+            pushBattleLog(`${actor.name} tries to guard, but it fails.`);
+        }
+
+        const index = action_queue.findIndex(c =>
+            c && Number(c.actor_slot) === Number(actor.squad_slot)
+        );
+
+        if(index !== -1){
+            action_queue[index] = null;
+        }
+
+        compactQueue();
+        renderQueue();
+        renderEquippedDeck();
+        renderBattleQueueWindowSlots();
+
+        hideBattleTargetingWindows();
+
+        advanceResolutionTurn();
+        return;
+    }
+
+    if(card.effects?.type === "focus"){
+        const applied = applyFocusToActor(actor, card.effects);
+
+        if(applied){
+            flashFocusVisual(actor);
+            pushBattleLog(`${actor.name} focuses. Next attack damage +${Math.round(card.effects.amount * 100)}%.`);
+        }else{
+            pushBattleLog(`${actor.name} tries to focus, but it has no effect.`);
+        }
+
+        const index = action_queue.findIndex(c =>
+            c && Number(c.actor_slot) === Number(actor.squad_slot)
+        );
+
+        if(index !== -1){
+            action_queue[index] = null;
+        }
+
+        compactQueue();
+        renderQueue();
+        renderEquippedDeck();
+        renderBattleQueueWindowSlots();
+
+        battle_queue_window.style.display = "none";
+        enemy_side_battle.style.display = "none";
+        battle_player_side.style.display = "none";
+
+        resolveNextCardForCurrentActorOrAdvance();
         return;
     }
 
@@ -844,6 +1255,83 @@ function consumeQueuedGuardForActor(actor){
     pushBattleLog(`${actor.name}'s ${guardCard.name} activates before the hit.`);
 
     return guardCard;
+}
+
+function getNaturalEvasionChance(targetActor, attackerActor = null){
+    if(!targetActor || !targetActor.stats) return 0;
+
+    const eva = Number(targetActor.stats.eva || 0);
+    const attackerDex = Number(attackerActor?.stats?.dex || 0);
+
+    let chance = eva - Math.floor(attackerDex / 2);
+
+    chance = Math.max(0, chance);
+    chance = Math.min(chance, 40);
+
+    return chance / 100;
+}
+
+function checkNaturalDodge(targetActor, attackerActor = null, incomingDamageType = "physical"){
+    if(incomingDamageType !== "physical") return false;
+    if(!targetActor || !targetActor.alive) return false;
+
+    const chance = getNaturalEvasionChance(targetActor, attackerActor);
+    const roll = Math.random();
+
+    return roll < chance;
+}
+
+function consumeDodgeStatusIfValid(targetActor, incomingDamageType = "physical"){
+    if(!targetActor || !targetActor.dodge_status){
+        return false;
+    }
+
+    const dodge = targetActor.dodge_status;
+
+    if(dodge.damage_type !== "all" && dodge.damage_type !== incomingDamageType){
+        return false;
+    }
+
+    if(dodge.hit_scope === "next_hit"){
+        dodge.remaining_hits -= 1;
+
+        if(dodge.remaining_hits <= 0){
+            targetActor.dodge_status = null;
+        }
+    }
+
+    return true;
+}
+
+function consumeQueuedDodgeForActor(actor){
+    if(!actor || actor.side !== "player") return null;
+
+    const dodgeIndex = action_queue.findIndex(card =>
+        card &&
+        Number(card.actor_slot) === Number(actor.squad_slot) &&
+        card.effects?.type === "dodge"
+    );
+
+    if(dodgeIndex === -1){
+        return null;
+    }
+
+    const dodgeCard = action_queue[dodgeIndex];
+
+    const applied = applyDodgeToActor(actor, dodgeCard.effects);
+    if(!applied){
+        return null;
+    }
+
+    action_queue[dodgeIndex] = null;
+    compactQueue();
+    renderQueue();
+    renderEquippedDeck();
+    renderBattleQueueWindowSlots();
+
+    pushBattleLog(`${actor.name}'s ${dodgeCard.name} activates before the hit.`);
+
+    return dodgeCard;
 }
 
 function getDeckForActor(slot){
@@ -1102,6 +1590,69 @@ function initializeBattleContext(){
 
 }
 
+function initializeBattleResultsControls(){
+
+    const resultsClose = document.getElementById("results_close");
+    const resultsScreen = document.getElementById("battle_results_screen");
+
+    if(!resultsClose || !resultsScreen) return;
+
+    resultsClose.onclick = function(){
+
+        resetPlayersToBattleIdle();
+        // Hide results window
+        resultsScreen.style.display = "none";
+
+        // Reset battle state cleanly
+        battle_phase = "planning";
+        planning_player_index = 0;
+        current_planning_actor_key = null;
+
+        // Clear queue for next battle
+        action_queue = action_queue.map(() => null);
+        renderQueue();
+
+        // Reset enemy alive state for next battle
+        if(Array.isArray(battle_state?.enemies)){
+            battle_state.enemies.forEach(enemy => {
+                enemy.alive = true;
+                enemy.hearts = enemy.max_hearts;
+                enemy.break_penalty_applied = false;
+                enemy.break_original_stats = null;
+            });
+        }
+
+        battle_state.players.forEach(player => {
+            player.guard_status = null;
+            player.dodge_status = null;
+            player.break_penalty_applied = false;
+            player.break_original_stats = null;
+            player.focus_status = {
+                bonus_percent: 0,
+                stacks: 0
+            };
+        });
+
+        // Optional: clear visuals / logs
+        battle_log = [];
+        if(battle_log_el){
+            battle_log_el.innerHTML = "";
+        }
+
+        // Re-enable interaction
+        setBattleInteractionEnabled(true);
+
+        console.log("Results closed. Ready for next encounter.");
+    };
+}
+
+function hideBattleTargetingWindows(){
+    if(battle_player_side) battle_player_side.style.display = "none";
+    if(enemy_side_battle) enemy_side_battle.style.display = "none";
+    if(battle_queue_window) battle_queue_window.style.display = "none";
+    if(restore_stat_screen) restore_stat_screen.style.display = "none";
+}
+
 function getSquadMemberBySlot(slot){
     return Array.isArray(current_squad)
         ? current_squad.find(member => Number(member.slot) === Number(slot)) || null
@@ -1199,18 +1750,22 @@ function buildSquadEquippedDecks(){
             if(!ownedManifest || !manifestDef) return;
 
             builtDeck.push({
-                id: ownedManifest.id,
-                owned_id: ownedManifest.id,
-                def_id: manifestDef.id,
-                queue_key: `Manifest-${ownedManifest.id}`,
-                name: manifestDef.name,
-                type: "Manifest",
-                cost: manifestDef.cp_cost || 0,
-                atk: manifestDef.effects?.atk ?? 0,
-                desc: manifestDef.desc || "Manifest card.",
-                icon: manifestDef.image ? `./images/${manifestDef.image}` : "",
-                target_type: manifestDef.target_type || "enemy_single"
-            });
+            id: ownedManifest.id,
+            owned_id: ownedManifest.id,
+            def_id: manifestDef.id,
+            queue_key: `Manifest-${ownedManifest.id}`,
+            name: manifestDef.name,
+            type: "Manifest",
+            cost: manifestDef.cp_cost || 0,
+            atk: manifestDef.effects?.atk ?? 0,
+            effects: manifestDef.effects || null,
+            desc: manifestDef.desc || "Manifest card.",
+            icon: manifestDef.image ? `./images/${manifestDef.image}` : "",
+            target_type: manifestDef.target_type || "enemy_single",
+            target_stat: manifestDef.target_stat || "def",
+            rank: manifestDef.rank || "F",
+            reload_type: manifestDef.reload_type || "rank_based"
+        });
         });
 
         skillsLoadout.forEach((ownedSkillId) => {
@@ -1236,6 +1791,57 @@ function buildSquadEquippedDecks(){
 
         member.equipped_deck = builtDeck;
     });
+}
+
+function applyFocusToActor(actor, effectData){
+    if(!actor || !effectData) return false;
+
+    if(!actor.focus_status){
+        actor.focus_status = {
+            bonus_percent: 0,
+            stacks: 0
+        };
+    }
+
+    actor.focus_status.bonus_percent += Number(effectData.amount || 0);
+    actor.focus_status.stacks += 1;
+
+    return true;
+}
+
+function applyFocusToAttackPower(actor, basePower){
+    if(!actor || !actor.focus_status){
+        return {
+            finalPower: basePower,
+            bonusPower: 0,
+            stacksUsed: 0
+        };
+    }
+
+    const bonusPercent = Number(actor.focus_status.bonus_percent || 0);
+    const stacksUsed = Number(actor.focus_status.stacks || 0);
+
+    if(bonusPercent <= 0){
+        return {
+            finalPower: basePower,
+            bonusPower: 0,
+            stacksUsed: 0
+        };
+    }
+
+    const bonusPower = Math.ceil(Number(basePower || 0) * bonusPercent);
+    const finalPower = Number(basePower || 0) + bonusPower;
+
+    actor.focus_status = {
+        bonus_percent: 0,
+        stacks: 0
+    };
+
+    return {
+        finalPower,
+        bonusPower,
+        stacksUsed
+    };
 }
 
 function healHeartsOnTarget(targetActor, amount){
@@ -1809,6 +2415,18 @@ function renderEnemyTargetChoices(){
         }
 
         const battleEnemy = getBattleEnemyByPosition(slot.key);
+
+        if(battleEnemy && !battleEnemy.alive){
+            slot.el.style.backgroundImage = "";
+            slot.el.style.backgroundSize = "";
+            slot.el.style.backgroundRepeat = "";
+            slot.el.style.backgroundPosition = "";
+            slot.el.style.opacity = "0.35";
+            slot.el.style.cursor = "not-allowed";
+            slot.el.title = "Downed";
+            slot.el.onclick = null;
+            return;
+        }
         const enemyBundle = getEnemyStatBlock(enemyId);
         if(!enemyBundle){
             slot.el.style.backgroundImage = "";
@@ -1838,11 +2456,21 @@ function renderEnemyTargetChoices(){
             );
         };
 
-        // slot.el.onmouseleave = function(){
-        //     hideTargetStats();
-        // };
+        slot.el.onclick = function(){
+            useQueuedCardOnTarget({
+                type: "enemy",
+                id: enemyId,
+                position: slot.key
+            });
+        };
 
         slot.el.onclick = function(){
+            const liveEnemy = getBattleEnemyByPosition(slot.key);
+
+            if(!liveEnemy || !liveEnemy.alive){
+                return;
+            }
+
             useQueuedCardOnTarget({
                 type: "enemy",
                 id: enemyId,
@@ -1925,6 +2553,107 @@ function renderSquadTargetChoices(){
     });
 }
 
+function getManifestPower(actor, card){
+    const sourceStat = card.effects?.stat_source || "atk";
+    const sourceValue = Number(actor.stats?.[sourceStat] || 0);
+    const amount = Number(card.effects?.amount || 0);
+
+    return Math.max(1, Math.ceil(sourceValue * amount));
+}
+
+function applyManifestPerk(actor, targetActor, card){
+    const perk = card.effects?.perk;
+    if(!perk) return 0;
+
+    const amount = Number(perk.amount || 0);
+    let changedBy = 0;
+
+    if(perk.type === "def_down"){
+        const current = Number(targetActor.stats.def || 0);
+        changedBy = Math.max(1, Math.ceil(Number(targetActor.max_stats.def || current) * amount));
+        targetActor.stats.def = Math.max(0, current - changedBy);
+    }
+
+    if(perk.type === "atk_down"){
+        const current = Number(targetActor.stats.atk || 0);
+        changedBy = Math.max(1, Math.ceil(Number(targetActor.max_stats.atk || current) * amount));
+        targetActor.stats.atk = Math.max(0, current - changedBy);
+    }
+
+    if(perk.type === "regen"){
+        const restored = restoreActorStats(actor);
+        return restored;
+    }
+
+    return changedBy;
+}
+
+function applyManifestToEnemy(actor, targetEnemy, card){
+    const power = getManifestPower(actor, card);
+    const targetStat = card.target_stat || "def";
+
+    let result;
+
+    if(targetStat === "def"){
+        result = applyAttackToTarget(targetEnemy, power, card.effects.damage_type || "manifest");
+    }else{
+        result = applyStatDamageToTarget(targetEnemy, targetStat, power);
+    }
+
+    const perkAmount = applyManifestPerk(actor, targetEnemy, card);
+
+    return {
+        ...result,
+        manifestPower: power,
+        perkAmount
+    };
+}
+
+function applyStatDamageToTarget(targetActor, statKey, power){
+    if(!targetActor?.stats || !targetActor?.max_stats){
+        return {
+            defReducedBy: 0,
+            heartsReducedBy: 0,
+            brokeDefense: false,
+            statReducedBy: 0,
+            statKey
+        };
+    }
+
+    if(statKey === "all"){
+        let totalReduced = 0;
+        const keys = ["def", "res", "atk", "eva", "spATK", "dex", "spDEF", "cp"];
+
+        keys.forEach(key => {
+            const current = Number(targetActor.stats[key] || 0);
+            const reducedBy = Math.min(current, Math.max(1, Math.floor(power / 2)));
+            targetActor.stats[key] = Math.max(0, current - reducedBy);
+            totalReduced += reducedBy;
+        });
+
+        return {
+            defReducedBy: 0,
+            heartsReducedBy: 0,
+            brokeDefense: false,
+            statReducedBy: totalReduced,
+            statKey
+        };
+    }
+
+    const current = Number(targetActor.stats[statKey] || 0);
+    const reducedBy = Math.min(current, power);
+
+    targetActor.stats[statKey] = Math.max(0, current - reducedBy);
+
+    return {
+        defReducedBy: statKey === "def" ? reducedBy : 0,
+        heartsReducedBy: 0,
+        brokeDefense: statKey === "def" && targetActor.stats.def <= 0,
+        statReducedBy: reducedBy,
+        statKey
+    };
+}
+
 function useQueuedCardOnTarget(target){
     if(battle_resolution_wait){
         return;
@@ -1944,11 +2673,113 @@ function useQueuedCardOnTarget(target){
     };
 
     if(target.type === "enemy"){
-        const targetEnemy = getBattleEnemyByPosition(target.position);
-        targetName = getEnemyNameByPosition(target.position);
 
+        const isAllEnemies = target.position === "all";
+
+        const targetEnemy = isAllEnemies
+            ? null
+            : getBattleEnemyByPosition(target.position);
+
+        targetName = isAllEnemies
+            ? "all enemies"
+            : getEnemyNameByPosition(target.position);
+
+        // MANIFEST DAMAGE
+        if(card.effects?.type === "manifest_damage"){
+
+            if(card.target_type === "enemy_all"){
+                let totalHits = 0;
+
+                battle_state.enemies.forEach(enemy => {
+                    if(!enemy || !enemy.alive) return;
+
+                    const manifestResult = applyManifestToEnemy(actor, enemy, card);
+                    totalHits++;
+
+                    flashManifestHitVisual(
+                        enemy,
+                        manifestResult.statReducedBy ||
+                        manifestResult.defReducedBy ||
+                        manifestResult.manifestPower,
+                        card.effects.damage_type
+                    );
+
+                    setTimeout(() => {
+                        if(manifestResult.brokeDefense){
+                            flashBreakVisual(enemy);
+                        }else if(manifestResult.defReducedBy > 0){
+                            flashDefenseLossVisual(enemy, manifestResult.defReducedBy);
+                        }
+                    }, 350);
+
+                    refreshBattleTargetPanelForActor(enemy);
+                });
+
+                pushBattleLog(`${actor.name} uses ${card.name}. ${totalHits} enemies are hit by ${card.effects.damage_type}.`);
+            }else{
+                if(!targetEnemy) return;
+
+                const manifestResult = applyManifestToEnemy(actor, targetEnemy, card);
+
+                flashManifestHitVisual(
+                    targetEnemy,
+                    manifestResult.statReducedBy ||
+                    manifestResult.defReducedBy ||
+                    manifestResult.manifestPower,
+                    card.effects.damage_type
+                );
+
+                setTimeout(() => {
+                    if(manifestResult.brokeDefense){
+                        flashBreakVisual(targetEnemy);
+                    }else if(manifestResult.defReducedBy > 0){
+                        flashDefenseLossVisual(targetEnemy, manifestResult.defReducedBy);
+                    }
+                }, 350);
+
+                refreshBattleTargetPanelForActor(targetEnemy);
+
+                pushBattleLog(`${actor.name} uses ${card.name} on ${targetName}.`);
+            }
+
+            const index = action_queue.findIndex(c =>
+                c && Number(c.actor_slot) === Number(actor.squad_slot)
+            );
+
+            if(index !== -1){
+                action_queue[index] = null;
+            }
+
+            compactQueue();
+            renderQueue();
+            renderEquippedDeck();
+            renderBattleQueueWindowSlots();
+
+            hideBattleTargetingWindows();
+
+            if(areAllEnemiesDefeated()){
+                setPlayersToResultsPose();
+                showBattleResultsScreen();
+                return;
+            }
+
+            advanceResolutionTurn();
+            return;
+        }
+
+        // NORMAL ENEMY TARGET ATTACK
         if(targetEnemy){
-            result = applyAttackToTarget(targetEnemy, card.atk);
+            let attackPower = Number(card.atk || 0);
+
+            const focusResult = applyFocusToAttackPower(actor, attackPower);
+            attackPower = focusResult.finalPower;
+
+            if(focusResult.bonusPower > 0){
+                flashFocusVisual(actor, focusResult.bonusPower);
+                pushBattleLog(`${actor.name}'s focus adds +${focusResult.bonusPower} damage.`);
+            }
+
+            result = applyAttackToTarget(targetEnemy, attackPower);
 
             if(result.brokeDefense){
                 flashBreakVisual(targetEnemy);
@@ -1959,11 +2790,22 @@ function useQueuedCardOnTarget(target){
             }
 
             refreshBattleTargetPanelForActor(targetEnemy);
+
+            if(areAllEnemiesDefeated()){
+                setPlayersToResultsPose();
+                showBattleResultsScreen();
+                return;
+            }
         }
     }
     else if(target.type === "ally"){
         const targetAlly = getBattlePlayerBySlot(target.position);
         targetName = getAllyNameBySlot(target.position);
+
+        if(card.effects?.type === "restore_stat" || card.effects?.perk_type === "restore_stat"){
+            showRestoreStatScreen(actor, targetAlly, card);
+            return;
+        }
 
         if(targetAlly){
             if(card.effects?.type === "heart"){
@@ -1997,9 +2839,7 @@ function useQueuedCardOnTarget(target){
                 renderEquippedDeck();
                 renderBattleQueueWindowSlots();
 
-                battle_queue_window.style.display = "none";
-                enemy_side_battle.style.display = "none";
-                battle_player_side.style.display = "none";
+                hideBattleTargetingWindows();
 
                 resolveNextCardForCurrentActorOrAdvance();
                 return;
@@ -2048,9 +2888,7 @@ function useQueuedCardOnTarget(target){
     renderEquippedDeck();
     renderBattleQueueWindowSlots();
 
-    battle_queue_window.style.display = "none";
-    enemy_side_battle.style.display = "none";
-    battle_player_side.style.display = "none";
+    hideBattleTargetingWindows();
 
     resolveNextCardForCurrentActorOrAdvance();
 }
@@ -2362,6 +3200,99 @@ function flashHeartGainVisual(actor, amount = 1){
     };
 }
 
+function flashGuardBlockVisual(actor, blockedAmount){
+
+    const pop = document.createElement("div");
+
+    pop.textContent = `BLOCK ${blockedAmount}`;
+
+    pop.style.position = "absolute";
+    pop.style.color = "cyan";
+    pop.style.fontWeight = "bold";
+    pop.style.pointerEvents = "none";
+
+    const pos = getPopUpStartPosition(actor);
+    pop.style.top = pos.top;
+    pop.style.left = pos.left;
+
+    pop.style.animation = "popFloat 0.6s ease-out forwards";
+
+    battle_visual_layer.appendChild(pop);
+
+    setTimeout(() => pop.remove(), 600);
+}
+
+function flashFocusVisual(actor, bonusPower = 0){
+    const text = bonusPower > 0
+        ? `FOCUS +${bonusPower}`
+        : "FOCUS";
+
+    const popUpEl = preparePopUp(actor, text, {
+        color: "yellow",
+        fontSize: "24px",
+        fontWeight: "bolder"
+    });
+
+    if(!popUpEl) return;
+
+    popUpEl.style.top = "60px";
+    popUpEl.style.left = "-10px";
+
+    const anim = popUpEl.animate(
+        [
+            { top: "70px", opacity: 0, transform: "scale(0.75)" },
+            { top: "42px", opacity: 1, transform: "scale(1.2)" },
+            { top: "18px", opacity: 1, transform: "scale(1)" },
+            { top: "-6px", opacity: 0, transform: "scale(0.95)" }
+        ],
+        {
+            duration: 700,
+            iterations: 1,
+            easing: "ease-out",
+            fill: "forwards"
+        }
+    );
+
+    anim.onfinish = () => {
+        popUpEl.style.display = "none";
+        popUpEl.innerHTML = "";
+        popUpEl.style.opacity = "1";
+        popUpEl.style.transform = "scale(1)";
+        popUpEl.style.top = "60px";
+        popUpEl.style.left = "-10px";
+    };
+}
+
+function flashManifestHitVisual(actor, amount, damageType = "manifest"){
+    const visualId = getVisualIdForActor(actor);
+    const visualEl = visualId ? document.getElementById(visualId) : null;
+    if(!visualEl) return;
+
+    const pop = visualEl.querySelector(".pop_up");
+    if(!pop) return;
+
+    pop.textContent = `${damageType.toUpperCase()} -${amount}`;
+    pop.style.display = "flex";
+    pop.style.opacity = "1";
+    pop.style.color = "deepskyblue";
+
+    pop.animate(
+        [
+            { opacity: 0, transform: "translateY(8px) scale(0.9)" },
+            { opacity: 1, transform: "translateY(0px) scale(1.1)" },
+            { opacity: 0, transform: "translateY(-12px) scale(1)" }
+        ],
+        {
+            duration: 700,
+            easing: "ease-out"
+        }
+    );
+
+    setTimeout(() => {
+        pop.style.display = "none";
+    }, 700);
+}
+
 function preparePopUp(actor, text, options = {}){
     const popUpEl = getPopUpElementForActor(actor);
     if(!popUpEl) return null;
@@ -2376,6 +3307,43 @@ function preparePopUp(actor, text, options = {}){
     popUpEl.style.fontWeight = options.fontWeight || "bolder";
 
     return popUpEl;
+}
+
+function flashDodgeVisual(actor){
+    const popUpEl = preparePopUp(actor, "DODGE", {
+        color: "gold",
+        fontSize: "24px",
+        fontWeight: "bolder"
+    });
+
+    if(!popUpEl) return;
+
+    popUpEl.style.top = "60px";
+    popUpEl.style.left = "-10px";
+
+    const anim = popUpEl.animate(
+        [
+            { top: "70px", opacity: 0, transform: "scale(0.8) rotate(-8deg)" },
+            { top: "42px", opacity: 1, transform: "scale(1.18) rotate(6deg)" },
+            { top: "18px", opacity: 1, transform: "scale(1) rotate(-4deg)" },
+            { top: "-6px", opacity: 0, transform: "scale(0.95) rotate(0deg)" }
+        ],
+        {
+            duration: 650,
+            iterations: 1,
+            easing: "ease-out",
+            fill: "forwards"
+        }
+    );
+
+    anim.onfinish = () => {
+        popUpEl.style.display = "none";
+        popUpEl.innerHTML = "";
+        popUpEl.style.opacity = "1";
+        popUpEl.style.transform = "scale(1)";
+        popUpEl.style.top = "60px";
+        popUpEl.style.left = "-10px";
+    };
 }
 
 function flashHeartLossVisual(actor, amount = 1){
@@ -2653,6 +3621,14 @@ function routeTargetingForCard(card){
     battle_player_side.style.display = "none";
     // target_battle_stats.style.display = "none";
 
+    if(card.target_type === "enemy_all"){
+    useQueuedCardOnTarget({
+        type: "enemy",
+        position: "all"
+    });
+    return;
+}
+
     if(target === "enemy_single"){
         showEnemySide();
         renderEnemyTargetChoices();
@@ -2671,11 +3647,37 @@ function routeTargetingForCard(card){
             type: "ally_all"
         });
     }
-    else if(target === "self"){
-        console.log("Auto target: self", card.name);
-        useQueuedCardOnAutoTarget({
-            type: "self"
-        });
+    if(target.type === "self"){
+        if(card.effects?.type === "focus"){
+            const applied = applyFocusToActor(actor, card.effects);
+
+            if(applied){
+                flashFocusVisual(actor, focusResult.bonusPower);
+                pushBattleLog(`${actor.name} focuses. Next attack damage +${Math.round(card.effects.amount * 100)}%.`);
+            }else{
+                pushBattleLog(`${actor.name} tries to focus, but it has no effect.`);
+            }
+
+            const index = action_queue.findIndex(c =>
+                c && Number(c.actor_slot) === Number(actor.squad_slot)
+            );
+
+            if(index !== -1){
+                action_queue[index] = null;
+            }
+
+            compactQueue();
+            renderQueue();
+            renderEquippedDeck();
+            renderBattleQueueWindowSlots();
+
+            battle_queue_window.style.display = "none";
+            enemy_side_battle.style.display = "none";
+            battle_player_side.style.display = "none";
+
+            resolveNextCardForCurrentActorOrAdvance();
+            return;
+        }
     }
 }
 
@@ -2755,14 +3757,19 @@ function advanceResolutionTurn(){
 }
 
 function endBattleResolutionPhase(){
-    console.log(`=== ROUND ${battle_state.round_number} COMPLETE ===`);
+    applyEndPhaseRestoration();
 
-    battle_state.round_number++;
-    battle_state.current_turn_index = 0;
     battle_phase = "planning";
+    battle_state.round_number++;
+    battle_state.turn_order = buildBattleTurnOrder(
+        battle_state.players,
+        battle_state.enemies
+    );
+    battle_state.current_turn_index = 0;
 
-    current_planning_actor_key = null;
-    planning_player_index = 0;
+    renderBattleOrder();
+    renderQueue();
+    renderEquippedDeck();
 
     startPlayerPlanningPhase();
 }
@@ -2815,12 +3822,17 @@ function applyAttackToTarget(targetActor, attackPower, incomingDamageType = "phy
         targetActor.hearts = Math.max(0, currentHearts - heartsReducedBy);
         targetActor.alive = targetActor.hearts > 0;
 
+        if(!targetActor.alive){
+            markActorDownVisual(targetActor);
+        }
+
         return {
             defReducedBy,
             heartsReducedBy,
             brokeDefense,
             blockedAmount: guardResult.blockedAmount || 0,
-            guardTriggered: guardResult.guardTriggered || false
+            guardTriggered: guardResult.guardTriggered || false,
+            guardWasBrokenState: guardResult.guardWasBrokenState || false
         };
     }
 
@@ -2829,9 +3841,13 @@ function applyAttackToTarget(targetActor, attackPower, incomingDamageType = "phy
 
     if(currentDef > 0 && targetActor.stats.def === 0){
         brokeDefense = true;
+        applyBreakStatPenalty(targetActor);
     }
 
     targetActor.alive = targetActor.hearts > 0;
+    if(!targetActor.alive){
+        markActorDownVisual(targetActor);
+    }
 
     return {
         defReducedBy,
@@ -2939,9 +3955,427 @@ function hideTargetStats(){
 
 dragWindow(handler_header, element_handler);
 dragWindow(battle_log_header, battle_log_window);
+dragWindow(results_header,battle_results_screen);
 
 battle_log_close.onclick = ()=>{
     battle_log_window.style.display = 'none';
+}
+
+function restoreActorStats(actor){
+    if(!actor || !actor.alive || !actor.stats || !actor.max_stats) return 0;
+
+    const restoreAmount = Math.max(1, Math.floor(Number(actor.stats.res || 0) / 4));
+
+    const statKeys = ["def", "res", "atk", "eva", "spATK", "dex", "spDEF", "cp"];
+    let totalRestored = 0;
+
+    statKeys.forEach(key => {
+        const current = Number(actor.stats[key] || 0);
+        const max = Number(actor.max_stats[key] || 0);
+
+        if(current < max){
+            const next = Math.min(max, current + restoreAmount);
+            totalRestored += next - current;
+            actor.stats[key] = next;
+        }
+    });
+
+    return totalRestored;
+}
+
+function applyEndPhaseRestoration(){
+    const actors = [
+        ...(battle_state.players || []),
+        ...(battle_state.enemies || [])
+    ];
+
+    actors.forEach(actor => {
+        const total = restoreActorStats(actor);
+
+        if(total > 0){
+            pushBattleLog(`${actor.name} restores ${total} total stats.`);
+            refreshBattleTargetPanelForActor(actor);
+        }
+    });
+}
+
+function markActorDownVisual(actor){
+    if(!actor) return;
+
+    if(actor.side === "enemy"){
+        const visualId = getVisualIdForActor(actor);
+        const visualEl = visualId ? document.getElementById(visualId) : null;
+
+        if(visualEl){
+            visualEl.animate(
+                [
+                    { opacity: 1, transform: visualEl.style.transform },
+                    { opacity: 0, transform: `${visualEl.style.transform} scale(0.85)` }
+                ],
+                {
+                    duration: 500,
+                    easing: "ease-out",
+                    fill: "forwards"
+                }
+            );
+
+            setTimeout(() => {
+                visualEl.style.display = "none";
+            }, 500);
+        }
+
+        return;
+    }
+
+    if(actor.side === "player"){
+        const popUpEl = preparePopUp(actor, "DOWN", {
+            color: "crimson",
+            fontSize: "24px",
+            fontWeight: "bolder"
+        });
+
+        if(!popUpEl) return;
+
+        popUpEl.style.display = "block";
+        popUpEl.style.opacity = "1";
+        popUpEl.style.top = "45px";
+        popUpEl.style.left = "-10px";
+        popUpEl.innerHTML = "DOWN";
+    }
+}
+
+function getBreakAffectedStatKeys(){
+    return ["res", "atk", "eva", "spATK", "dex", "spDEF",];
+}
+
+function applyBreakStatPenalty(actor){
+    if(!actor || !actor.stats || actor.break_penalty_applied) return;
+
+    const statKeys = getBreakAffectedStatKeys();
+
+    actor.break_original_stats = {};
+
+    statKeys.forEach(key => {
+        const currentValue = Number(actor.stats[key] || 0);
+        actor.break_original_stats[key] = currentValue;
+
+        actor.stats[key] = Math.max(
+            0,
+            Math.floor(currentValue * 0.8)
+        );
+    });
+
+    actor.break_penalty_applied = true;
+
+    // Speed may change because EVA/DEX may drop.
+    actor.speed = getBattleSpeedFromStats(actor.stats);
+
+    pushBattleLog(`${actor.name} enters BREAK. Stats lowered by 20%.`);
+}
+
+function showBattleResultsScreen(){
+    start_commands.style.display = "none";
+    move_commands.style.display = "none";
+    card_commands.style.display = "none";
+    battle_queue_window.style.display = "none";
+    enemy_side_battle.style.display = "none";
+    battle_player_side.style.display = "none";
+
+    setBattleInteractionEnabled(false);
+
+    const rewards = getBattleRewards();
+    const currentUser = users.find(u =>
+        Number(u.id) === Number(current_squad[0]?.user_id)
+    );
+
+    if(currentUser){
+        currentUser.currency.gil += rewards.totalGil;
+    }
+
+    const goldWon = document.getElementById("gold_won");
+    const goldTotal = document.getElementById("gold_total");
+
+    if(goldWon) goldWon.textContent = `+${rewards.totalGil}`;
+    if(goldTotal) goldTotal.textContent = currentUser?.currency?.gil ?? 0;
+
+    const resultsScreen = document.getElementById("battle_results_screen");
+    if(resultsScreen){
+        resultsScreen.style.display = "flex";
+
+        resultsScreen.animate(
+            [
+                { opacity: 0, transform: "translateY(18px) scale(0.96)" },
+                { opacity: 1, transform: "translateY(0px) scale(1)" }
+            ],
+            {
+                duration: 350,
+                easing: "ease-out",
+                fill: "forwards"
+            }
+        );
+    }
+
+    const livingOrJoinedMembers = current_squad.filter(member =>
+        member && member.user_id !== null && member.avatar_id !== null
+    );
+
+    livingOrJoinedMembers.forEach((member, index) => {
+        const displayIndex = index + 1;
+
+        const avatar = findAvatarById(member.avatar_id);
+        const avatarLink = users_avatars.find(link =>
+            Number(link.user_id) === Number(member.user_id) &&
+            Number(link.avatar_id) === Number(member.avatar_id)
+        );
+
+        if(!avatarLink) return;
+
+        if(avatarLink.avatar_exp === undefined){
+            avatarLink.avatar_exp = 0;
+        }
+
+        if(avatarLink.avatar_level === undefined){
+            avatarLink.avatar_level = 1;
+        }
+
+        const oldLevel = Number(avatarLink.avatar_level || 1);
+        const oldExp = Number(avatarLink.avatar_exp || 0);
+        const oldExpToNext = getAvatarExpToNextLevel(oldLevel);
+        const oldPercent = Math.min(
+            100,
+            Math.floor((oldExp / oldExpToNext) * 100)
+        );
+
+        const expResult = addBattleExpToAvatar(avatarLink, rewards.totalExp);
+
+        const nameEl = document.getElementById(`result_${displayIndex}_name`);
+        const levelEl = document.getElementById(`result_${displayIndex}_level`);
+        const rankEl = document.getElementById(`result_${displayIndex}_rank`);
+        const portraitEl = document.getElementById(`results_${displayIndex}_portrait`);
+        const barFill = document.getElementById(`member_${displayIndex}_exp_bar_fill`);
+        const levelUpEl = document.getElementById(`member_${displayIndex}_level_up_display`);
+
+        if(nameEl) nameEl.textContent = avatar?.name || `Member ${displayIndex}`;
+        if(levelEl) levelEl.textContent = `Level ${avatarLink.avatar_level || 1}`;
+        if(rankEl) rankEl.textContent = `Rank ${currentUser?.rank || "F"}`;
+
+        if(portraitEl){
+            const portraitImage =
+                avatar?.image_portrait ||
+                avatar?.image_battle_idle ||
+                avatar?.image_idle;
+
+            portraitEl.style.backgroundImage = portraitImage
+                ? `url(./images/${portraitImage})`
+                : "";
+
+            portraitEl.style.backgroundSize = "cover";
+            portraitEl.style.backgroundRepeat = "no-repeat";
+            portraitEl.style.backgroundPosition = "center";
+        }
+
+        if(barFill){
+            const newPercent = Math.min(
+                100,
+                Math.floor((expResult.currentExp / expResult.expToNext) * 100)
+            );
+
+            animateExpBarFill(
+                barFill,
+                oldPercent,
+                newPercent,
+                `${expResult.currentExp}/${expResult.expToNext} EXP`
+            );
+        }
+
+        if(levelUpEl && expResult.leveledUp){
+            levelUpEl.textContent = expResult.levelsGained > 1
+                ? `LEVEL UP x${expResult.levelsGained}`
+                : "LEVEL UP";
+
+            levelUpEl.style.opacity = "1";
+
+            levelUpEl.animate(
+                [
+                    { opacity: 0, transform: "scale(0.7) translateY(8px)" },
+                    { opacity: 1, transform: "scale(1.12) translateY(0px)" },
+                    { opacity: 1, transform: "scale(1)" },
+                    { opacity: 0, transform: "scale(0.95) translateY(-6px)" }
+                ],
+                {
+                    duration: 1400,
+                    easing: "ease-out",
+                    fill: "forwards"
+                }
+            );
+
+            setTimeout(() => {
+                levelUpEl.style.opacity = "0";
+            }, 1400);
+        }
+    });
+
+    battle_in_progress = false;
+    pushBattleLog(`Victory! Gained ${rewards.totalExp} EXP and ${rewards.totalGil} gil.`);
+}
+
+function animateExpBarFill(barFill, fromPercent, toPercent, labelText){
+    if(!barFill) return;
+
+    barFill.style.width = `${fromPercent}%`;
+    barFill.textContent = labelText;
+    barFill.style.transition = "none";
+
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            barFill.style.transition = "width 900ms cubic-bezier(.2, .9, .2, 1.2)";
+            barFill.style.width = `${toPercent}%`;
+        });
+    });
+
+    barFill.animate(
+        [
+            { filter: "brightness(1)", transform: "scaleY(1)" },
+            { filter: "brightness(1.8)", transform: "scaleY(1.25)" },
+            { filter: "brightness(1)", transform: "scaleY(1)" }
+        ],
+        {
+            duration: 900,
+            easing: "ease-out"
+        }
+    );
+}
+
+function areAllEnemiesDefeated(){
+    return Array.isArray(battle_state.enemies) &&
+        battle_state.enemies.length > 0 &&
+        battle_state.enemies.every(enemy => !enemy.alive);
+}
+
+function getBattleRewards(){
+    let totalExp = 0;
+    let totalGil = 0;
+
+    battle_state.enemies.forEach(enemyActor => {
+        const enemyDef = enemies.find(e => Number(e.id) === Number(enemyActor.enemy_id));
+        const stats = enemy_stats.find(s => Number(s.stat_id) === Number(enemyDef?.stat_id));
+
+        totalExp += Number(stats?.exp || 0);
+        totalGil += Number(stats?.gold || 0);
+    });
+
+    return { totalExp, totalGil };
+}
+
+function setPlayersToResultsPose(){
+
+    if(!Array.isArray(battle_state?.players)) return;
+
+    battle_state.players.forEach(player => {
+
+        const visualId = `visual_p_${player.battle_position}`;
+        const visualEl = document.getElementById(visualId);
+
+        if(!visualEl) return;
+
+        const avatar = findAvatarById(player.avatar_id);
+        if(!avatar) return;
+
+        const resultsImage =
+            avatar.image_battle_results ||
+            avatar.image_battle_idle;
+
+        visualEl.style.backgroundImage =
+            resultsImage
+                ? `url(./images/${resultsImage})`
+                : "";
+
+        visualEl.style.backgroundSize = "contain";
+        visualEl.style.backgroundRepeat = "no-repeat";
+        visualEl.style.backgroundPosition = "center";
+
+        // optional small celebratory bounce
+        visualEl.animate(
+            [
+                { transform: visualEl.style.transform + " scale(1)" },
+                { transform: visualEl.style.transform + " scale(1.08)" },
+                { transform: visualEl.style.transform + " scale(1)" }
+            ],
+            {
+                duration: 420,
+                easing: "ease-out"
+            }
+        );
+
+    });
+}
+
+function getAvatarExpToNextLevel(level){
+    const row = avatar_level_requirements.find(req =>
+        Number(req.level) === Number(level)
+    );
+
+    return Number(row?.exp_to_next || 100);
+}
+
+function addBattleExpToAvatar(avatarLink, expGained){
+    if(!avatarLink){
+        return {
+            leveledUp: false,
+            levelsGained: 0,
+            currentExp: 0,
+            expToNext: 100
+        };
+    }
+
+    if(avatarLink.avatar_exp === undefined){
+        avatarLink.avatar_exp = 0;
+    }
+
+    let levelsGained = 0;
+    avatarLink.avatar_exp += Number(expGained || 0);
+
+    let expToNext = getAvatarExpToNextLevel(avatarLink.avatar_level || 1);
+
+    while(avatarLink.avatar_exp >= expToNext){
+        avatarLink.avatar_exp -= expToNext;
+        avatarLink.avatar_level = Number(avatarLink.avatar_level || 1) + 1;
+        levelsGained++;
+
+        expToNext = getAvatarExpToNextLevel(avatarLink.avatar_level || 1);
+    }
+
+    return {
+        leveledUp: levelsGained > 0,
+        levelsGained,
+        currentExp: avatarLink.avatar_exp,
+        expToNext
+    };
+}
+
+function resetPlayersToBattleIdle(){
+
+    if(!Array.isArray(battle_state?.players)) return;
+
+    battle_state.players.forEach(player => {
+
+        const visualId = `visual_p_${player.battle_position}`;
+        const visualEl = document.getElementById(visualId);
+
+        if(!visualEl) return;
+
+        const avatar = findAvatarById(player.avatar_id);
+        if(!avatar) return;
+
+        const idleImage =
+            avatar.image_battle_idle ||
+            avatar.image_idle;
+
+        visualEl.style.backgroundImage =
+            idleImage
+                ? `url(./images/${idleImage})`
+                : "";
+    });
 }
 
 window.addEventListener("load", function(){
@@ -2961,11 +4395,12 @@ window.addEventListener("load", function(){
     renderPlayerBattleVisuals();
 
     initializeBattleDeckSystem();
+    initializeRestoreStatControls();
     applyAllBattleVisualTransforms();
     initializeBattleVisualHandler();
     initializeBattleExit();
     initializeBattleTargeting();
-
+    initializeBattleResultsControls();
     planning_player_index = 0;
 
     battle_log = [];

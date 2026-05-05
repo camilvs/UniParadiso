@@ -1,0 +1,467 @@
+<html>
+<head>
+    <title>RPG Game</title>
+
+    <style>
+        body {
+            margin: 0;
+            background-color: #111;
+            font-family: Arial, sans-serif;
+        }
+
+        .scrolling-background {
+            background-repeat: repeat-x;
+            animation: scrollBackground 20s linear infinite;
+        }
+
+        @keyframes scrollBackground {
+            from { background-position: 0 0; }
+            to { background-position: -888.5px 0; }
+        }
+
+        #game_shell {
+            width: 908px;
+            height: 908px;
+            border: 1px solid #222;
+            display: flex;
+            flex-direction: column;
+            margin: auto;
+            margin-top: 24px;
+            position: relative;
+            background-color: black;
+            overflow: hidden;
+        }
+
+        #game_nav {
+            width: 98%;
+            height: 72px;
+            border: 1px solid #222;
+            display: flex;
+            flex-direction: column;
+            margin-left: 8px;
+            background-color: ghostwhite;
+            z-index: 50;
+        }
+
+        #player_hud {
+            display: flex;
+            flex-direction: row;
+            border: 1px solid black;
+            width: 884px;
+            height: 32px;
+            margin: 2px;
+            background-color: gold;
+            justify-content: space-between;
+        }
+
+        .hud_button {
+            width: 120px;
+            height: 28px;
+            background-image: linear-gradient(#222, grey);
+            margin: 2px;
+            color: ghostwhite;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            cursor: pointer;
+        }
+
+        #game_viewport {
+            width: 98%;
+            height: 600px;
+            border: 1px solid black;
+            margin-left: 8px;
+            margin-top: 2px;
+            perspective: 800px;
+            overflow: hidden;
+            position: relative;
+            background-color: #222;
+        }
+
+        .game_screen {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        #world_map_screen {
+            display: flex;
+        }
+
+        #room_screen {
+            display: none;
+        }
+
+        #room_screen,
+        #level_test_preview {
+            perspective: 800px;
+            transform-style: preserve-3d;
+        }
+
+        #battle_screen {
+            display: none;
+        }
+
+        #world_map_preview,
+        #level_test_preview {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        #world_map_preview {
+            perspective: 800px;
+            transform-style: preserve-3d;
+        }
+
+        #level_test_holder {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 840px;
+            height: 840px;
+            transform-style: preserve-3d;
+        }
+
+        #world {
+            width: 840px;
+            height: 840px;
+            background-color: #222;
+            display: grid;
+            grid-template-columns: repeat(7, 120px);
+            grid-template-rows: repeat(7, 120px);
+            opacity: 1;
+        }
+
+        #level_test_controller_dpad {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background-color: rgba(238, 130, 238, 0.244);
+            border-radius: 96px;
+            display: flex;
+            flex-direction: column;
+            bottom: 92px;
+            left: 15px;
+            z-index: 100;
+        }
+
+        .controller_button {
+            width: 32px;
+            height: 32px;
+            border: #222 3px outset;
+            border-radius: 32px;
+            cursor: pointer;
+            background-color: #222;
+            color: ghostwhite;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .floating_window {
+            position: absolute;
+            background-color: ghostwhite;
+            border: 1px solid black;
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        #fade_layer {
+            position: absolute;
+            inset: 0;
+            background-color: black;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 2000;
+        }
+
+        .pause_member_card {
+    width: 502px;
+    height: 92px;
+    border: 1px solid black;
+    margin: 4px;
+    display: flex;
+    flex-direction: row;
+    background-image: linear-gradient(#222, grey);
+    color: yellow;
+}
+
+.pause_member_portrait {
+    width: 86px;
+    height: 86px;
+    background-color: aliceblue;
+    margin: 3px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.pause_member_text {
+    width: 220px;
+    height: 86px;
+    margin: 3px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    font-size: 13px;
+}
+
+.pause_member_stats {
+    width: 140px;
+    height: 86px;
+    margin: 3px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.stat_bar {
+    width: 120px;
+    height: 8px;
+    border: 1px outset white;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #111;
+}
+
+.stat_bar div {
+    width: 0%;
+    height: 100%;
+    background-color: gold;
+}
+    </style>
+</head>
+
+<body>
+    <div id="game_shell">
+
+        <div id="game_nav">
+            <div style="width: 280px; height: 32px; border: solid #222 1px; display: flex; flex-direction: row;">
+                <div id="level_test_exit"
+                     style="background-color: rgb(87, 50, 114); width: 28px; height: 28px; margin: 2px; border-radius: 3px; cursor: pointer;"
+                     title="Exit"></div>
+
+                <div id="level_test_level_name"
+                     style="position: relative; top: 6px; left: 12px; width: 240px;"></div>
+            </div>
+
+            <div id="player_hud">
+                <div id="user_name_display" class="hud_button" title="Username"></div>
+                <div id="user_character_portrait" class="hud_button"></div>
+                <div id="user_hearts" class="hud_button" style="width:240px;" title="Hearts"></div>
+                <div id="pause_menu" class="hud_button" title="Open Menu">Menu</div>
+                <div id="save_menu" class="hud_button" title="Save Menu">&#128427;</div>
+                <div id="exit_menu" class="hud_button" title="Exit">Exit</div>
+            </div>
+        </div>
+
+        <div id="game_viewport">
+
+            <div id="world_map_screen" class="game_screen">
+                <div id="world_map_preview" class="scrolling-background"
+                     style="background-image: url(./images/background12.png);">
+                    <div id="level_test_holder">
+                        <div id="world"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="room_screen" class="game_screen">
+                <div id="level_test_preview" class="scrolling-background">
+                    <!-- cube gets created here by play_test.js -->
+                </div>
+            </div>
+
+            <div id="battle_screen" class="game_screen">
+                <!-- battle screen later -->
+            </div>
+
+            <div id="fade_layer"></div>
+        </div>
+
+        <div id="level_test_controller_dpad" style="position: relative; top: -124px;">
+            <div id="controller_up" class="controller_button" style="position:relative; left:42px;">&#8593;</div>
+
+            <div style="display:flex; flex-direction:row; justify-content:space-evenly; position:relative; top:7px;">
+                <div id="controller_left" class="controller_button">&#8592;</div>
+                <div id="controller_turbo"
+                     style="width:28px; height:28px; border-radius:16px; margin:3px; border:1px outset #222; background-color:#222; cursor:pointer;"
+                     title="TURBO"></div>
+                <div id="controller_right" class="controller_button">&#8594;</div>
+            </div>
+
+            <div id="controller_down" class="controller_button" style="position:relative; left:40px; top:9px;">&#8595;</div>
+        </div>
+
+        <!-- Destination Prompt -->
+        <div id="exit_to_destination_window"
+             class="floating_window"
+             style="width:260px; height:120px; top:300px; left:324px; align-items:center; justify-content:space-evenly;">
+            <div>Travel to<span id="destination_name"></span></div>
+
+            <div style="display:flex; flex-direction:row; width:98%; height:32px; justify-content:space-evenly;">
+                <div id="enter_destination_yes"
+                     style="width:80px; background-color:#222; color:white; display:flex; justify-content:center; align-items:center; cursor:pointer;">
+                    Yes
+                </div>
+                <div id="enter_destination_no"
+                     style="width:80px; background-color:#222; color:white; display:flex; justify-content:center; align-items:center; cursor:pointer;">
+                    No
+                </div>
+            </div>
+
+            <div id="destination_window_exit"
+                 style="position:absolute; top:2px; right:2px; width:22px; height:22px; border:1px solid black; display:flex; justify-content:center; align-items:center; cursor:pointer;">
+                X
+            </div>
+        </div>
+
+        <!-- user_stats_window goes here -->
+        <!-- pause_menu_window goes here -->
+        <!-- editor_tools can stay hidden or removed for player build -->
+
+    </div>
+    <div id="pause_menu_window" class="floating_window"
+     style="width:520px; height:420px; top:120px; left:190px;">
+
+        <div style="display:flex; flex-direction:row;">
+            <div id="pause_menu_header"
+                style="width:481px; height:26px; border-bottom:grey 1px solid; margin:2px;"
+                title="drag to move"></div>
+
+            <div id="pause_menu_closer"
+                style="width:26px; height:26px; border:1px solid black; margin:2px; display:flex; justify-content:center; align-items:center; cursor:pointer;">
+                X
+            </div>
+        </div>
+
+        <div style="width:512px; height:26px; margin:2px; display:flex; justify-content:space-around; border-bottom:grey 1px solid;">
+            <div id="pause_nav_squad" style="cursor:pointer;">Squad</div>
+            <div id="pause_nav_deck" style="cursor:pointer;">Deck</div>
+            <div id="pause_nav_equipment" style="cursor:pointer;">Equipment</div>
+        </div>
+
+        <div id="squad_pause_display" style="display:flex; flex-direction:column; width:512px; height:351px; margin:2px;">
+            <div style="font-size:12px; margin-left:4px;">Current Squad</div>
+
+                <div id="member_1" class="pause_member_card">
+                <div id="member_1_avatar_portrait" class="pause_member_portrait"></div>
+
+                <div class="pause_member_text">
+                    <div id="member_1_user_name"></div>
+                    <div id="member_1_rank"></div>
+                    <div id="member_1_avatar"></div>
+                    <div id="member_1_hearts"></div>
+                    <div id="member_1_avatar_level"></div>
+                </div>
+
+                <div class="pause_member_stats">
+                    <div class="stat_bar"><div id="member_1_def"></div></div>
+                    <div class="stat_bar"><div id="member_1_res"></div></div>
+                    <div class="stat_bar"><div id="member_1_atk"></div></div>
+                    <div class="stat_bar"><div id="member_1_eva"></div></div>
+                    <div class="stat_bar"><div id="member_1_spATK"></div></div>
+                    <div class="stat_bar"><div id="member_1_dex"></div></div>
+                    <div class="stat_bar"><div id="member_1_spDEF"></div></div>
+                </div>
+            </div>
+                <div id="member_2" class="pause_member_card">
+                <div id="member_2_avatar_portrait" class="pause_member_portrait"></div>
+
+                <div class="pause_member_text">
+                    <div id="member_2_user_name"></div>
+                    <div id="member_2_rank"></div>
+                    <div id="member_2_avatar"></div>
+                    <div id="member_2_hearts"></div>
+                    <div id="member_2_avatar_level"></div>
+                </div>
+
+                <div class="pause_member_stats">
+                    <div class="stat_bar"><div id="member_2_def"></div></div>
+                    <div class="stat_bar"><div id="member_2_res"></div></div>
+                    <div class="stat_bar"><div id="member_2_atk"></div></div>
+                    <div class="stat_bar"><div id="member_2_eva"></div></div>
+                    <div class="stat_bar"><div id="member_2_spATK"></div></div>
+                    <div class="stat_bar"><div id="member_2_dex"></div></div>
+                    <div class="stat_bar"><div id="member_2_spDEF"></div></div>
+                </div>
+            </div>
+                <div id="member_3" class="pause_member_card">
+                <div id="member_3_avatar_portrait" class="pause_member_portrait"></div>
+
+                <div class="pause_member_text">
+                    <div id="member_3_user_name"></div>
+                    <div id="member_3_rank"></div>
+                    <div id="member_3_avatar"></div>
+                    <div id="member_3_hearts"></div>
+                    <div id="member_3_avatar_level"></div>
+                </div>
+
+                <div class="pause_member_stats">
+                    <div class="stat_bar"><div id="member_3_def"></div></div>
+                    <div class="stat_bar"><div id="member_3_res"></div></div>
+                    <div class="stat_bar"><div id="member_3_atk"></div></div>
+                    <div class="stat_bar"><div id="member_3_eva"></div></div>
+                    <div class="stat_bar"><div id="member_3_spATK"></div></div>
+                    <div class="stat_bar"><div id="member_3_dex"></div></div>
+                    <div class="stat_bar"><div id="member_3_spDEF"></div></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="deck_pause_display" style="display:none; flex-direction:row; width:512px; height:351px; margin:2px;">
+            <div style="width:256px; background-image:linear-gradient(#222, grey);">
+                <div style="display:flex; margin:4px;">
+                    <div id="member_1_deck_display" style="width:48px; height:48px; background:#222; margin:4px; cursor:pointer;"></div>
+                    <div id="member_2_deck_display" style="width:48px; height:48px; background:#222; margin:4px; cursor:pointer;"></div>
+                    <div id="member_3_deck_display" style="width:48px; height:48px; background:#222; margin:4px; cursor:pointer;"></div>
+                    <div style="color:yellow;">CP:</div>
+                    <div id="cp_used" style="color:yellow;"></div>
+                    <div style="color:yellow;">/</div>
+                    <div id="cp_max" style="color:yellow;"></div>
+                </div>
+                <div id="equipped_deck" style="height:290px; overflow-y:auto; display:flex; flex-wrap:wrap;"></div>
+            </div>
+
+            <div style="width:256px; background-image:linear-gradient(grey, #222);">
+                <div style="margin:4px; color:yellow;">Card Inventory</div>
+                <div id="users_card_inventory" style="height:320px; overflow-y:auto; display:flex; flex-wrap:wrap;"></div>
+            </div>
+        </div>
+
+        <div id="equipment_pause_display" style="display:none; flex-direction:row; width:512px; height:351px; margin:2px;">
+            <div style="width:256px; background-image:linear-gradient(#222, grey);">
+                <div style="display:flex; justify-content:center;">
+                    <div id="member_1_equip_display" style="width:48px; height:48px; background:#222; margin:4px; cursor:pointer;"></div>
+                    <div id="member_2_equip_display" style="width:48px; height:48px; background:#222; margin:4px; cursor:pointer;"></div>
+                    <div id="member_3_equip_display" style="width:48px; height:48px; background:#222; margin:4px; cursor:pointer;"></div>
+                </div>
+                <div id="user_equipment_inventory" style="height:290px; overflow-y:auto;"></div>
+            </div>
+
+            <div style="width:256px; background-image:linear-gradient(grey, #222); display:flex; flex-direction:column; align-items:center;">
+                <div id="equip_slot_1" style="width:96px; height:120px; border:3px inset white; margin:4px; color:white;">Slot 1<br>empty</div>
+                <div style="display:flex;">
+                    <div id="equip_slot_2" style="width:96px; height:120px; border:3px inset white; margin:4px; color:white;">Slot 2<br>empty</div>
+                    <div id="equip_slot_3" style="width:96px; height:120px; border:3px inset white; margin:4px; color:white;">Slot 3<br>empty</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./data_base.js"></script>
+    <script src="./level_shared.js"></script>
+    <script src="./game_play.js"></script>
+    <script src="./play_test.js"></script>
+    <script src="./world_map.js"></script>
+</body>
+</html>

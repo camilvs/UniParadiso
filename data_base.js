@@ -27,6 +27,10 @@ let avatars = [
         image_battle_idle: "spr_character_0_up.png",
         image_battle_hurt: "",
         image_battle_results: "spr_character_idle_0.gif",
+        image_world_up: "spr_character_0_up.png",
+        image_world_down: "spr_character_idle_0.gif",
+        image_world_left: "spr_character_0_walk.gif",
+        image_world_right: "spr_character_0_walk.gif",
     },
     {
         id: 1,
@@ -38,6 +42,10 @@ let avatars = [
         image_battle_idle: "spr_character_1_up.png",
         image_battle_hurt: "",
         image_battle_results: "spr_character_idle_1.png",
+        image_world_up: "spr_character_1_up.png",
+        image_world_down: "spr_character_idle_1.png",
+        image_world_left: "spr_character_1_walk.gif",
+        image_world_right: "spr_character_1_walk.gif",
     },
         {
         id: 2,
@@ -49,6 +57,10 @@ let avatars = [
         image_battle_idle: "spr_character_2_up.png",
         image_battle_hurt: "",
         image_battle_results: "spr_character_idle_2.png",
+        image_world_up: "spr_character_2_up.png",
+        image_world_down: "spr_character_idle_2.png",
+        image_world_left: "spr_character_2_walk.gif",
+        image_world_right: "spr_character_2_walk.gif",
     },
 ];
 
@@ -1272,7 +1284,7 @@ let manifest = [
         reload_type: "rank_based",
         uses_per_battle: null,
         target_type: "enemy_all",
-        target_stat: "all",
+        target_stat: "def",
         stat_requirements: { res: 10 },
         effects: {
             type: "manifest_damage",
@@ -1305,10 +1317,7 @@ let manifest = [
             damage_type: "fire",
             amount: 0.40,
             stat_source: "atk",
-            perk: {
-                type: "atk_down",
-                amount: 0.05
-            }
+            perk: null,
         }
     },
     {
@@ -2371,7 +2380,7 @@ let enemies = [
 let enemy_stats = [
     // WAVE 1 (simple: 1 weakness, 1 resist) — hearts: 2–3
     {stat_id: 0, def: 18, res: 6, atk: 4, eva: 2, spATK: 0, dex: 1, spDEF: 5,
-        weak_type: 'orange', resist_type: ['red'], hearts: 3, spd: 0, gold: 8, exp: 15},
+        weak_type: 'orange', resist_type: ['red'], hearts: 3, spd: 0, gold: 8, exp: 24},
 
     {stat_id: 1, def: 4, res: 18, atk: 3, eva: 5, spATK: 2, dex: 1, spDEF: 4,
         weak_type: 'yellow', resist_type: ['orange'], hearts: 2, spd: 1, gold: 9, exp: 16},

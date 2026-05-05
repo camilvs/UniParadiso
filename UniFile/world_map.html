@@ -1,0 +1,333 @@
+<html>
+    <head>
+        <title>world map</title>
+        <style>
+          .scrolling-background {
+          background-repeat: repeat-x;
+        
+          animation: scrollBackground 20s linear infinite;
+        }
+
+        @keyframes scrollBackground {
+            from {
+                background-position: 0 0;
+            }
+            to {
+                background-position: -888.5px 0; 
+            }
+        }
+        #world_map_preview{
+            animation: scrollBackground 20s linear infinite;
+        }
+        </style>
+    </head>
+    <body>
+        <div id="level_test_screen" style="width: 908px; height: 908px; border: #222 1px solid; display: flex; flex-direction: column; margin: auto; margin-top: 24px;">
+            <div id="level_test_nav" style="width: 98%; height: 72px; border: 1px solid #222; display: flex; flex-direction: column; margin-left: 8px;">
+                <div style="width: 280px; height: 32px; border: solid #222 1px; display: flex; flex-direction: row;">
+                    <div id="level_test_exit" style="background-color: rgb( 87, 50, 114); width: 28px; height: 28px; margin: 2px; border-radius: 3px; cursor: pointer;" title="Exit Test"></div>
+                    <div id="level_test_level_name" style="position: relative; top: 6px;  left: 12px; width: 240px;"></div>
+                </div>
+                <div id="player_hud" style="display: flex; flex-direction: row; border: 1px solid black; width: 884px; height: 32px; margin: 2px; background-color: gold; justify-content: space-between;">
+                    <div id="user_name_display" style="width: 120px; height: 28px; background-image: linear-gradient(#222, grey);margin: 2px; border-radius: 5px 0px 0px 5px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex; cursor: pointer;" title="Username" ></div>
+                    <div id="user_character_portrait" style="width: 120px; height: 28px; background-color: #222; margin: 2px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex;"></div>
+                    <div id="user_hearts"  style="width: 240px; height: 28px; background-image: linear-gradient(#222, grey);margin: 2px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex;" title="Hearts"></div>
+                    <div id="pause_menu" style="width: 120px; height: 28px; background-image: linear-gradient(#222, grey);margin: 2px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex; cursor: pointer;" title="Open Menu">Menu</div>
+                    <div id="save_menu" style="width: 120px; height: 28px; background-image: linear-gradient(#222, grey);margin: 2px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex; cursor: pointer;" title="Save Menu">&#128427;</div>
+                    <div id="exit_menu" style="width: 120px; height: 28px; background-image: linear-gradient(#222, grey);margin: 2px; color: ghostwhite; text-align: center; justify-content: center; align-items: center; display: flex; cursor: pointer; border-radius: 0px 5px 5px 0px;" title="Exit">Exit</div>
+                </div>
+            </div>
+            <div id="world_map_preview" style="width:98%; height:600px; border:1px solid black; margin-left:8px; margin-top:2px; perspective:800px; transform-style:preserve-3d; position:relative; overflow:hidden; background-image: url(./images/background12.png)">
+
+                 <div id="level_test_holder" style="position:absolute; left:0; top:0; width:840px; height:840px; transform-style:preserve-3d;">
+                     <div id="world" style="width:840px; height:840px; background-color:#222; display:grid; grid-template-columns:repeat(7,120px); grid-template-rows:repeat(7,120px); opacity:1;"></div>
+                </div>
+            </div>
+            <div id="level_test_controller_dpad" style="position: relative; width: 120px; height: 120px; background-color: rgba(238, 130, 238, 0.244); border-radius: 96px; display: flex; flex-direction: column; top: -124px; left: 15px;">
+                    <div id="controller_up" style="width: 32px; height: 32px; border: #222 3px outset; border-radius: 32px; position: relative; left: 42px; cursor: pointer; background-color: #222; color: ghostwhite; display: flex; flex-direction: column; text-align: center; justify-content: center;">&#8593</div>
+                    <div style="display: flex; flex-direction: row; position: relative; left: 0px; justify-content: space-evenly; top: 7px;">
+                        <div id="controller_left" style="width: 32px; height: 32px; border: #222 3px outset; border-radius: 32px; position: relative;  cursor: pointer; background-color: #222; color: ghostwhite; display: flex; flex-direction: column; text-align: center; justify-content: center;">&#8592</div>
+                        <div id="controller_turbo" style="width: 28px; height: 28px; border-radius: 16px; margin: 3px; border: 1px outset #222; background-color: #222; cursor: pointer;" title="TURBO"></div>
+                        <div id="controller_right" style="width: 32px; height: 32px; border: #222 3px outset; border-radius: 32px; position: relative;  cursor: pointer; background-color: #222; color: ghostwhite; display: flex; flex-direction: column; text-align: center; justify-content: center;">&#8594</div>
+                    </div>
+                    <div id="controller_down" style="width: 32px; height: 32px; border: #222 3px outset; border-radius: 32px; position: relative; left: 40px; top: 9px; cursor: pointer; background-color: #222; color: ghostwhite; display: flex; flex-direction: column; text-align: center; justify-content: center;">&#8595</div>
+                </div>
+        </div>
+        <div id="user_stats_window" style="width: 240px; height: 240px; position: absolute; top: 120px; left: 120px; background-color: ghostwhite; border: 1px solid black; display: none; flex-direction: column;">
+            <div style="display: flex; flex-direction: row; width: 100%; height: 28px;">
+                <div id="user_stats_header" style="width: 210px; height: 28px; border-bottom: grey 1px solid;" title="click to drag"></div>
+                <div id="user_stats_window_close" style="width: 26px; height: 26px; border: #222 1px solid; text-align: center; align-items: center; display: flex; flex-direction: column; justify-content: center; cursor: pointer; margin: 2px;" title="close">X</div>
+            </div>
+            <div style="display: flex; flex-direction: row;">
+                <div>Hearts: </div>
+                <div id="user_stats_hearts"></div>
+            </div>
+            <div style="display: flex; flex-direction: row;">
+                <div style="width: 16px; height: 16px; background-color: red; border-radius: 26px; margin: 2px; border: 2px inset black;" title="Defense"></div>
+                <div id="user_stats_def" style="margin: 2px;"></div>
+            </div>
+            <div style="display: flex; flex-direction: row;">
+                <div style="width: 16px; height: 16px; background-color: orange; border-radius: 26px; margin: 2px; border: 2px inset black;" title="Resoration"></div>
+                <div id="user_stats_res" style="margin: 2px;"></div>
+            </div>
+            <div style="display: flex; flex-direction: row;">
+                <div style="width: 16px; height: 16px; background-color: yellow; border-radius: 26px; margin: 2px; border: 2px inset black;" title="Attack"></div>
+                <div id="user_stats_atk" style="margin: 2px;"></div>
+            </div>
+            <div style="display: flex; flex-direction: row;">
+                <div style="width: 16px; height: 16px; background-color: green; border-radius: 26px; margin: 2px; border: 2px inset black;" title="Evasion"></div>
+                <div id="user_stats_eva" style="margin: 2px;"></div>
+            </div>
+            <div style="display: flex; flex-direction: row;">
+                <div style="width: 16px; height: 16px; background-color: blue; border-radius: 26px; margin: 2px; border: 2px inset black;" title="Special Attack"></div>
+                <div id="user_stats_spATK" style="margin: 2px;"></div>
+            </div>
+            <div style="display: flex; flex-direction: row;">
+                <div style="width: 16px; height: 16px; background-color: indigo; border-radius: 26px; margin: 2px; border: 2px inset black;" title="Dexterity"></div>
+                <div id="user_stats_dex" style="margin: 2px;"></div>
+            </div>
+            <div style="display: flex; flex-direction: row;">
+                <div style="width: 16px; height: 16px; background-color: violet; border-radius: 26px; margin: 2px; border: 2px inset black;" title="Special Defense"></div>
+                <div id="user_stats_SPdef" style="margin: 2px;"></div>
+            </div>
+            <div style="display: flex; flex-direction: row;">
+                <div style="width: 16px; height: 16px;  border-radius: 26px; margin: 2px;" title="Card Points">CP</div>
+                <div id="user_stats_cp" style="margin: 2px 2px 2px 8px;"></div>
+            </div>
+        </div>
+        <div id="pause_menu_window" style="position: absolute; width: 520px; height: 420px; top: 0px; left: 0px; border: 1px solid black; background-color: ghostwhite; display: none; flex-direction: column;">
+            <div style="display: flex; flex-direction: row;">
+                <div id="pause_menu_header" style="width: 481px; height: 26px; border-bottom: grey 1px solid; margin: 2px;" title="drag to move"></div>
+                <div id="pause_menu_closer" style="width: 26px; height: 26px; border: 1px solid black; margin: 2px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer;" title="close">X</div>
+            </div>
+            <div style="width: 512px; height: 26px; margin: 2px; display: flex; flex-direction: row; align-items: center; justify-content: space-around; border-bottom: grey 1px solid;">
+                <div id="pause_nav_deck" style="cursor: pointer; padding: 2px; border-radius: 3px;">Deck</div>
+                <div id="pause_nav_items" style="cursor: pointer; padding: 2px; border-radius: 3px;">Items</div>
+                <div id="pause_nav_equipment" style="cursor: pointer; padding: 2px; border-radius: 3px;">Equipment</div>
+                <div id="pause_nav_avatars" style="cursor: pointer; padding: 2px; border-radius: 3px;">Avatars</div>
+                <div id="pause_nav_squad" style="cursor: pointer; padding: 2px; border-radius: 3px;">Squad</div>
+                <div id="pause_nav_shop" style="cursor: pointer; padding: 2px; border-radius: 3px;">Shop</div>
+                <div id="pause_nav_journal" style="cursor: pointer; padding: 2px; border-radius: 3px;">Journal</div>
+            </div>
+            <div id="squad_pause_display" style="display: flex; flex-direction: column; width: 512px; height: 351px; border: 1px solid transparent; margin: 2px;">
+                <div style="font-size: 12px; margin-left: 4px;">Current Squad</div>
+                <div style="width: 510px; height: 308px; display: flex; flex-direction: column;">
+                    <div id="member_1" style="width: 502px; height: 92px; border: black 1px solid; margin: 4px; display: flex; flex-direction: row; background-image: linear-gradient(#222, grey);">
+                        <div id="member_1_avatar_portrait" style="width: 86px; height: 86px; background-color: aliceblue; margin: 3px; background-size: cover; background-repeat: no-repeat;"></div>
+                        <div style="height: 86px; width: 150px; border: 1px solid transparent; margin: 3px; display: flex; flex-direction: column; justify-content: space-evenly; align-items: left; text-align: left;">
+                            <div id="member_1_user_name" style="font-size: 14px; color: yellow;"></div>
+                            <div id="member_1_rank" style="font-size: 14px; color: yellow;"></div>
+                            <div style="width: 115px; height: 18px; border: 1px solid white; background-color: black; color: white; border-radius: 4px; text-align: center;">Leader</div>
+                        </div>
+                        <div style="width: 130px; height: 84px; border: 1px solid transparent; margin: 3px; display: flex; flex-direction: column; justify-content: space-evenly; align-items: left; text-align: left; color: yellow;">
+                            <div id="member_1_avatar"></div>
+                            <div id="member_1_hearts" style="color: violet; font-size: 18px;"></div>
+                            <div id="member_1_avatar_level" style="color: ghostwhite;"></div>
+                        </div>
+                        <div id="member_1_stat_holder" style="width:  112px; height: 90px; border: 1px solid transparent; display: flex; flex-direction: column; justify-content: space-evenly; align-items: center;">
+                            <div id="member_1_def_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Defense">
+                                <div id="member_1_def" style=" width: 0px; height: 12px; background-color: red;"></div>
+                            </div>
+                            <div id="member_1_res_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Restoration">
+                                <div id="member_1_res" style=" width: 0px; height: 12px; background-color: orange;"></div>
+                            </div>
+                            <div id="member_1_atk_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Attack">
+                                <div id="member_1_atk" style="width: 0px; height: 12px; background-color: yellow;"></div>
+                            </div>
+                            <div id="member_1_eva_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Evasion">
+                                <div id="member_1_eva" style="width: 0px; height: 12px; background-color: green;"></div>
+                            </div>
+                            <div id="member_1_spATK_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Special Attack">
+                                <div id="member_1_spATK" style="width: 0px; height: 12px; background-color: blue;"></div>
+                            </div>
+                            <div id="member_1_dex_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Dexterity">
+                                <div id="member_1_dex" style="width: 0px; height: 12px; background-color: indigo;"></div>
+                            </div>
+                            <div id="member_1_spDEF_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Special Defense">
+                                <div id="member_1_spDEF" style="width: 0px; height: 12px; background-color: violet;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="member_2" style="width: 502px; height: 92px; border: black 1px solid; margin: 4px; display: flex; flex-direction: row; background-image: linear-gradient(#222, grey);">
+                        <div id="member_2_avatar_portrait" style="width: 86px; height: 86px; background-color: aliceblue; margin: 3px; background-size: cover; background-repeat: no-repeat;"></div>
+                        <div style="height: 86px; width: 150px; border: 1px solid transparent; margin: 3px; display: flex; flex-direction: column; justify-content: space-evenly; align-items: left; text-align: left;">
+                            <div id="member_2_user_name" style="font-size: 14px; color: yellow;"></div>
+                            <div id="member_2_rank" style="font-size: 14px; color: yellow;"></div>
+                            <div style="width: 115px; height: 18px; border: 1px solid violet; background-color: black; color: yellow; border-radius: 4px; text-align: center;">Mid</div>
+                        </div>
+                        <div style="width: 130px; height: 84px; border: 1px solid transparent; margin: 3px; display: flex; flex-direction: column; justify-content: space-evenly; align-items: left; text-align: left; color: yellow;">
+                            <div id="member_2_avatar"></div>
+                            <div id="member_2_hearts" style="color: violet; font-size: 18px;"></div>
+                            <div id="member_2_avatar_level" style="color: ghostwhite;"></div>
+                        </div>
+                                                <div id="member_1_stat_holder" style="width:  112px; height: 90px; border: 1px solid transparent; display: flex; flex-direction: column; justify-content: space-evenly; align-items: center;">
+                            <div id="member_2_def_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Defense">
+                                <div id="member_2_def" style="width: 0px; height: 12px; background-color: red;"></div>
+                            </div>
+                            <div id="member_2_res_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Restoration">
+                                <div id="member_2_res" style="width: 0px; height: 12px; background-color: orange;"></div>
+                            </div>
+                            <div id="member_2_atk_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Attack">
+                                <div id="member_2_atk" style="width: 0px; height: 12px; background-color: yellow;"></div>
+                            </div>
+                            <div id="member_2_eva_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Evasion">
+                                <div id="member_2_eva" style="width: 0px; height: 12px; background-color: green;"></div>
+                            </div>
+                            <div id="member_2_spATK_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Special Attack">
+                                <div id="member_2_spATK" style="width: 0px; height: 12px; background-color: blue;"></div>
+                            </div>
+                            <div id="member_2_dex_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Dexterity">
+                                <div id="member_2_dex" style="width: 0px; height: 12px; background-color: indigo;"></div>
+                            </div>
+                            <div id="member_2_spDEF_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Special Defense">
+                                <div id="member_2_spDEF" style="width: 0px; height: 12px; background-color: violet;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="member_3" style="width: 502px; height: 92px; border: black 1px solid; margin: 4px; display: flex; flex-direction: row; background-image: linear-gradient(#222, grey);">
+                        <div id="member_3_avatar_portrait" style="width: 86px; height: 86px; background-color: aliceblue; margin: 3px; background-size: cover; background-repeat: no-repeat;"></div>
+                        <div style="height: 86px; width: 150px; border: 1px solid transparent; margin: 3px; display: flex; flex-direction: column; justify-content: space-evenly; align-items: left; text-align: left;">
+                            <div id="member_3_user_name" style="font-size: 14px; color: yellow;"></div>
+                            <div id="member_3_rank" style="font-size: 14px; color: yellow;"></div>
+                            <div style="width: 115px; height: 18px; border: 1px solid violet; background-color: black; color: yellow; border-radius: 4px; text-align: center;">Back</div>
+                        </div>
+                        <div style="width: 130px; height: 84px; border: 1px solid transparent; margin: 3px; display: flex; flex-direction: column; justify-content: space-evenly; align-items: left; text-align: left; color: yellow;">
+                            <div id="member_3_avatar"></div>
+                            <div id="member_3_hearts" style="color: violet; font-size: 18px;"></div>
+                            <div id="member_3_avatar_level" style="color: ghostwhite;"></div>
+                        </div>
+                                                <div id="member_1_stat_holder" style="width:  112px; height: 90px; border: 1px solid transparent; display: flex; flex-direction: column; justify-content: space-evenly; align-items: center;">
+                            <div id="member_3_def_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Defense">
+                                <div id="member_3_def" style="width: 0px; height: 12px; background-color: red;"></div>
+                            </div>
+                            <div id="member_3_res_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Restoration">
+                                <div id="member_3_res" style="width: 0px; height: 12px; background-color: orange;"></div>
+                            </div>
+                            <div id="member_3_atk_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Attack">
+                                <div id="member_3_atk" style="width: 0px; height: 12px; background-color: yellow;"></div>
+                            </div>
+                            <div id="member_3_eva_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Evasion">
+                                <div id="member_3_eva" style="width: 0px; height: 12px; background-color: green;"></div>
+                            </div>
+                            <div id="member_3_spATK_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Special Attack">
+                                <div id="member_3_spATK" style="width: 0px; height: 12px; background-color: blue;"></div>
+                            </div>
+                            <div id="member_3_dex_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Dexterity">
+                                <div id="member_3_dex" style="width: 0px; height: 12px; background-color: indigo;"></div>
+                            </div>
+                            <div id="member_3_spDEF_holder" style="display: flex; flex-direction: row; width: 109px; height: 8px; border: 1px outset white; border-radius: 8px; overflow: hidden;" title="Special Defense">
+                                <div id="member_3_spDEF" style="width: 0px; height: 12px; background-color: violet;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                <div style="width: 510px; height: 24px; background-color: #222; justify-content: flex-end; display: flex;">
+                    <div id="pause_coin_amount" style="margin: 3px; color: goldenrod; padding-right: 8px;">gil: </div>
+                </div>
+            </div>
+            <div id="deck_pause_display" style="display: none; flex-direction: row; width: 512px; height: 351px; border: 1px solid transparent; margin: 2px;">
+                <div id="deck_pause_left_panel" style="width: 256px; height: 351px; background-image: linear-gradient(#222, grey); display: flex; flex-direction: column;">
+                    <div style="display: flex; flex-direction: row; margin: 4px">
+                        <div style="display: flex; flex-direction: row;">
+                            <div id="member_1_deck_display" style="width: 48px; height: 48px; background-color: #222; margin-right: 4px; border-radius: 5px; border: 2px outset ghostwhite; cursor: pointer;"></div>
+                            <div id="member_2_deck_display" style="width: 48px; height: 48px; background-color: #222; margin-right: 4px; margin-right: 4px; border-radius: 5px; border: 2px outset ghostwhite; cursor: pointer;"></div>
+                            <div id="member_3_deck_display" style="width: 48px; height: 48px; background-color: #222; margin-right: 4px; margin-right: 4px; border-radius: 5px; border: 2px outset ghostwhite; cursor: pointer;"></div>
+                        </div>
+                        <div style="color: yellow; margin-left: 4px;">CP: </div>
+                        <div id="cp_used" style="color: yellow; margin-left: 4px;"></div>
+                        <div style="color: yellow">/</div>
+                        <div id="cp_max" style="color: yellow; margin-left: 4px;"></div>
+                    </div>
+                    <div id="equipped_deck" style="width: 100%; height: 323px; border: 1px solid transparent; overflow-y: scroll; display: flex; flex-wrap: wrap;"></div>
+                </div>
+                <div id="deck_pause_right_panel" style="width: 256px; height: 351px; background-image: linear-gradient(grey, #222); display: flex; flex-direction: column;">
+                    <div style="margin: 4px; color: yellow;">Card Inventory</div>
+                    <div id="users_card_inventory" style="width: 100%; height: 323px; border: 1px solid transparent; overflow-y: scroll; display: flex; flex-wrap: wrap;"></div>
+                </div>
+            </div>
+            <div id="equipment_pause_display" style="display: none; flex-direction: row; width: 512px; height: 351px; border: 1px solid transparent; margin: 2px;">
+                <div id="equip_panel_left" style="display: flex; flex-direction: column; width: 50%; height: 350px; border: transparent 1px solid; background-image: linear-gradient(#222, grey);">
+                    <div style="display: flex; flex-direction: row; width: 96%; justify-content: center; align-items: center;">
+                            <div id="member_1_equip_display" style="width: 48px; height: 48px; background-color: #222; margin-right: 4px; border-radius: 5px; border: 2px outset ghostwhite; cursor: pointer;"></div>
+                            <div id="member_2_equip_display" style="width: 48px; height: 48px; background-color: #222; margin-right: 4px; margin-right: 4px; border-radius: 5px; border: 2px outset ghostwhite; cursor: pointer;"></div>
+                            <div id="member_3_equip_display" style="width: 48px; height: 48px; background-color: #222; margin-right: 4px; margin-right: 4px; border-radius: 5px; border: 2px outset ghostwhite; cursor: pointer;"></div>
+                        </div>
+                    <div style="margin: 4px; color: yellow;">Equipment</div>
+                    <div id="user_equipment_inventory" style="display: flex; flex-direction: column; width: 255px; height: 322px; overflow-y: scroll; border: 1px solid transparent;"></div>
+                </div>
+            <div id="equip_panel_right" style="display: flex; flex-direction: column; width: 50%; height: 350px; border: transparent 1px solid; background-image: linear-gradient( grey, #222); justify-content: center; align-items: center;">
+                <div id="equip_slot_1" style="width: 96px; height: 120px; border: 3px inset white; border-radius: 4px; background-color: #222; color: ghostwhite; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 4px;">Slot 1<br>empty</div>
+                <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+                    <div id="equip_slot_2" style="width: 96px; height: 120px; border: 3px inset white; border-radius: 4px; background-color: #222; color: ghostwhite; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 4px;">Slot 2<br>empty</div>
+                    <div id="equip_slot_3" style="width: 96px; height: 120px; border: 3px inset white; border-radius: 4px; background-color: #222; color: ghostwhite; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 4px;">Slot 3<br>empty</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="map_mover" style="display: flex; flex-direction: column; position: absolute; background-color: ghostwhite; width: 240px; height: 260px; top: 12px; border: black 1px solid; left: 12px; overflow-y: scroll;">
+        <div style="display: flex; flex-direction: row;">
+            <div id="editor_camera" style="background-color: black; margin: 4px; color: white; cursor: pointer;">Editor</div>
+            <div id="game_camera" style="background-color: black; margin: 4px; color: white; cursor: pointer;">Game</div>
+        </div>
+        <div style="display: flex; margin: 8px;">X
+            <input id="map_x" type="number">
+        </div>
+        <div style="display: flex; margin: 8px;">Y
+            <input id="map_y" type="number">
+        </div>
+        <div style="display: flex; margin: 8px;" max="">Z
+            <input id="map_z" type="number">
+        </div>
+        <div style="display: flex; margin: 8px;">RX
+            <input id="map_rotate_x" type="number">
+        </div>
+        <div style="display: flex; margin: 8px;">RY
+            <input id="map_rotate_y" type="number">
+        </div>
+        <div style="display: flex; margin: 8px;">Rz
+            <input id="map_rotate_z" type="number">
+        </div>
+        <div id="reset_map" style="margin: 4px; padding: 7px; background-color: #222; color: ghostwhite;">RESET</div>
+        <div id="tile_holder" style="margin-top: 12px; width: 224px; height: 880px; border: 1px solid black;"></div>
+        <div style="margin-top:12px; width: 224px; height: 640px; border: 1px solid black; display: flex; flex-direction: column;">
+            <div id="object_preview" style="width: 64px; height: 64px; border: 1px solid black; margin: 8px;"></div>
+            <div style="display: flex; margin: 8px;">X
+                <input id="object_x" type="range" max="880" min="-180">
+            </div>
+            <div style="display: flex; margin: 8px;" max="880" min="-180">Y
+                <input id="object_y" type="range">
+            </div>
+            <div style="display: flex; margin: 8px;">Z
+                <input id="object_z" type="range">
+            </div>
+            <div style="display: flex; margin: 8px;">RX
+                <input id="object_rotate_x" type="range">
+            </div>
+            <div style="display: flex; margin: 8px;">RY
+                <input id="object_rotate_y" type="range">
+            </div>
+            <div style="display: flex; margin: 8px;">Rz
+                <input id="object_rotate_z" type="range">
+            </div>
+            <div style="display: flex; margin: 8px;">Scale
+                <input id="object_scale" type="range">
+            </div>
+            <div id="object_holder" style="width: 224px; height: auto;"></div>
+            <div id="delete_object" style="margin: 4px; padding: 7px; background-color: #222; color: ghostwhite;">Delete</div>
+            <div style="margin-top:12px; width: 224px; height: 640px; border: 1px solid black; display: flex; flex-direction: column;">
+                <div>Collisions</div>
+                <div style="display: flex; flex-direction: row; width: 100%; height: 120px; flex-wrap: wrap;">
+                    <div id="col" style="width: 32px; height: 32px; border: 3px solid red; text-align: center; color: red; align-items: center; display: flex; flex-direction: column; justify-content: center; margin: 4px; cursor: pointer;" title="collide">X</div>
+                    <div id="teleport" style="width: 32px; height: 32px; border: 3px solid blue; text-align: center; color: blue; align-items: center; display: flex; flex-direction: column; justify-content: center; margin: 4px; cursor: pointer;" title="teleport">T</div>
+                    <div id="water" style="width: 32px; height: 32px; border: 3px solid orange; text-align: center; color: orange; align-items: center; display: flex; flex-direction: column; justify-content: center; margin: 4px; cursor: pointer;" title="water">W</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+</html>
+<!-- <script src="./data_base.js" id="data_base"></script> -->
+<script src="./world_map.js"></script>
+<!-- <script src="./level_shared.js"></script>
+<script src="./game_play.js"></script>
+<script src="./play_test.js"></script> -->

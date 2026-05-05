@@ -29,6 +29,7 @@ function findSquadMember(slot){
     return current_squad.find(member => Number(member.slot) === Number(slot)) || null;
 }
 
+
 // ---------- initialize current player from squad slot 0 ----------
 function initializeCurrentUser(){
     const leadMember = findSquadMember(0);
@@ -475,9 +476,9 @@ function doesColorMatchAvatarType(def, avatar){
 
 function highlightActiveEquipMemberTab(){
     const tabs = [
-        { el: member_1_equip_display, slot: 0 },
-        { el: member_2_equip_display, slot: 1 },
-        { el: member_3_equip_display, slot: 2 }
+        { el: document.getElementById("member_1_equip_display"), slot: 0 },
+        { el: document.getElementById("member_2_equip_display"), slot: 1 },
+        { el: document.getElementById("member_3_equip_display"), slot: 2 }
     ];
 
     tabs.forEach((tab) => {
@@ -501,6 +502,10 @@ function highlightActiveEquipMemberTab(){
 }
 
 function initializeEquipMemberTabs(){
+    const member_1_equip_display = document.getElementById("member_1_equip_display");
+    const member_2_equip_display = document.getElementById("member_2_equip_display");
+    const member_3_equip_display = document.getElementById("member_3_equip_display");
+
     if(member_1_equip_display){
         member_1_equip_display.onclick = function(){
             current_member_equip_slot = 0;
@@ -657,9 +662,9 @@ function renderEquippedDeckForCurrentMember(){
 
 function highlightActiveDeckMemberTab(){
     const tabs = [
-        { el: member_1_deck_display, slot: 0 },
-        { el: member_2_deck_display, slot: 1 },
-        { el: member_3_deck_display, slot: 2 }
+        { el: document.getElementById("member_1_deck_display"), slot: 0 },
+        { el: document.getElementById("member_2_deck_display"), slot: 1 },
+        { el: document.getElementById("member_3_deck_display"), slot: 2 }
     ];
 
     tabs.forEach((tab) => {
@@ -683,6 +688,10 @@ function highlightActiveDeckMemberTab(){
 }
 
 function initializeDeckMemberTabs(){
+    const member_1_deck_display = document.getElementById("member_1_deck_display");
+    const member_2_deck_display = document.getElementById("member_2_deck_display");
+    const member_3_deck_display = document.getElementById("member_3_deck_display");
+
     if(member_1_deck_display){
         member_1_deck_display.onclick = function(){
             current_member_deck_slot = 0;
@@ -1430,6 +1439,34 @@ function syncSquadMembersToState(){
     });
 }
 
+const LANDMARK_X_TRIGGER_RANGE = 18;
+
+function checkRoomLandmarkCollision(){
+    if(roomLandmarkTransitioning) return;
+    if(!current_level || !Array.isArray(current_level.landmarks)) return;
+
+    let foundLandmark = null;
+
+    current_level.landmarks.forEach(landmark => {
+        const playerX = Number(player_state.x);
+        const landmarkX = Number(landmark.left);
+
+        if(Math.abs(playerX - landmarkX) <= LANDMARK_X_TRIGGER_RANGE){
+            foundLandmark = landmark;
+        }
+    });
+
+    if(foundLandmark){
+        if(!roomLandmarkPromptOpen){
+            openRoomLandmarkWindow(foundLandmark);
+        }
+    }else{
+        if(roomLandmarkPromptOpen){
+            closeRoomLandmarkWindow();
+        }
+    }
+}
+
 function levelUsesCamera(level){
     if(!level) return false;
     return level.size === "mid" || level.size === "large";
@@ -1465,6 +1502,10 @@ function syncPlayerToState(){
 }
 
 function updatePlayer(){
+    if(roomLandmarkTransitioning){
+        syncPlayerToState();
+        return;
+    }
     if(!current_level){
         player_state.moving = false;
         syncPlayerToState();
@@ -1501,6 +1542,8 @@ function updatePlayer(){
 function updateCamera(){
     if(!cube || !current_level) return;
 
+    cube.style.transformStyle = "preserve-3d";
+
     if(!levelUsesCamera(current_level)){
         camera_state.x = 0;
         cube.style.transform = `
@@ -1515,13 +1558,8 @@ function updateCamera(){
     let targetX = player_state.x - VIEW_WIDTH / 2;
     const maxCameraX = Math.max(0, bounds.roomWidth - VIEW_WIDTH);
 
-    if(targetX < 0){
-        targetX = 0;
-    }
-
-    if(targetX > maxCameraX){
-        targetX = maxCameraX;
-    }
+    if(targetX < 0) targetX = 0;
+    if(targetX > maxCameraX) targetX = maxCameraX;
 
     camera_state.x += (targetX - camera_state.x) * camera_state.followSpeed;
 
@@ -1532,10 +1570,17 @@ function updateCamera(){
 }
 
 function gameLoop(){
+    if(!roomGameLoopStarted) return;
+    if(npcDialogueOpen && isAnyMovementInput()){
+        closeNPCDialogue();
+    }
     updatePlayer();
+    checkRoomLandmarkCollision();
     updateSquadMemberStates();
     syncSquadMembersToState();
     updateCamera();
+    checkRoomRandomEncounter();
+
     requestAnimationFrame(gameLoop);
 }
 
@@ -1588,3 +1633,12 @@ if(controller_left){
     }, { passive: false });
 }
 
+
+function isAnyMovementInput(){
+    return (
+        input_state.left ||
+        input_state.right ||
+        input_state.up ||
+        input_state.down
+    );
+}

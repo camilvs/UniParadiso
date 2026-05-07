@@ -202,11 +202,11 @@
         </div>
         <div id="level_create_screen" class="level_create_screen">
             <div id="level_create_options" style="position: absolute; width: 120px; height: 120px; border: 1px solid black; background-color: ghostwhite; display: none; flex-direction: column; top: 36px; left: 12px;">
-                <div id="create_save" class="create_options">Save</div>
+                <div  id="export_levels_json" class="create_options">Export</div>
                 <div id="create_test" class="create_options">Test</div>
                 <div id="create_exit" class="create_options">Exit</div>
-                <div id="create_clear" class="create_options">Clear</div>
-                <div id="create_delete" class="create_options">Delete</div>
+                <div id="create_clear" class="create_options" style="display: none;">Clear</div>
+                <div id="create_delete" class="create_options" style="display: none">Delete</div>
             </div>
             <div id="level_create_nav" style="width: 98%; height: 72px; border: 1px solid black; margin-left: 8px; display: flex; flex-direction: column;">
                 <div style="width: 280px; height: 32px; border: 1px solid black; display: flex; flex-direction: row;">
@@ -221,6 +221,9 @@
                     <div id="treasure_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Chest</div>
                     <div id="enemy_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Encounters</div>
                     <div id="landmark_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Landmarks</div>
+                    <div id="camera_left" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Camera L</div>
+                    <div id="camera_center" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Camera C</div>
+                     <div id="camera_right" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Camera R</div>
                 </div>
             </div>
             <div id="create_level_holder" style="display: flex; flex-direction: row;">
@@ -415,37 +418,37 @@
             <div style="width: 180px; height: 160px; margin-left: 30px; border: 1px solid black; display: flex; flex-direction: column; justify-content: space-evenly;">
                 <div style="display: flex; flex-direction: row; justify-content: space-around;">
                     X
-                    <input id="asset_x" type="range">
+                    <input id="asset_x" type="number">
                     <output for="asset_x" id="asset_x_output"></output>
                 </div>
                 <div style="display: flex; flex-direction: row; justify-content: space-around;">
                     Y
-                    <input id="asset_y" type="range">
+                    <input id="asset_y" type="number">
                     <output for="asset_y" id="asset_y_output"></output>
                 </div>
                 <div style="display: flex; flex-direction: row; justify-content: space-around;">
                     Z
-                    <input id="asset_z" type="range" max="400" min="-300">
+                    <input id="asset_z" type="number" max="400">
                     <output for="asset_z" id="asset_z_output"></output>
                 </div>
                 <div style="display: flex; flex-direction: row; justify-content: space-around;">
                     Ry
-                    <input id="asset_ry" type="range" max="359" min="0">
+                    <input id="asset_ry" type="number" max="359" min="0">
                     <output for="asset_ry" id="asset_ry_output"></output>
                 </div>
                 <div style="display: flex; flex-direction: row; justify-content: space-around;">
                     Rx
-                    <input id="asset_rx" type="range" max="359" min="0">
+                    <input id="asset_rx" type="number" max="359" min="0">
                     <output for="asset_rx" id="asset_rx_output"></output>
                 </div>
                 <div style="display: flex; flex-direction: row; justify-content: space-around;">
                     Rz
-                    <input id="asset_rz" type="range" max="359" min="0">
+                    <input id="asset_rz" type="number" max="359" min="0">
                     <output for="asset_rz" id="asset_rz_output"></output>
                 </div>
                 <div style="display: flex; flex-direction: row; justify-content: space-around;">
                     SC
-                    <input id="asset_scale" type="range" max="4" min="1" value="1">
+                    <input id="asset_scale" type="number" max="4" min="1" value="1">
                     <output for="asset_scale" id="asset_scale_output"></output>
                 </div>
                 <div id="delete_object" style="text-align: center; background-color: #222; color: ghostwhite; cursor: pointer">Delete</div>
@@ -598,10 +601,31 @@
                 <div id="content_asset_holder" style="width: 292px; height: 136px; background-image: linear-gradient(#222, rgb(71, 71, 71)); margin-left: 2px; overflow-y: scroll; display: flex; flex-direction: row; flex-wrap: wrap;"></div>
                 <div id="delete_current_treasure" style=" width: 292; height: 24px; background-color: #222; margin-left: 2px; text-align: center; color: ghostwhite; cursor: pointer; margin-top: 2px;">Delete Treasure</div>
         </div>
-        <div id="set_landmark_window" style="position: absolute; top: 0px; left: 0px; height: 280px; width: 240px; background-color: ghostwhite; border: 1px solid black; display: none; flex-direction: column;">
+        <div id="set_landmark_window" style="position: absolute; top: 0px; left: 0px; height: 420px; width: 240px; background-color: ghostwhite; border: 1px solid black; display: none; flex-direction: column;">
             <div style=" width: 99%; height: 32px; margin-left: 1px; display: flex; flex-direction: row;">
                 <div id="landmark_header" style="height: 27px; width: 208px; background-color: ghostwhite; border-bottom: grey 1px solid; cursor: pointer; margin: 0px 4px 0px 0px" title="drag to move"></div>
                 <div id="close_landmark_window" style="width: 26px; height: 26px; border: 1px solid black; justify-content: center; display: flex; flex-direction: column; text-align: center; cursor: pointer;">X</div>
+            </div>
+            <div id="exit_options_holder" style="width: 96%; display: flex; flex-direction: column; margin: 4px;">
+                <select id="exit_type" style="margin: 4px;">
+                    <option value="">Choose Exit type</option>
+                    <option value="left">Left</option>
+                    <option value="up">Up</option>
+                    <option value="right">Right</option>
+                    <option value="down">Down</option>
+                    <option value="teleport">Teleport</option>
+                </select>
+                <select id="destination_type" style="margin: 4px;">
+                    <option value="">Choose Destination Type</option>
+                    <option value="to_world_map">World Map</option>
+                    <option value="to_level">Level</option>
+                </select>
+                <select id="destination_to" style="margin: 4px;">
+                    <option value="">Choose Destination</option>
+                </select>
+                <select id="destination_landmarks" style="margin: 4px;">
+                    <option value="">Choose Landmark</option>
+                </select>
             </div>
             <div style="width: 235px; height: 120px; border: 1px solid transparent; margin-left: 2px; display: flex; flex-direction: row;" >
                 <div id="landmark_image_preview" style="width: 114px; height: 114px; background-color: aliceblue; border: 1px solid black; margin: 2px; background-image: url(./images/landmark_0.png); background-size: contain; background-position: center; background-repeat: no-repeat;"></div>
@@ -686,6 +710,10 @@
     var level_desciption_input = document.getElementById("level_desciption_input");
     var create_level_input = document.getElementById("create_level_input");
     var exit_level_stats = document.getElementById("exit_level_stats");
+    //camera
+    var camera_left = document.getElementById("camera_left");
+    var camera_center = document.getElementById("camera_center");
+    var camera_right = document.getElementById("camera_right");
     //level create 
     var level_nav_name = document.getElementById("level_nav_name");
     var current_level = null;
@@ -693,7 +721,6 @@
     //level create options menu
     var level_create_options = document.getElementById('level_create_options');
     //save created level
-    var create_save = document.getElementById("create_save");
     //test created level
     var create_test = document.getElementById('create_test');
     //exit level creation
@@ -896,6 +923,10 @@
     let set_landmark = document.getElementById('set_landmark');
     let delete_landmark = document.getElementById('delete_landmark');
     let landmark_asset_preview = document.getElementById('landmark_asset_preview');
+    let destination_landmarks = document.getElementById("destination_landmarks");
+    let exit_type = document.getElementById("exit_type");
+    let destination_type = document.getElementById("destination_type");
+    let destination_to = document.getElementById("destination_to");
     //screen array
     var screens = [start_window, level_stats, level_create_screen,load_level_screen];
     create_new_level.onclick = function(){
@@ -912,7 +943,7 @@
         showScreen(start_window);
     }
     //pointer on hover array
-    var options_arr = [create_new_level,load_level,exit_level,create_level_input,exit_level_stats, close_error, create_save, create_test, create_exit, create_clear, create_delete, delete_confirm_no, delete_confirm_yes,delete_object,delete_object_no, delete_object_yes,
+    var options_arr = [create_new_level,load_level,exit_level,create_level_input,exit_level_stats, close_error, create_test, create_exit, create_clear, create_delete, delete_confirm_no, delete_confirm_yes,delete_object,delete_object_no, delete_object_yes,
         move_portrait_left, move_portrait_up, move_portrait_down, move_portrait_right, move_portrait_flip,delete_current_treasure, delete_enemy,see_room_encounters,
     ];
     //hover funtion
@@ -1005,10 +1036,10 @@
     const roomWidth = cols * 120;
 
     return {
-        xMin: -60,
-        xMax: roomWidth - 70,
-        yMin: 528,
-        yMax: 920
+        xMin: -240,
+        xMax: roomWidth + 120,
+        yMin: 0,
+        yMax: 1920
     };
 }
 
@@ -1037,7 +1068,7 @@ function applyLevelSliderRanges(level){
             Object.assign(levels_box.style,{
                 width:'255px', height: 'auto',borderBottom: '1px solid black', display: 'flex', flexDirection: 'column', marginBottom: '4px'
             });
-            levels_box.innerHTML = level.name+"| size: "+level.size+"|<br>Description: "+level.desc;
+            levels_box.innerHTML = level.name+"| size: "+level.size+"|<br>Description: "+level.id;
             load_level_holder.appendChild(levels_box);
             //buttons
             var load_button_holder = document.createElement('div');
@@ -1438,7 +1469,7 @@ function applyLevelSliderRanges(level){
         });
     }
     //tile asset on click
-    const total_tiles = 96;
+    const total_tiles = 136;
     let selected_tile = null;
 
     tile_asset.onclick = () =>{
@@ -1499,7 +1530,7 @@ function applyLevelSliderRanges(level){
     //background nav on click
     const total_backgrounds = 13;
     let selected_background = null;
-    const total_objects = 29;
+    const total_objects = 146;
     let selected_object = null;
     asset_preview.addEventListener('click',(e)=>{
         //backgrounds
@@ -1518,7 +1549,7 @@ function applyLevelSliderRanges(level){
                 current_level.background = selected_background;
                 saveLevel();
             }
-            console.log("selected background:"+selected_background);
+            // console.log("selected background:"+selected_background);
         }
         //tiles
             if(e.target.classList.contains('tile_preview')){
@@ -1530,7 +1561,7 @@ function applyLevelSliderRanges(level){
                 e.target.style.outline = '2px solid yellow';
 
                 selected_tile = e.target.dataset.id;
-                console.log("selected tile:"+selected_tile);
+                // console.log("selected tile:"+selected_tile);
             }
         //objects
             if(e.target.classList.contains('object_preview')){
@@ -1579,10 +1610,11 @@ function applyLevelSliderRanges(level){
                 width: '120px',
                 height: '120px',
                 backgroundImage: `url(./images/object${object}.png)`,
-                backgroundSize: 'cover',
+                backgroundSize: 'contain',
                 position: 'absolute',
                 top: '750px',
-                left: '230px'
+                left: '230px',
+                backgroundRepeat: "no-repeat"
             });
 
             cube.appendChild(new_object);
@@ -2327,6 +2359,12 @@ cube.addEventListener('click', (e) => {
         level.treasure_boxes = Array.isArray(level.treasure_boxes) ? level.treasure_boxes : [];
         level.enemy_encounters = Array.isArray(level.enemy_encounters) ? level.enemy_encounters : [];
         level.landmarks = Array.isArray(level.landmarks) ? level.landmarks : [];
+
+        level.landmarks.forEach(landmark => {
+            landmark.exit_type ??= "";
+            landmark.destination_type ??= "";
+            landmark.destination_to ??= "";
+        });
         return level;
     }
     //delete level
@@ -3076,7 +3114,7 @@ function openChest(t_id){
 
     const chest = current_level.treasure_boxes.find(t => t.t_id === t_id);
 
-    if(chest_opened){
+    if(chest.opened){
         //chest_empty logic
         showMessage("Empty Treasure Chest...");
         return;
@@ -3088,7 +3126,7 @@ function openChest(t_id){
     chest.opened = true;
 
     //change treasure_sprite
-    updateVisual(t_id);
+    updateChestVisual(t_id);
 
     saveLevel();
 }
@@ -3121,8 +3159,14 @@ function getContentByType(type,id){
         trap: traps
 
     };
+    //replace with .find
+    const source = sources[type];
 
-    return sources[type]?.[id];
+    if(!source) return null;
+
+    return source.find(item =>
+        Number(item.id) === Number(id)
+    ) || null;
 
 }
     //encounters
@@ -3494,7 +3538,7 @@ function exitDeleteMode(){
         encounter_asset_window.style.display = 'none';
         encounters_set_rate.style.display = 'flex';
 
-        console.log(current_level.enemy_encounters);
+        // console.log(current_level.enemy_encounters);
     };
 
     //close set_encounter_window 
@@ -3640,6 +3684,20 @@ function renderSavedEncounters(){
 
         encounter_holder.appendChild(card);
 
+        function getAllEditorLevels(){
+    try{
+        const saved = JSON.parse(localStorage.getItem("levels") || "[]");
+
+        if(Array.isArray(saved) && saved.length > 0){
+            return saved;
+        }
+    }catch(err){
+        console.warn("Could not parse saved levels:", err);
+    }
+
+    return Array.isArray(levels) ? levels : [];
+}
+
         let encounter_rate_holder = document.createElement('select');
         slot_holder.appendChild(encounter_rate_holder);
 
@@ -3714,10 +3772,35 @@ function renderSavedEncounters(){
         };
         //test encounter 
         let test_encounter = document.createElement('div');
-            card.appendChild(test_encounter);
-            Object.assign(test_encounter.style,{ width: '96%', height: '16px', backgroundColor: '#222', color: 'ghostwhite', textAlign: 'center', cursor:'pointer', marginTop: '4px'});
-            onHover(test_encounter,'yellow','ghostwhite');
-            test_encounter.textContent = 'Test Encounter';
+                card.appendChild(test_encounter);
+                Object.assign(test_encounter.style,{ width: '96%', height: '16px', backgroundColor: '#222', color: 'ghostwhite', textAlign: 'center', cursor:'pointer', marginTop: '4px'});
+                onHover(test_encounter,'yellow','ghostwhite');
+                test_encounter.textContent = 'Test Encounter';
+                test_encounter.onclick = () => {
+            if(!current_level) return;
+
+            const encounterToTest = {
+                level_id: current_level.id,
+                level_name: current_level.name || "Test Level",
+                encounter_index: index,
+                encounter_data: {
+                    front_position: encounter.front_position,
+                    mid_1: encounter.mid_1,
+                    mid_2: encounter.mid_2,
+                    back_1: encounter.back_1,
+                    back_2: encounter.back_2,
+                    back_3: encounter.back_3,
+                    rate: encounter.rate || "common"
+                }
+            };
+
+            localStorage.setItem(
+                "battle_test_encounter",
+                JSON.stringify(encounterToTest)
+            );
+
+            window.location.href = "./battle_test.html";
+        };
     });
 }
     function loadEncounterForEditing(index){
@@ -3751,6 +3834,7 @@ function renderSavedEncounters(){
         encounter_asset_window.style.display = 'flex';
     }
     //LANDMARKS
+
     landmark_asset.onclick = () =>{
         set_landmark_window.style.display = 'flex';
     };
@@ -3758,7 +3842,54 @@ function renderSavedEncounters(){
     let current_landmark = null;
     let selected_landmark_sprite = 0;
 
-    //landmark id helper
+    function getSavedLevelsSafe(){
+        try{
+            const saved = JSON.parse(localStorage.getItem("levels") || "[]");
+            return Array.isArray(saved) ? saved : [];
+        }catch(err){
+            console.warn("Could not read saved levels:", err);
+            return [];
+        }
+    }
+
+    function populateLandmarkDestinationOptions(){
+        destination_to.innerHTML = `<option value="">Choose Destination</option>`;
+        destination_landmarks.innerHTML = `<option value="">Choose Landmark</option>`;
+
+        if(destination_type.value !== "to_level") return;
+
+        const savedLevels = getSavedLevelsSafe();
+
+        savedLevels.forEach(level => {
+            const option = document.createElement("option");
+            option.value = String(level.id);
+            option.textContent = `${level.id}: ${level.name || "Unnamed Level"}`;
+            destination_to.appendChild(option);
+        });
+    }
+
+    function populateDestinationLandmarks(){
+        destination_landmarks.innerHTML = `<option value="">Choose Landmark</option>`;
+
+        if(destination_type.value !== "to_level") return;
+        if(!destination_to.value) return;
+
+        const savedLevels = getSavedLevelsSafe();
+
+        const level = savedLevels.find(l =>
+            String(l.id) === String(destination_to.value)
+        );
+
+        if(!level || !Array.isArray(level.landmarks)) return;
+
+        level.landmarks.forEach(landmark => {
+            const option = document.createElement("option");
+            option.value = String(landmark.landmark_id);
+            option.textContent = `Landmark ${landmark.landmark_id}`;
+            destination_landmarks.appendChild(option);
+        });
+    }
+
     function nextLandmarkPid(level){
         if(!level || !Array.isArray(level.landmarks) || level.landmarks.length === 0){
             return 1;
@@ -3766,12 +3897,27 @@ function renderSavedEncounters(){
         return Math.max(...level.landmarks.map(l => Number(l.landmark_id) || 0)) + 1;
     }
 
-    //current landmark record
     function getCurrentLandmarkRecord(){
         if(!current_level || !current_landmark) return null;
 
         const landmarkId = Number(current_landmark.dataset.landmark_id);
         return current_level.landmarks.find(l => l.landmark_id === landmarkId) || null;
+    }
+
+    function reloadCurrentLandmarkRouteFields(){
+        const rec = getCurrentLandmarkRecord();
+        if(!rec) return;
+
+        exit_type.value = rec.exit_type || "";
+        destination_type.value = rec.destination_type || "";
+
+        populateLandmarkDestinationOptions();
+
+        destination_to.value = rec.destination_to || "";
+
+        populateDestinationLandmarks();
+
+        destination_landmarks.value = rec.destination_landmark_id || "";
     }
 
     //place landmark
@@ -3807,7 +3953,12 @@ set_landmark.onclick = () => {
         landmark_id: landmark_id,
         sprite_id: Number(selected_landmark_sprite),
         left: 230,
-        top: 750
+        top: 750,
+
+        exit_type: exit_type.value || "",
+        destination_type: destination_type.value || "",
+        destination_to: destination_to.value || "",
+        destination_landmark_id: destination_landmarks.value || ""
     });
 
     landmark_x.value = 230;
@@ -3817,8 +3968,12 @@ set_landmark.onclick = () => {
     saveCurrentLevel();
     renderLandmarks();
 
+    current_landmark = cube.querySelector(
+        `.landmark[data-landmark_id="${landmark_id}"]`
+    );
+
     set_landmark_window.style.display = 'flex';
-};
+    };
 
     //move current landmark
     landmark_x.addEventListener('input', function(){
@@ -3827,6 +3982,7 @@ set_landmark.onclick = () => {
         current_landmark.style.left = `${this.value}px`;
 
         const rec = getCurrentLandmarkRecord();
+
         if(rec){
             rec.left = Number(this.value);
             saveLevel();
@@ -3846,6 +4002,10 @@ set_landmark.onclick = () => {
             saveCurrentLevel();
         }
     });
+
+    close_landmark_window.onclick = ()=>{
+        set_landmark_window.style.display = "none";
+    }
 
     //change landmark image
     function setLandmarkImage(spriteId){
@@ -3886,6 +4046,9 @@ set_landmark.onclick = () => {
         landmark_y.value = parseInt(landmarkEl.style.top) || 0;
 
         selected_landmark_sprite = Number(landmarkEl.dataset.id) || 0;
+        const rec = getCurrentLandmarkRecord();
+
+       reloadCurrentLandmarkRouteFields();
     });
 
     //delete landmark
@@ -3908,10 +4071,7 @@ set_landmark.onclick = () => {
         saveCurrentLevel();
     };
 
-    //close editor
-    close_landmark_window.onclick = () => {
-        set_landmark_window.style.display = 'none';
-    };
+
 
     //render saved landmarks
     function renderLandmarks(){
@@ -3938,7 +4098,10 @@ set_landmark.onclick = () => {
                 backgroundRepeat: 'no-repeat',
                 cursor: 'pointer'
             });
-
+            el.dataset.exit_type = landmark.exit_type || "";
+            el.dataset.destination_type = landmark.destination_type || "";
+            el.dataset.destination_to = landmark.destination_to || "";
+            el.dataset.destination_landmark_id = landmark.destination_landmark_id || "";
             cube.appendChild(el);
         });
     }
@@ -3968,9 +4131,12 @@ set_landmark.onclick = () => {
                 setLandmarkImage(i);
             };
         }
-        }
+
+    }
+
         buildLandmarkAssetPreview();
         setLandmarkImage(0);
+
 
 function setCardVisual(el, imagePath, fallbackColor){
     const img = new Image();
@@ -4050,7 +4216,7 @@ function setCardVisual(el, imagePath, fallbackColor){
                 left: obj.left+'px',
                 top: obj.top+'px',
                 backgroundImage: `url(./images/object${obj.sprite_id}.png)`,
-                backgroundSize: 'cover',
+                backgroundSize: 'contain',
                 backgroundPosition: 'center', 
                 backgroundRepeat: 'no-repeat',
             });
@@ -4129,6 +4295,41 @@ function setCardVisual(el, imagePath, fallbackColor){
 
     }
 
+    destination_type.addEventListener("change", () => {
+    populateLandmarkDestinationOptions();
+});
+
+destination_to.addEventListener("change", () => {
+    populateDestinationLandmarks();
+});
+
+//camera function
+camera_left.onclick =()=>{
+    cube.style.transform = "rotateY(45deg)";
+}
+camera_center.onclick =()=>{
+    cube.style.transform = "rotateY(0deg)";
+}
+camera_right.onclick =()=>{
+    cube.style.transform = "rotateY(-45deg)";
+}
+
+document.getElementById("export_levels_json").onclick = function(){
+    const levels = JSON.parse(localStorage.getItem("levels") || "[]");
+
+    const json = JSON.stringify(levels, null, 2);
+
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "levels.json";
+    a.click();
+
+    URL.revokeObjectURL(url);
+};
+
     window.onload = () =>{
         loadSavedLevels();
         loadCurrentLevel();
@@ -4143,4 +4344,5 @@ function setCardVisual(el, imagePath, fallbackColor){
         generateTiles();
         
     };
+
 </script>

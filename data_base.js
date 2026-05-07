@@ -2,8 +2,58 @@
 let users = [
     {
         id: 0,
-        username: "Tahdah001",
-        rank: "F",
+        username: "",
+        rank: "E",
+        rank_exp: 0,
+        currency: {
+            gil: 0
+        },
+        profile: {
+            title: "",
+            created_at: ""
+        },
+    },
+];
+
+const DEFAULT_NEW_SAVE = {
+        intro_flags: {
+        opening_cutscene_done: false
+    },
+    slot: 1,
+    file_name: "File 1",
+    created_at: Date.now(),
+    updated_at: Date.now(),
+
+    scene: "room", 
+    // or "room"
+
+    room_level_id: 10,
+
+    world: {
+        x: 300,
+        y: 300,
+        z: 16,
+        facing: "right"
+    },
+
+    room: {
+        level_id: 10,
+        x: 300,
+        top: 300,
+        z: 0,
+        facing: "right"
+    },
+
+    opened_chests: [],
+    discovered_landmarks: [],
+    defeated_bosses: [],
+    inventory: {},
+    gil: 0,
+    user: {
+        id: 0,
+        username: "",
+        rank: "E",
+        rank_exp: 0,
         currency: {
             gil: 0
         },
@@ -12,7 +62,7 @@ let users = [
             created_at: ""
         }
     }
-];
+};
 
 let avatars = [
     {
@@ -21,8 +71,46 @@ let avatars = [
         type: "Red",
         image_portrait: "spr_character_0_dialogue.png",
         image_idle: "spr_character_idle_0.gif",
-        image_walk: "spr_character_0_walk.gif"
-    }
+        image_walk: "spr_character_0_walk.gif",
+        image_battle_idle: "spr_character_0_up.png",
+        image_battle_hurt: "",
+        image_battle_results: "spr_character_idle_0.gif",
+        image_world_up: "spr_character_0_up.png",
+        image_world_down: "spr_character_idle_0.gif",
+        image_world_left: "spr_character_0_walk.gif",
+        image_world_right: "spr_character_0_walk.gif",
+        image_laying: "spr_character_0_laying.png"
+    },
+    {
+        id: 1,
+        name: "Rikki Ravager",
+        type: "Orange",
+        image_portrait: "spr_character_1_dialogue.png",
+        image_idle: "spr_character_idle_1.png",
+        image_walk: "spr_character_1_walk.gif",
+        image_battle_idle: "spr_character_1_up.png",
+        image_battle_hurt: "",
+        image_battle_results: "spr_character_idle_1.png",
+        image_world_up: "spr_character_1_up.png",
+        image_world_down: "spr_character_idle_1.png",
+        image_world_left: "spr_character_1_walk.gif",
+        image_world_right: "spr_character_1_walk.gif",
+    },
+        {
+        id: 2,
+        name: "Edith Eigh",
+        type: "Yellow",
+        image_portrait: "spr_character_2_dialogue.png",
+        image_idle: "spr_character_idle_2.png",
+        image_walk: "spr_character_2_walk.gif",
+        image_battle_idle: "spr_character_2_up.png",
+        image_battle_hurt: "",
+        image_battle_results: "spr_character_idle_2.png",
+        image_world_up: "spr_character_2_up.png",
+        image_world_down: "spr_character_idle_2.png",
+        image_world_left: "spr_character_2_walk.gif",
+        image_world_right: "spr_character_2_walk.gif",
+    },
 ];
 
 let users_avatars = [
@@ -31,6 +119,7 @@ let users_avatars = [
         user_id: 0,
         avatar_id: 0,
         avatar_level: 1,
+        avatar_exp: 0,
         base_stats: {
             hearts: 3,
             def: 12,
@@ -40,14 +129,53 @@ let users_avatars = [
             spATK: 0,
             dex: 0,
             spDEF: 2,
-            cp: 7
+            cp: 7,
+            slots: 3,
         }
-    }
+    },
+        {
+        id: 1,
+        user_id: 0,
+        avatar_id: 1,
+        avatar_level: 1,
+        avatar_exp: 0,
+        base_stats: {
+            hearts: 3,
+            def: 4,
+            res: 12,
+            atk: 1,
+            eva: 0,
+            spATK: 3,
+            dex: 0,
+            spDEF: 4,
+            cp: 7,
+            slots: 3,
+        }
+    },
+            {
+        id: 2,
+        user_id: 0,
+        avatar_id: 2,
+        avatar_level: 1,
+        avatar_exp: 0,
+        base_stats: {
+            hearts: 3,
+            def: 0,
+            res: 2,
+            atk: 12,
+            eva: 0,
+            spATK: 0,
+            dex: 3,
+            spDEF: 0,
+            cp: 7,
+            slots: 3,
+        }
+    },
 ];
 let current_squad = [
     {slot: 0, user_id: 0, avatar_id: 0, ready: true},
-    {slot: 1, user_id: null, avatar_id: null, ready: false},
-    {slot: 2, user_id: null, avatar_id: null, ready: false}
+    {slot: 1, user_id: 0, avatar_id: null, ready: true},
+    {slot: 2, user_id: 0, avatar_id: null, ready: true}
 ];
 
 const rank_reload_turns = {
@@ -60,6 +188,24 @@ const rank_reload_turns = {
     S: 7,
     SS: 7
 };
+
+const avatar_level_requirements = [
+    { level: 1, exp_to_next: 100 },
+    { level: 2, exp_to_next: 125 },
+    { level: 3, exp_to_next: 160 },
+    { level: 4, exp_to_next: 200 },
+    { level: 5, exp_to_next: 260 },
+];
+
+const rank_requirements = [
+    { rank: "F", next_rank: "E", total_exp_required: 500 },
+    { rank: "E", next_rank: "D", total_exp_required: 1400 },
+    { rank: "D", next_rank: "C", total_exp_required: 3000 },
+    { rank: "C", next_rank: "B", total_exp_required: 6000 },
+    { rank: "B", next_rank: "A", total_exp_required: 11000 },
+    { rank: "A", next_rank: "S", total_exp_required: 18000 },
+    { rank: "S", next_rank: "SS", total_exp_required: 30000 },
+];
     
 let weapons = [
     {
@@ -157,7 +303,7 @@ let weapons = [
         name: "Wooden Club",
         desc: "Though it is wooden, it really hurts.",
         image: "weapon_6.png",
-        color: "yellow",
+        color: "red",
         rarity: "common",
         cp_cost: 1,
         reload_type: "rank_based",
@@ -317,7 +463,7 @@ let weapons = [
         stat_requirements: { atk: 11 },
         effects: { def: 4, res: 2, atk: 11, eva: 1, spATK: 0, dex: 2, spDEF: 0 }
     },
-    {
+    { 
         id: 17,
         name: "Ye Old Blapper",
         desc: "One shot in the chamber, great damage if it hits.",
@@ -337,15 +483,15 @@ let weapons = [
         name: "Leather Whip",
         desc: "Crack that whip.",
         image: "weapon_18.png",
-        color: "green",
+        color: "orange",
         rarity: "common",
         cp_cost: 1,
         reload_type: "rank_based",
         use_phase: "battle",
         target_type: "enemy_single",
         uses_per_battle: null,
-        stat_requirements: { dex: 7, eva: 6 },
-        effects: { def: 1, res: 2, atk: 3, eva: 6, spATK: 0, dex: 7, spDEF: 0 }
+        stat_requirements: { res: 7},
+        effects: { def: 1, res: 14, atk: 3, eva: 6, spATK: 0, dex: 7, spDEF: 0 }
     },
     {
         id: 19,
@@ -423,6 +569,7 @@ let weapons = [
         effects: { def: 1, res: 1, atk: 4, eva: 5, spATK: 0, dex: 6, spDEF: 0 }
     }
 ];
+
 let equipments = [
     {
         id: 0,
@@ -698,6 +845,7 @@ let items = [
         durability: null,
         effects: { type: "heart", amount: 1 },
         cp_cost: 1,
+        target_type: "ally_single"
     },
     {
         id: 1,
@@ -713,6 +861,7 @@ let items = [
         durability: null,
         effects: { type: "cooldown", amount: -1 },
         cp_cost: 1,
+        target_type: "ally_single"
     },
     {
         id: 2,
@@ -728,6 +877,7 @@ let items = [
         durability: null,
         effects: { type: "cleanse", amount: 1 },
         cp_cost: 1,
+        target_type: "ally_single"
     },
     {
         id: 3,
@@ -743,6 +893,7 @@ let items = [
         durability: null,
         effects: { type: "barrier", amount: 2 },
         cp_cost: 1,
+        target_type: "ally_single"
     },
     {
         id: 4,
@@ -758,6 +909,7 @@ let items = [
         durability: null,
         effects: { type: "regen", amount: 0.2 },
         cp_cost: 1,
+        target_type: "ally_single"
     },
     {
         id: 5,
@@ -773,6 +925,7 @@ let items = [
         durability: null,
         effects: { type: "revive", amount: 1 },
         cp_cost: 3,
+        target_type: "ally_single"
     },
 
     // BASIC FIELD ITEM
@@ -788,7 +941,8 @@ let items = [
         consume_on_use: true,
         reload_type: "none",
         durability: 1,
-        effects: { type: "recovery", amount: 1 }
+        effects: { type: "recovery", amount: 1 },
+        target_type: "self"
     },
 
     // MID BATTLE ITEMS
@@ -806,6 +960,7 @@ let items = [
         durability: null,
         effects: { type: "heart", amount: 2 },
         cp_cost: 2,
+        target_type: "ally_single"
     },
     {
         id: 8,
@@ -821,6 +976,7 @@ let items = [
         durability: null,
         effects: { type: "cooldown", amount: -2 },
         cp_cost: 2,
+        target_type: "ally_single"
     },
     {
         id: 9,
@@ -836,6 +992,7 @@ let items = [
         durability: null,
         effects: { type: "cleanse", amount: 2 },
         cp_cost: 2,
+        target_type: "ally_single"
     },
     {
         id: 10,
@@ -851,6 +1008,7 @@ let items = [
         durability: null,
         effects: { type: "barrier", amount: 2 },
         cp_cost: 2,
+        target_type: "ally_single"
     },
     {
         id: 11,
@@ -866,6 +1024,7 @@ let items = [
         durability: null,
         effects: { type: "regen", amount: 0.5 },
         cp_cost: 2,
+        target_type: "ally_single"
     },
     {
         id: 12,
@@ -881,6 +1040,7 @@ let items = [
         durability: null,
         effects: { type: "revive", amount: 2 },
         cp_cost: 3,
+        target_type: "ally_single"
     },
 
     // MID FIELD ITEM
@@ -896,7 +1056,8 @@ let items = [
         consume_on_use: false,
         reload_type: "none",
         durability: 2,
-        effects: { type: "recovery", amount: 2 }
+        effects: { type: "recovery", amount: 2 },
+        target_type: "self"
     },
 
     // HIGH BATTLE ITEMS
@@ -914,6 +1075,7 @@ let items = [
         durability: null,
         effects: { type: "heart", amount: 3 },
         cp_cost: 3,
+        target_type: "ally_single"
     },
     {
         id: 15,
@@ -929,6 +1091,7 @@ let items = [
         durability: null,
         effects: { type: "cooldown", amount: -3 },
         cp_cost: 3,
+        target_type: "ally_single"
     },
     {
         id: 16,
@@ -944,6 +1107,7 @@ let items = [
         durability: null,
         effects: { type: "cleanse", amount: 3 },
         cp_cost: 3,
+        target_type: "ally_single"
     },
     {
         id: 17,
@@ -959,6 +1123,7 @@ let items = [
         durability: null,
         effects: { type: "barrier", amount: 3 },
         cp_cost: 3,
+        target_type: "ally_single"
     },
     {
         id: 18,
@@ -974,6 +1139,7 @@ let items = [
         durability: null,
         effects: { type: "regen", amount: 1.0 },
         cp_cost: 3,
+        target_type: "ally_single"
     },
     {
         id: 19,
@@ -989,6 +1155,7 @@ let items = [
         durability: null,
         effects: { type: "revive", amount: 3 },
         cp_cost: 4,
+        target_type: "ally_single"
     },
 
     // HIGH FIELD ITEM
@@ -1004,7 +1171,8 @@ let items = [
         consume_on_use: false,
         reload_type: "none",
         durability: 3,
-        effects: { type: "recovery", amount: 3 }
+        effects: { type: "recovery", amount: 3 },
+        target_type: "self"
     },
 
     // EPIC BATTLE ITEMS
@@ -1022,6 +1190,7 @@ let items = [
         durability: null,
         effects: { type: "heart", amount: "full" },
         cp_cost: 4,
+        target_type: "ally_all"
     },
     {
         id: 22,
@@ -1037,6 +1206,7 @@ let items = [
         durability: null,
         effects: { type: "cooldown", amount: "reset_all" },
         cp_cost: 4,
+        target_type: "ally_all"
     },
     {
         id: 23,
@@ -1052,6 +1222,7 @@ let items = [
         durability: null,
         effects: { type: "cleanse", amount: "all" },
         cp_cost: 4,
+        target_type: "ally_all"
     },
     {
         id: 24,
@@ -1067,6 +1238,7 @@ let items = [
         durability: null,
         effects: { type: "barrier", amount: "3turn" },
         cp_cost: 4,
+        target_type: "ally_all"
     },
     {
         id: 25,
@@ -1082,6 +1254,7 @@ let items = [
         durability: null,
         effects: { type: "regen", amount: "max" },
         cp_cost: 4,
+        target_type: "ally_all"
     },
     {
         id: 26,
@@ -1097,6 +1270,7 @@ let items = [
         durability: null,
         effects: { type: "revive", amount: 4 },
         cp_cost: 5,
+        target_type: "ally_all"
     },
 
     // LEGENDARY FIELD ITEM
@@ -1112,7 +1286,8 @@ let items = [
         consume_on_use: false,
         reload_type: "none",
         durability: 4,
-        effects: { type: "recovery", amount: 4 }
+        effects: { type: "recovery", amount: 4 },
+        target_type: "self"
     }
 ];
 
@@ -1126,18 +1301,23 @@ let manifest = [
         image: "manifest_0.png",
         color: "red",
         rarity: "common",
+        rank: "E",
         cp_cost: 1,
         use_phase: "battle",
         reload_type: "rank_based",
         uses_per_battle: null,
         target_type: "enemy_all",
+        target_stat: "def",
         stat_requirements: { def: 10 },
         effects: {
+            type: "manifest_damage",
             damage_type: "earth",
-            d_output: 0.40,
-            perk_type: "def_down",
-            p_output: 0.05,
-            special: null
+            amount: 0.30,
+            stat_source: "def",
+            perk: {
+                type: "def_down",
+                amount: 0.05
+            }
         }
     },
     {
@@ -1147,18 +1327,23 @@ let manifest = [
         image: "manifest_1.png",
         color: "orange",
         rarity: "common",
+        rank: "E",
         cp_cost: 1,
         use_phase: "battle",
         reload_type: "rank_based",
         uses_per_battle: null,
         target_type: "enemy_all",
+        target_stat: "def",
         stat_requirements: { res: 10 },
         effects: {
+            type: "manifest_damage",
             damage_type: "water",
-            d_output: 0.40,
-            perk_type: "regen",
-            p_output: 0.05,
-            special: null
+            amount: 0.40,
+            stat_source: "res",
+            perk: {
+                type: "regen",
+                amount: 0.05
+            }
         }
     },
     {
@@ -1168,18 +1353,20 @@ let manifest = [
         image: "manifest_2.png",
         color: "yellow",
         rarity: "common",
+        rank: "E",
         cp_cost: 1,
         use_phase: "battle",
         reload_type: "rank_based",
         uses_per_battle: null,
         target_type: "enemy_single",
+        target_stat: "atk",
         stat_requirements: { atk: 10 },
         effects: {
+            type: "manifest_damage",
             damage_type: "fire",
-            d_output: 0.40,
-            perk_type: "atk_down",
-            p_output: 0.05,
-            special: null
+            amount: 0.40,
+            stat_source: "atk",
+            perk: null,
         }
     },
     {
@@ -1583,7 +1770,12 @@ let skills = [
         uses_per_battle: null,
         target_type: "self",
         stat_requirements: { def: 10 },
-        effects: { damage_type: "none", d_output: 0, perk_type: "defense_up", p_output: 0.08 }
+        effects: { 
+                    type: "guard",
+                    amount: 0.2,
+                    hit_scope: "next_hit",
+                    damage_type: "physical",
+                 }
     },
     {
         id: 1,
@@ -1598,7 +1790,11 @@ let skills = [
         uses_per_battle: null,
         target_type: "ally_single",
         stat_requirements: { res: 10 },
-        effects: { damage_type: "none", d_output: 0, perk_type: "restore_stat", p_output: 0.20 }
+        effects: {
+            type: "restore_stat",
+            amount: 0.50,
+            stat_source: "res"
+        },
     },
     {
         id: 2,
@@ -1613,14 +1809,14 @@ let skills = [
         uses_per_battle: null,
         target_type: "self",
         stat_requirements: { atk: 10 },
-        effects: { damage_type: "none", d_output: 0, perk_type: "next_attack_up", p_output: 0.25 }
+        effects: { type: "focus", amount: 0.25, hit_scope: "next_attack", stacks: true }
     },
     {
         id: 3,
         name: "Dodge",
         desc: "Dodge an oncoming attack.",
         image: "skill_3.png",
-        color: "green",
+        color: "orange",
         rarity: "common",
         cp_cost: 1,
         use_phase: "battle",
@@ -1628,7 +1824,7 @@ let skills = [
         uses_per_battle: null,
         target_type: "self",
         stat_requirements: { eva: 10 },
-        effects: { damage_type: "none", d_output: 0, perk_type: "evasion_up", p_output: 0.30 }
+        effects: { type: "dodge", amount: 1, hit_scope: "next_hit", damage_type: "physical"},
     },
     {
         id: 4,
@@ -2233,7 +2429,7 @@ let enemies = [
 let enemy_stats = [
     // WAVE 1 (simple: 1 weakness, 1 resist) — hearts: 2–3
     {stat_id: 0, def: 18, res: 6, atk: 4, eva: 2, spATK: 0, dex: 1, spDEF: 5,
-        weak_type: 'orange', resist_type: ['red'], hearts: 3, spd: 0, gold: 8, exp: 15},
+        weak_type: 'orange', resist_type: ['red'], hearts: 3, spd: 0, gold: 8, exp: 24},
 
     {stat_id: 1, def: 4, res: 18, atk: 3, eva: 5, spATK: 2, dex: 1, spDEF: 4,
         weak_type: 'yellow', resist_type: ['orange'], hearts: 2, spd: 1, gold: 9, exp: 16},
@@ -2326,23 +2522,72 @@ let enemy_stats = [
 
 //ownership tables for every card category
 let users_weapons = [
+    // Avatar 0 owns 3 copies
     {
-        id: 0,
-        user_id: 0,
-        avatar_id: 0,
-        weapon_id: 6,
-        level: 1,
+        id: null,
+        user_id: null,
+        avatar_id: null,
+        weapon_id: null,
+        level: null,
+        rank: null,
+        quantity: null,
+        locked: false,
+        favorite: false
+    },
+];
+
+let users_manifest = [
+    {
+        id: null,
+        user_id: null,
+        avatar_id: null,
+        manifest_id: null,
+        level: null,
         rank: "F",
         quantity: 1,
         locked: false,
         favorite: false
-    },{
+    },
+];
+
+let users_skills = [
+    {
+        id: null,
+        user_id: null,
+        avatar_id: null,
+        skill_id: null,
+        level: null,
+        rank: "F",
+        quantity: null,
+        locked: false,
+        favorite: false
+    },
+];
+
+let users_items = [
+    {
+        id: null,
+        user_id: null,
+        item_id: null,
+        quantity: null,
+        locked: false,
+        favorite: false
+    },
+];
+
+let users_equipments = [
+    {
+        id: 0,
+        user_id: 0,
+        equipment_id: null,
+        quantity: null,
+        locked: false,
+        favorite: false
+    },
+    {
         id: 1,
         user_id: 0,
-        avatar_id: 0,
-        weapon_id: 6,
-        level: 1,
-        rank: "F",
+        equipment_id: 1,
         quantity: 1,
         locked: false,
         favorite: false
@@ -2350,80 +2595,42 @@ let users_weapons = [
     {
         id: 2,
         user_id: 0,
-        avatar_id: 0,
-        weapon_id: 6,
-        level: 1,
-        rank: "F",
+        equipment_id: 2,
         quantity: 1,
         locked: false,
         favorite: false
     }
-];
-let users_equipments = [
-    {
-        id: 0,
-        user_id: 0,
-        equipment_id: 0,
-        quantity: 1,
-        locked: false,
-        favorite: false
-    }
-];
-let users_items = [
-    {
-        id: 0,
-        user_id: 0,
-        item_id: 0,
-        quantity: 3,
-        locked: false,
-        favorite: false
-    }
-];
-let users_manifest = [
-    {
-        id: 0,
-        user_id: 0,
-        avatar_id: 0,
-        manifest_id: 0,
-        level: 1,
-        rank: "F",
-        quantity: 1,
-        locked: false,
-        favorite: false
-    }
-];
-let users_skills = [
-    {
-        id: 0,
-        user_id: 0,
-        avatar_id: 0,
-        skill_id: 0,
-        level: 1,
-        rank: "F",
-        quantity: 1,
-        locked: false,
-        favorite: false
-    },
-    {
-        id: 1,
-        user_id: 0,
-        avatar_id: 0,
-        skill_id: 0,
-        level: 1,
-        rank: "F",
-        quantity: 1,
-        locked: false,
-        favorite: false
-    },
 ];
 
-//deck/loadout tables 
+// =====================================
+// LOADOUT TABLES
+// one loadout per owned avatar
+// these use OWNED CARD IDS, not definition IDs
+// =====================================
+
 let squad_loadouts = [
     {
         id: 0,
         user_id: 0,
         avatar_id: 0,
-
+        weapons: [],
+        battle_items: [],
+        manifest: [],
+        skills: []
+    },
+    {
+        id: 1,
+        user_id: 0,
+        avatar_id: 1,
+        weapons: [],
+        battle_items: [],
+        manifest: [],
+        skills: []
+    },
+    {
+        id: 2,
+        user_id: 0,
+        avatar_id: 2,
         weapons: [],
         battle_items: [],
         manifest: [],
@@ -2436,7 +2643,45 @@ let squad_equipment_loadouts = [
         id: 0,
         user_id: 0,
         avatar_id: 0,
-
+        slots: [null, null, null]
+    },
+    {
+        id: 1,
+        user_id: 0,
+        avatar_id: 1,
+        slots: [null, null, null]
+    },
+    {
+        id: 2,
+        user_id: 0,
+        avatar_id: 2,
         slots: [null, null, null]
     }
 ];
+
+
+let battle_snaphot = {
+    actor_key: "player-0",
+    side: "player",
+    squad_slot: 0,
+    battle_position: "front_position",
+    user_id: 0,
+    avatar_id: 0,
+    name: "Tahdah Hihat",
+    hearts: 3,
+    max_hearts: 3,
+    stats: {
+        def: 12,
+        res: 4,
+        atk: 3,
+        eva: 0,
+        spATK: 0,
+        dex: 0,
+        spDEF: 2,
+        cp: 7
+    },
+    speed: 0,
+    alive: true,
+    guarding: false,
+    queued_actions: [],
+}

@@ -1,13 +1,490 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
-</head>
-<body>
-
-  <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
-</body>
-
+<html>
+  <head>
+    <title>Uni Paradiso</title>
+  </head>
+  <audio
+    id="title_music"
+    loop
+    preload="auto">
+    <source src="./audio/bgm001.wav" type="audio/wav">
+  </audio>
+<body id="bod" style="margin: 0px; min-height: 100vh; justify-content: center; align-items: center; display: flex; flex-direction: column; overflow: hidden;">    <div style="display: flex; flex-direction: row; margin: 0px; margin:auto">
+  <div id="mute_button" style="width: 64px; height: 64px; position: absolute; top: 12px; left: 12px; cursor: pointer;" title="toggle sound" >&#128264;</div>    
+  <div id="start_overlay"
+     style="
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 64px;
+        cursor: pointer;
+    ">
+    <div style="background-color: black; position: relative; top: -22px;">CLICK TO START</div>
+</div>
+  <div style="width: 240px; height: 908px; background-color: rgba(137, 43, 226, 0); background-image: url(./images/title_side_1.png);"></div>
+      <div id="title_screen_holder" style="width: 0px; height: 908px; border-radius: 24px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <div id="dev_name" style="color: black;text-align: center; display: flex; flex-direction: column; opacity: 0;">
+          <div style="display: flex; flex-direction: row; font-size: 120px;">
+            <div style="color: red;">D</div>
+            <div style="color: green;">R</div>
+            <div style="color: blue;">J</div>
+          </div>
+          <div style="font-size: 98px; position: relative; top: -32px; color: ghostwhite">force</div>
+          <div style="color: white; font-size: 42px;">presents</div>
+        </div>
+        <div id="title_screen" style="display: none; flex-direction: column; width: 100%; height: 100%; justify-content: center; align-items: center;">
+          <div style="width: 100%; height: 420px; background-image: url(./images/title_icon.png); background-position: center; background-size: contain; background-color: white; background-repeat: no-repeat;"></div>
+          <div style="font-size: 64px; color: white;">UNI PARADISO</div>
+            <div style="display:flex; flex-direction: column; justify-content: space-evenly; align-items:flex-start; cursor: pointer;">
+              <div style="display:flex; flex-direction: row;">
+              <div id="pointer_1" style="width: 32px; height: 32px; border: 1px solid transparent;"></div>
+              <div id="continue_game" style="font-size: 32px; color: white;">Continue</div>
+            </div>
+            <div style="display:flex; flex-direction: row; cursor: pointer;">
+              <div id="pointer_2" style="width: 32px; height: 32px; border: 1px solid transparent;"></div>
+              <div id="new_game" style="font-size: 32px; color: white;">New Game</div>
+            </div>          
+          </div>
+        </div>
+        <div id="file_screen" style="width: 100%; height: 100%; display: none; flex-direction: column;"></div>
+      </div>
+      <div style="width: 240px; height: 908px; background-color: rgba(137, 43, 226, 0); background-image: url(./images/title_side_2.png); "></div>
+    </div>
+    <input id="upload_save_input" type="file" accept=".json" style="display:none;">
+  </body>
 </html>
+<script src="./data_base.js"></script>
+<script>
+let bod = document.getElementById("bod");
+let start_overlay = document.getElementById("start_overlay");
+let title_screen_holder = document.getElementById("title_screen_holder");
+let dev_name = document.getElementById("dev_name");
+let title_screen = document.getElementById("title_screen");
+let continue_game = document.getElementById("continue_game");
+let new_game = document.getElementById("new_game");
+let file_screen = document.getElementById("file_screen");
+let fileScreenMode = "load";
+let mute_button = document.getElementById("mute_button");
+let title_music = document.getElementById("title_music");
+
+let musicMuted = false;
+
+function start_animation() {
+  startMusic();
+  // 1. Expand title holder
+  let title_animation = title_screen_holder.animate(
+    [
+      { width: "0px" },
+      { width: "908px" }
+    ],
+    {
+      iterations: 1,
+      duration: 2200,
+      fill: "forwards",
+      easing: "ease-in"
+    }
+  );
+
+  title_animation.onfinish = () => {
+
+    dev_name.style.opacity = 1;
+
+    // 2. Fade background
+    let show_dev = bod.animate(
+      [
+        { backgroundColor: "white" },
+        { backgroundColor: "#222" }
+      ],
+      {
+        iterations: 1,
+        duration: 900,
+        fill: "forwards",
+        easing: "ease-in"
+      }
+    );
+
+    show_dev.onfinish = () => {
+
+      // 3. Fade out dev name
+      let show_title = dev_name.animate(
+        [
+          { opacity: 1 },
+          { opacity: 0 }
+        ],
+        {
+          iterations: 1,
+          duration: 900,
+          easing: "ease-in-out",
+          fill: "forwards"
+        }
+      );
+
+      show_title.onfinish = () => {
+        // 4. Hide dev name, show title screen
+        dev_name.style.display = "none";
+        title_screen.style.display = "flex";
+      };
+    };
+  };
+}
+
+start_overlay.onclick = async function(){
+
+    start_overlay.style.display = "none";
+
+    await startMusic();
+
+    start_animation();
+};
+
+    function onHover(element,color1,color2){
+        element.addEventListener("mouseover", ()=>{
+            element.style.color = color1;
+        });
+        element.addEventListener("mouseout", ()=>{
+            element.style.color = color2;
+        });
+    }
+
+  onHover(continue_game,"yellow","white");
+  onHover(new_game,"yellow","white");
+
+  const SAVE_SLOT_PREFIX = "uni_paradiso_save_slot_";
+const ACTIVE_SAVE_SLOT_KEY = "uni_paradiso_active_save_slot";
+
+function getSaveKey(slot){
+    return `${SAVE_SLOT_PREFIX}${slot}`;
+}
+
+function getSaveSlot(slot){
+    const raw = localStorage.getItem(getSaveKey(slot));
+    return raw ? JSON.parse(raw) : null;
+}
+
+function setSaveSlot(slot, saveData){
+    saveData.slot = slot;
+    saveData.updated_at = Date.now();
+
+    localStorage.setItem(
+        getSaveKey(slot),
+        JSON.stringify(saveData)
+    );
+}
+
+function setActiveSaveSlot(slot){
+    localStorage.setItem(ACTIVE_SAVE_SLOT_KEY, String(slot));
+}
+
+function getActiveSaveSlot(){
+    return Number(localStorage.getItem(ACTIVE_SAVE_SLOT_KEY) || 1);
+}
+
+function createNewGame(slot){
+
+    const newSave = structuredClone(DEFAULT_NEW_SAVE);
+
+    newSave.slot = slot;
+    newSave.file_name = `File ${slot}`;
+    newSave.created_at = Date.now();
+    newSave.updated_at = Date.now();
+
+    setSaveSlot(slot, newSave);
+    setActiveSaveSlot(slot);
+
+    localStorage.setItem("game_scene", "room");
+
+    localStorage.setItem(
+        "saved_room_location",
+        JSON.stringify({
+            level_id: newSave.room.level_id,
+            x: newSave.room.x,
+            top: newSave.room.top,
+            z: newSave.room.z,
+            facing: newSave.room.facing
+        })
+    );
+
+    localStorage.setItem(
+        "test_level_id",
+        String(newSave.room.level_id)
+    );
+    localStorage.setItem("opening_cutscene_done", "false");
+    localStorage.setItem("new_game_intro_pending", "true");
+    window.location.href = "./game.html";
+}
+
+function showFileScreen(mode){
+    fileScreenMode = mode;
+
+    title_screen.style.display = "none";
+    file_screen.style.display = "flex";
+
+    renderFileScreen();
+}
+
+function hideFileScreen(){
+    file_screen.style.display = "none";
+    title_screen.style.display = "flex";
+}
+
+function renderFileScreen(){
+    file_screen.innerHTML = "";
+
+    Object.assign(file_screen.style, {
+        color: "white",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: "18px",
+        backgroundColor: "#222"
+    });
+
+    const title = document.createElement("div");
+    title.style.fontSize = "48px";
+    title.textContent =
+        fileScreenMode === "new"
+            ? "Choose New Game Slot"
+            : "Choose Save File";
+
+    file_screen.appendChild(title);
+
+    for(let slot = 1; slot <= 3; slot++){
+        file_screen.appendChild(makeSaveSlotCard(slot));
+    }
+
+    const uploadBtn = document.createElement("div");
+    uploadBtn.textContent = "Upload Save File";
+    styleFileButton(uploadBtn);
+
+    uploadBtn.onclick = function(){
+        showUploadSlotPicker();
+    };
+
+    file_screen.appendChild(uploadBtn);
+
+    const backBtn = document.createElement("div");
+    backBtn.textContent = "Back";
+    styleFileButton(backBtn);
+    backBtn.onclick = hideFileScreen;
+
+    file_screen.appendChild(backBtn);
+}
+
+function makeSaveSlotCard(slot){
+    const save = getSaveSlot(slot);
+
+    const card = document.createElement("div");
+
+    Object.assign(card.style, {
+        width: "520px",
+        minHeight: "74px",
+        border: "2px solid white",
+        borderRadius: "8px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        padding: "10px",
+        cursor: "pointer",
+        backgroundColor: save ? "#333" : "#111"
+    });
+
+    const name = document.createElement("div");
+    name.style.fontSize = "28px";
+
+    if(save){
+        name.textContent = `File ${slot}: ${save.file_name || "Saved Game"}`;
+    }else{
+        name.textContent = `File ${slot}: Empty`;
+    }
+
+    const details = document.createElement("div");
+    details.style.fontSize = "14px";
+    details.style.color = "lightgrey";
+
+    if(save){
+        details.textContent =
+            `Last Saved: ${new Date(save.updated_at || save.created_at).toLocaleString()}`;
+    }else{
+        details.textContent = "No save data";
+    }
+
+    card.appendChild(name);
+    card.appendChild(details);
+
+    card.onclick = function(){
+        if(fileScreenMode === "new"){
+            const okay = !save || confirm(`Overwrite File ${slot}?`);
+
+            if(okay){
+                createNewGame(slot);
+            }
+
+            return;
+        }
+
+        if(fileScreenMode === "load"){
+            if(!save){
+                alert("This save slot is empty.");
+                return;
+            }
+
+            setActiveSaveSlot(slot);
+            window.location.href = "./game.html";
+        }
+    };
+
+    return card;
+}
+
+function styleFileButton(btn){
+    Object.assign(btn.style, {
+        width: "320px",
+        height: "42px",
+        border: "2px solid white",
+        borderRadius: "8px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        fontSize: "24px",
+        cursor: "pointer",
+        backgroundColor: "#111",
+        color: "white"
+    });
+
+    btn.addEventListener("mouseover", () => {
+        btn.style.color = "yellow";
+    });
+
+    btn.addEventListener("mouseout", () => {
+        btn.style.color = "white";
+    });
+}
+
+new_game.onclick = function(){
+    showFileScreen("new");
+};
+
+continue_game.onclick = function(){
+    showFileScreen("load");
+};
+
+const uploadSaveInput = document.getElementById("upload_save_input");
+let uploadTargetSlot = null;
+
+function showUploadSlotPicker(){
+    file_screen.innerHTML = "";
+
+    const title = document.createElement("div");
+    title.style.fontSize = "42px";
+    title.style.color = "white";
+    title.textContent = "Upload Save To Which Slot?";
+
+    file_screen.appendChild(title);
+
+    for(let slot = 1; slot <= 3; slot++){
+        const btn = document.createElement("div");
+        btn.textContent = `Upload To File ${slot}`;
+        styleFileButton(btn);
+
+        btn.onclick = function(){
+            uploadTargetSlot = slot;
+            uploadSaveInput.click();
+        };
+
+        file_screen.appendChild(btn);
+    }
+
+    const backBtn = document.createElement("div");
+    backBtn.textContent = "Back";
+    styleFileButton(backBtn);
+    backBtn.onclick = renderFileScreen;
+
+    file_screen.appendChild(backBtn);
+}
+
+uploadSaveInput.addEventListener("change", function(){
+    const file = uploadSaveInput.files[0];
+
+    if(!file || uploadTargetSlot === null) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(e){
+        try{
+            const uploadedSave = JSON.parse(e.target.result);
+
+            uploadedSave.slot = uploadTargetSlot;
+            uploadedSave.file_name =
+                uploadedSave.file_name || `Imported File ${uploadTargetSlot}`;
+
+            uploadedSave.updated_at = Date.now();
+
+            setSaveSlot(uploadTargetSlot, uploadedSave);
+            setActiveSaveSlot(uploadTargetSlot);
+
+            alert(`Save uploaded to File ${uploadTargetSlot}.`);
+
+            renderFileScreen();
+
+        }catch(err){
+            console.error(err);
+            alert("Invalid save file.");
+        }
+
+        uploadSaveInput.value = "";
+        uploadTargetSlot = null;
+    };
+
+    reader.readAsText(file);
+});
+
+async function startMusic(){
+
+    try{
+
+        title_music.volume = 0.4;
+
+        await title_music.play();
+
+    }catch(err){
+
+        console.log(
+            "Music autoplay blocked:",
+            err
+        );
+
+    }
+}
+
+
+mute_button.onclick = function(){
+
+    musicMuted = !musicMuted;
+
+    title_music.muted = musicMuted;
+
+    localStorage.setItem(
+        "uni_paradiso_muted",
+        musicMuted
+    );
+
+    mute_button.innerHTML =
+        musicMuted
+            ? "&#128263;"
+            : "&#128264;";
+};
+
+const savedMute =
+    localStorage.getItem("uni_paradiso_muted");
+
+if(savedMute === "true"){
+
+    musicMuted = true;
+
+    title_music.muted = true;
+
+    mute_button.innerHTML = "&#128263;";
+}
+</script>

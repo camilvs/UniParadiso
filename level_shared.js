@@ -42,6 +42,31 @@ function loadSavedLevels(){
     }
 }
 
+function getContentByType(type,id){
+
+    const sources = {
+
+        weapon: weapons,
+        equipment: equipments,
+        item: items,
+        skill: skills,
+        material: materials,
+        key: keys,
+        manifest: manifest,
+        trap: traps
+
+    };
+    //replace with .find
+    const source = sources[type];
+
+    if(!source) return null;
+
+    return source.find(item =>
+        Number(item.id) === Number(id)
+    ) || null;
+
+}
+
 function getTestLevel(levels){
     const testLevelId = localStorage.getItem("test_level_id");
 
@@ -508,7 +533,13 @@ function renderLevelNPCs(level){
         });
 
         npcEl.onclick = () => {
-            console.log("NPC dialogue:", npc.dialogue ?? "");
+            // console.log("NPC CLICKED", npc);
+
+            if(typeof openNPCDialogue === "function"){
+                openNPCDialogue(npc);
+            }else{
+                console.warn("openNPCDialogue is not defined.");
+            }
         };
 
         cube.appendChild(npcEl);
@@ -522,7 +553,6 @@ function renderLevelTreasure(level){
 
     level.treasure_boxes.forEach((chest, index) => {
         if(!chest) return;
-
         const chestEl = document.createElement("div");
         chestEl.className = "treasure_box";
         chestEl.dataset.index = index;
@@ -532,6 +562,10 @@ function renderLevelTreasure(level){
         const spriteId = Number(chest.sprite_id ?? 0);
         const x = Number(chest.left ?? 0);
         const y = Number(chest.top ?? 0);
+        const isOpened = chest.opened === true;
+        const imageName = isOpened
+            ? `chest_open_${spriteId}.png`
+            : `chest_${spriteId}.png`;
 
         Object.assign(chestEl.style, {
             position: "absolute",
@@ -539,7 +573,7 @@ function renderLevelTreasure(level){
             top: y + "px",
             width: "120px",
             height: "120px",
-            backgroundImage: `url(./images/chest_${spriteId}.png)`,
+            backgroundImage: `url(./images/${imageName})`,
             backgroundPosition: "center",
             backgroundSize: "contain",
             backgroundRepeat: "no-repeat",
@@ -548,11 +582,81 @@ function renderLevelTreasure(level){
         });
 
         chestEl.onclick = () => {
-            console.log("Treasure chest:", chest);
+            openTreasureBox(chest, chestEl);
         };
 
         cube.appendChild(chestEl);
     });
+}
+
+function openTreasureBox(chest, chestEl){
+    if(!chest) return;
+
+    if(chest.opened){
+        showTreasureMessage("Empty treasure box...");
+        return;
+    }
+
+    if(chest.content_type && chest.content_id !== null){
+        addChestContentToInventory(chest.content_type, chest.content_id);
+
+        const content = getContentByType(chest.content_type, chest.content_id);
+        showTreasureMessage(`Obtained ${content?.name || "treasure"}!`);
+    }else{
+        showTreasureMessage("The treasure box was empty...");
+    }
+
+    chest.opened = true;
+
+    const spriteId = Number(chest.sprite_id ?? 0);
+    chestEl.style.backgroundImage = `url(./images/chest_open_${spriteId}.png)`;
+
+    saveCurrentLevelState();
+}
+
+function showTreasureMessage(message){
+    let popup = document.getElementById("treasure_popup");
+
+    if(!popup){
+        popup = document.createElement("div");
+        popup.id = "treasure_popup";
+
+        Object.assign(popup.style, {
+            position: "fixed",
+            left: "50%",
+            bottom: "220px",
+            transform: "translateX(-50%)",
+            backgroundColor: "#222",
+            color: "ghostwhite",
+            border: "2px solid gold",
+            padding: "12px 24px",
+            fontSize: "20px",
+            zIndex: "999999",
+            display: "none"
+        });
+
+        document.body.appendChild(popup);
+    }
+
+    popup.textContent = message;
+    popup.style.display = "flex";
+
+    clearTimeout(popup._hideTimer);
+    popup._hideTimer = setTimeout(() => {
+        popup.style.display = "none";
+    }, 1800);
+}
+
+function saveCurrentLevelState(){
+    const allLevels = loadSavedLevels();
+    const index = allLevels.findIndex(l =>
+        String(l.id) === String(current_level.id)
+    );
+
+    if(index !== -1){
+        allLevels[index] = current_level;
+        localStorage.setItem("levels", JSON.stringify(allLevels));
+    }
 }
 
 function getLevelEncounters(level){
@@ -564,20 +668,20 @@ function getLevelEncounters(level){
 function logLevelEncounters(level){
     const encounters = getLevelEncounters(level);
 
-    console.log("Current level encounter data:", encounters);
+    // console.log("Current level encounter data:", encounters);
 
-    encounters.forEach((encounter, index) => {
-        console.log(`Encounter ${index + 1}`, {
-            encounter_id: encounter.encounter_id,
-            front_position: encounter.front_position,
-            mid_1: encounter.mid_1,
-            mid_2: encounter.mid_2,
-            back_1: encounter.back_1,
-            back_2: encounter.back_2,
-            back_3: encounter.back_3,
-            rate: encounter.rate
-        });
-    });
+    // encounters.forEach((encounter, index) => {
+    //     console.log(`Encounter ${index + 1}`, {
+    //         encounter_id: encounter.encounter_id,
+    //         front_position: encounter.front_position,
+    //         mid_1: encounter.mid_1,
+    //         mid_2: encounter.mid_2,
+    //         back_1: encounter.back_1,
+    //         back_2: encounter.back_2,
+    //         back_3: encounter.back_3,
+    //         rate: encounter.rate
+    //     });
+    // });
 }
 
 function renderLevelLandmarks(level){
@@ -607,11 +711,12 @@ function renderLevelLandmarks(level){
             backgroundSize: "contain",
             backgroundRepeat: "no-repeat",
             cursor: "pointer",
-            pointerEvents: "auto"
+            pointerEvents: "auto", 
+            opacity: 0,
         });
 
         landmarkEl.onclick = () => {
-            console.log("Landmark:", landmark);
+            // console.log("Landmark:", landmark);
         };
 
         cube.appendChild(landmarkEl);
@@ -650,7 +755,7 @@ function renderPlayer(level){
     // store reference for future movement logic
     window.player_object = player_obj;
 
-    console.log("Player rendered.");
+    // console.log("Player rendered.");
 }
 
 function renderCurrentUserStats(){
@@ -677,5 +782,5 @@ function renderCurrentUserStats(){
     document.getElementById("user_stats_SPdef").textContent = `: ${stats.spDEF}`;
     document.getElementById("user_stats_cp").textContent = `: ${stats.cp}`;
 
-    console.log("Current squad stats rendered:", stats);
+    // console.log("Current squad stats rendered:", stats);
 }

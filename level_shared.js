@@ -668,7 +668,7 @@ function getLevelEncounters(level){
 function logLevelEncounters(level){
     const encounters = getLevelEncounters(level);
 
-    console.log("Current level encounter data:", encounters);
+    // console.log("Current level encounter data:", encounters);
 
     // encounters.forEach((encounter, index) => {
     //     console.log(`Encounter ${index + 1}`, {
@@ -711,7 +711,8 @@ function renderLevelLandmarks(level){
             backgroundSize: "contain",
             backgroundRepeat: "no-repeat",
             cursor: "pointer",
-            pointerEvents: "auto"
+            pointerEvents: "auto", 
+            opacity: 0,
         });
 
         landmarkEl.onclick = () => {

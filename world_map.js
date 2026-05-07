@@ -622,6 +622,16 @@ if (deleteObject) {
 }
 
 function checkTeleportCollision() {
+    function checkTeleportCollision() {
+        if(!worldMapActive){
+            if(teleportPromptOpen){
+                closeDestinationWindow();
+            }
+            return;
+        }
+
+        // rest of function...
+    }
     if(worldTeleportCooldown > Date.now()){
         if(teleportPromptOpen){
             closeDestinationWindow();
@@ -767,7 +777,8 @@ function beginTeleportToLevel(levelId){
 
         document.getElementById("world_map_screen").style.display = "none";
         document.getElementById("room_screen").style.display = "flex";
-
+        localStorage.setItem("game_scene", "room");
+        localStorage.setItem("test_level_id", String(levelId));
         loadRoomByLevelId(levelId);
 
         fadeLayer.animate(
@@ -1009,11 +1020,29 @@ function saveWorldMapData() {
     );
 }
 
-function loadWorldMapData() {
-    const saved = localStorage.getItem(WORLD_MAP_KEY);
-    if (!saved) return;
 
-    worldMapData = JSON.parse(saved);
+    async function loadWorldMapData() {
+    let loadedData = null;
+
+    const saved = localStorage.getItem(WORLD_MAP_KEY);
+
+    if(saved){
+        loadedData = JSON.parse(saved);
+    }else{
+        try{
+            const response = await fetch("./data/world_map.json");
+
+            if(response.ok){
+                loadedData = await response.json();
+            }
+        }catch(err){
+            console.warn("No world_map.json found. Using blank world map.", err);
+        }
+    }
+
+    if(!loadedData) return;
+
+    worldMapData = loadedData;
 
     const t = worldMapData.map_transform || {};
 
@@ -1758,30 +1787,43 @@ if (objectHolder && objectPreview) {
     generateObjectPalette();
 }
 
-loadWorldMapData();
-ensureSafeSpawn();
+async function initWorldMap(){
 
-renderWorldPlayer();
+    await loadWorldMapData();
 
-worldFollowTrail = [];
-for (let i = 0; i < WORLD_TRAIL_MAX; i++) {
-    worldFollowTrail.push({
-        x: worldPlayerX,
-        y: worldPlayerY,
-        z: worldPlayerZ,
-        facing: worldPlayerFacing
-    });
+    ensureSafeSpawn();
+
+    renderWorldPlayer();
+
+    worldFollowTrail = [];
+
+    for(let i = 0; i < WORLD_TRAIL_MAX; i++){
+
+        worldFollowTrail.push({
+            x: worldPlayerX,
+            y: worldPlayerY,
+            z: worldPlayerZ,
+            facing: worldPlayerFacing
+        });
+
+    }
+
+    if(!isWorldEditorMode){
+
+        cameraMode = "game";
+        followWorldPlayerCamera();
+
+    }else{
+
+        cameraMode = "editor";
+        updateMapTransform();
+
+    }
+
+    worldGameLoop();
 }
 
-if (!isWorldEditorMode) {
-    cameraMode = "game";
-    followWorldPlayerCamera();
-} else {
-    cameraMode = "editor";
-    updateMapTransform();
-}
-
-worldGameLoop();
+initWorldMap();
 
 JSON.parse(localStorage.getItem("levels")).map(l => ({
     id: l.id,
@@ -1789,3 +1831,37 @@ JSON.parse(localStorage.getItem("levels")).map(l => ({
     landmarkCount: Array.isArray(l.landmarks) ? l.landmarks.length : "NO LANDMARK ARRAY",
     landmarks: l.landmarks
 }));
+
+const exportWorldMapBtn = document.getElementById("export_world_map_json");
+
+if(exportWorldMapBtn){
+    exportWorldMapBtn.onclick = function(){
+        saveWorldMapData();
+
+        const cleanWorldMapData = {
+            map_transform: worldMapData.map_transform || {},
+            tiles: worldMapData.tiles || [],
+            objects: worldMapData.objects || [],
+            collisions: worldMapData.collisions || [],
+            teleports: worldMapData.teleports || [],
+            player: worldMapData.player || {
+                x: 300,
+                y: 300,
+                z: 16,
+                facing: "right"
+            }
+        };
+
+        const json = JSON.stringify(cleanWorldMapData, null, 2);
+
+        const blob = new Blob([json], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "world_map.json";
+        a.click();
+
+        URL.revokeObjectURL(url);
+    };
+}

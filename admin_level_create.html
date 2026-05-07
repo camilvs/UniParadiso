@@ -202,11 +202,11 @@
         </div>
         <div id="level_create_screen" class="level_create_screen">
             <div id="level_create_options" style="position: absolute; width: 120px; height: 120px; border: 1px solid black; background-color: ghostwhite; display: none; flex-direction: column; top: 36px; left: 12px;">
-                <div id="create_save" class="create_options">Save</div>
+                <div  id="export_levels_json" class="create_options">Export</div>
                 <div id="create_test" class="create_options">Test</div>
                 <div id="create_exit" class="create_options">Exit</div>
-                <div id="create_clear" class="create_options">Clear</div>
-                <div id="create_delete" class="create_options">Delete</div>
+                <div id="create_clear" class="create_options" style="display: none;">Clear</div>
+                <div id="create_delete" class="create_options" style="display: none">Delete</div>
             </div>
             <div id="level_create_nav" style="width: 98%; height: 72px; border: 1px solid black; margin-left: 8px; display: flex; flex-direction: column;">
                 <div style="width: 280px; height: 32px; border: 1px solid black; display: flex; flex-direction: row;">
@@ -415,32 +415,32 @@
             <div style="width: 180px; height: 160px; margin-left: 30px; border: 1px solid black; display: flex; flex-direction: column; justify-content: space-evenly;">
                 <div style="display: flex; flex-direction: row; justify-content: space-around;">
                     X
-                    <input id="asset_x" type="range">
+                    <input id="asset_x" type="number">
                     <output for="asset_x" id="asset_x_output"></output>
                 </div>
                 <div style="display: flex; flex-direction: row; justify-content: space-around;">
                     Y
-                    <input id="asset_y" type="range">
+                    <input id="asset_y" type="number">
                     <output for="asset_y" id="asset_y_output"></output>
                 </div>
                 <div style="display: flex; flex-direction: row; justify-content: space-around;">
                     Z
-                    <input id="asset_z" type="range" max="400" min="-300">
+                    <input id="asset_z" type="number" max="400">
                     <output for="asset_z" id="asset_z_output"></output>
                 </div>
                 <div style="display: flex; flex-direction: row; justify-content: space-around;">
                     Ry
-                    <input id="asset_ry" type="range" max="359" min="0">
+                    <input id="asset_ry" type="number" max="359" min="0">
                     <output for="asset_ry" id="asset_ry_output"></output>
                 </div>
                 <div style="display: flex; flex-direction: row; justify-content: space-around;">
                     Rx
-                    <input id="asset_rx" type="range" max="359" min="0">
+                    <input id="asset_rx" type="number" max="359" min="0">
                     <output for="asset_rx" id="asset_rx_output"></output>
                 </div>
                 <div style="display: flex; flex-direction: row; justify-content: space-around;">
                     Rz
-                    <input id="asset_rz" type="range" max="359" min="0">
+                    <input id="asset_rz" type="number" max="359" min="0">
                     <output for="asset_rz" id="asset_rz_output"></output>
                 </div>
                 <div style="display: flex; flex-direction: row; justify-content: space-around;">
@@ -714,7 +714,6 @@
     //level create options menu
     var level_create_options = document.getElementById('level_create_options');
     //save created level
-    var create_save = document.getElementById("create_save");
     //test created level
     var create_test = document.getElementById('create_test');
     //exit level creation
@@ -937,7 +936,7 @@
         showScreen(start_window);
     }
     //pointer on hover array
-    var options_arr = [create_new_level,load_level,exit_level,create_level_input,exit_level_stats, close_error, create_save, create_test, create_exit, create_clear, create_delete, delete_confirm_no, delete_confirm_yes,delete_object,delete_object_no, delete_object_yes,
+    var options_arr = [create_new_level,load_level,exit_level,create_level_input,exit_level_stats, close_error, create_test, create_exit, create_clear, create_delete, delete_confirm_no, delete_confirm_yes,delete_object,delete_object_no, delete_object_yes,
         move_portrait_left, move_portrait_up, move_portrait_down, move_portrait_right, move_portrait_flip,delete_current_treasure, delete_enemy,see_room_encounters,
     ];
     //hover funtion
@@ -1030,10 +1029,10 @@
     const roomWidth = cols * 120;
 
     return {
-        xMin: -60,
-        xMax: roomWidth - 70,
-        yMin: 528,
-        yMax: 920
+        xMin: -240,
+        xMax: roomWidth + 120,
+        yMin: 0,
+        yMax: 1920
     };
 }
 
@@ -1062,7 +1061,7 @@ function applyLevelSliderRanges(level){
             Object.assign(levels_box.style,{
                 width:'255px', height: 'auto',borderBottom: '1px solid black', display: 'flex', flexDirection: 'column', marginBottom: '4px'
             });
-            levels_box.innerHTML = level.name+"| size: "+level.size+"|<br>Description: "+level.desc;
+            levels_box.innerHTML = level.name+"| size: "+level.size+"|<br>Description: "+level.id;
             load_level_holder.appendChild(levels_box);
             //buttons
             var load_button_holder = document.createElement('div');
@@ -1463,7 +1462,7 @@ function applyLevelSliderRanges(level){
         });
     }
     //tile asset on click
-    const total_tiles = 96;
+    const total_tiles = 136;
     let selected_tile = null;
 
     tile_asset.onclick = () =>{
@@ -1524,7 +1523,7 @@ function applyLevelSliderRanges(level){
     //background nav on click
     const total_backgrounds = 13;
     let selected_background = null;
-    const total_objects = 30;
+    const total_objects = 146;
     let selected_object = null;
     asset_preview.addEventListener('click',(e)=>{
         //backgrounds
@@ -1543,7 +1542,7 @@ function applyLevelSliderRanges(level){
                 current_level.background = selected_background;
                 saveLevel();
             }
-            console.log("selected background:"+selected_background);
+            // console.log("selected background:"+selected_background);
         }
         //tiles
             if(e.target.classList.contains('tile_preview')){
@@ -1555,7 +1554,7 @@ function applyLevelSliderRanges(level){
                 e.target.style.outline = '2px solid yellow';
 
                 selected_tile = e.target.dataset.id;
-                console.log("selected tile:"+selected_tile);
+                // console.log("selected tile:"+selected_tile);
             }
         //objects
             if(e.target.classList.contains('object_preview')){
@@ -1604,10 +1603,11 @@ function applyLevelSliderRanges(level){
                 width: '120px',
                 height: '120px',
                 backgroundImage: `url(./images/object${object}.png)`,
-                backgroundSize: 'cover',
+                backgroundSize: 'contain',
                 position: 'absolute',
                 top: '750px',
-                left: '230px'
+                left: '230px',
+                backgroundRepeat: "no-repeat"
             });
 
             cube.appendChild(new_object);
@@ -3531,7 +3531,7 @@ function exitDeleteMode(){
         encounter_asset_window.style.display = 'none';
         encounters_set_rate.style.display = 'flex';
 
-        console.log(current_level.enemy_encounters);
+        // console.log(current_level.enemy_encounters);
     };
 
     //close set_encounter_window 
@@ -4209,7 +4209,7 @@ function setCardVisual(el, imagePath, fallbackColor){
                 left: obj.left+'px',
                 top: obj.top+'px',
                 backgroundImage: `url(./images/object${obj.sprite_id}.png)`,
-                backgroundSize: 'cover',
+                backgroundSize: 'contain',
                 backgroundPosition: 'center', 
                 backgroundRepeat: 'no-repeat',
             });
@@ -4295,6 +4295,22 @@ function setCardVisual(el, imagePath, fallbackColor){
 destination_to.addEventListener("change", () => {
     populateDestinationLandmarks();
 });
+
+document.getElementById("export_levels_json").onclick = function(){
+    const levels = JSON.parse(localStorage.getItem("levels") || "[]");
+
+    const json = JSON.stringify(levels, null, 2);
+
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "levels.json";
+    a.click();
+
+    URL.revokeObjectURL(url);
+};
 
     window.onload = () =>{
         loadSavedLevels();

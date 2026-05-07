@@ -90,7 +90,7 @@ function loadTestLevel(){
     current_level = getTestLevel(levels);
 
     if(!current_level){
-        console.warn("No test level found.");
+        // console.warn("No test level found.");
         level_test_level_name.textContent = "No test level loaded";
         return;
     }
@@ -116,6 +116,7 @@ function loadTestLevel(){
     }
 
     syncPlayerToState();
+    saveRoomPlayerLocation();
     resetRoomSquadStates();
     renderSquadMembers();
     syncSquadMembersToState();
@@ -142,7 +143,7 @@ function placePlayerAtEntryLandmarkOrDefault(){
     );
 
     if(!landmark){
-        console.warn("Entry landmark not found:", entryId);
+        // console.warn("Entry landmark not found:", entryId);
         resetRoomPlayerSpawn();
         return;
     }
@@ -188,6 +189,7 @@ function prepareTestCube(){
 
 let roomGameLoopStarted = false;
 
+
 function startRoomMode(){
     // console.log("room mode started");
 
@@ -226,21 +228,7 @@ function startRoomMode(){
 // EXIT
 // =====================================
 
-if(level_test_exit){
-    level_test_exit.onclick = function(){
-        // console.log("Exiting test mode...");
-
-        if(typeof saveLevel === "function"){
-            saveLevel();
-        }
-
-        if(typeof saveCurrentLevel === "function"){
-            saveCurrentLevel();
-        }
-
-        window.location.href = "./admin_level_create.html";
-    };
-}
+level_test_exit.style.display = "none";
 
 // =====================================
 // DRAG WINDOWS
@@ -380,7 +368,7 @@ function closeRoomLandmarkWindow(){
 
 function loadRoomByLevelId(levelId){
     if(!levelId){
-        console.warn("No level id provided.");
+        // console.warn("No level id provided.");
         return;
     }
 
@@ -437,7 +425,7 @@ if(roomDestinationYes){
         // console.log("ROOM YES CLICKED");
 
         if(!activeRoomLandmark){
-            console.warn("Room yes clicked, but no activeRoomLandmark.");
+            // console.warn("Room yes clicked, but no activeRoomLandmark.");
             return;
         }
 
@@ -492,7 +480,7 @@ function fadeToRoomLevel(levelId){
     const fadeLayer = document.getElementById("fade_layer");
 
     if(!fadeLayer){
-        console.warn("No fade_layer found. Loading room without fade.");
+        // console.warn("No fade_layer found. Loading room without fade.");
         loadRoomByLevelId(levelId);
         roomLandmarkTransitioning = false;
         return;
@@ -786,6 +774,7 @@ function returnToWorldMapFromRoom(landmark){
             { duration: 600, fill: "forwards" }
         );
     };
+    localStorage.setItem("game_scene", "world");
 }
 
 function resetRoomPlayerSpawn(){
@@ -1110,13 +1099,14 @@ function triggerRoomEncounter(encounter){
     roomEncounterCheckLock = true;
     roomEncounterSteps = 0;
 
-    localStorage.setItem("battle_return_room", JSON.stringify({
-        level_id: current_level.id,
-        player_x: player_state.x,
-        player_top: player_state.top,
-        player_z: player_state.z,
-        player_facing: player_state.facing
-    }));
+    saveRoomPlayerLocation();
+
+    const roomLocation = JSON.parse(
+        localStorage.getItem("saved_room_location") || "{}"
+    );
+
+    localStorage.setItem("game_scene", "room");
+    localStorage.setItem("battle_return_room", JSON.stringify(roomLocation));
 
     player_state.moving = false;
     input_state.left = false;
@@ -1197,7 +1187,18 @@ function restorePlayerAfterBattleIfNeeded(){
     return true;
 }
 
-window.addEventListener("load", function(){
-    console.log("play_test loaded, starting room mode");
-    startRoomMode();
-});
+function saveRoomPlayerLocation(){
+    if(!current_level || !player_state) return;
+
+    localStorage.setItem("game_scene", "room");
+
+    localStorage.setItem("saved_room_location", JSON.stringify({
+        level_id: current_level.id,
+        player_x: player_state.x,
+        player_top: player_state.top,
+        player_z: player_state.z,
+        player_facing: player_state.facing
+    }));
+}
+
+

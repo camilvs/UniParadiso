@@ -2,7 +2,7 @@
 let users = [
     {
         id: 0,
-        username: "Tahdah001",
+        username: "",
         rank: "E",
         rank_exp: 0,
         currency: {
@@ -12,9 +12,57 @@ let users = [
             title: "",
             created_at: ""
         },
-        email: "clown1N@email.com"
     },
 ];
+
+const DEFAULT_NEW_SAVE = {
+        intro_flags: {
+        opening_cutscene_done: false
+    },
+    slot: 1,
+    file_name: "File 1",
+    created_at: Date.now(),
+    updated_at: Date.now(),
+
+    scene: "room", 
+    // or "room"
+
+    room_level_id: 10,
+
+    world: {
+        x: 300,
+        y: 300,
+        z: 16,
+        facing: "right"
+    },
+
+    room: {
+        level_id: 10,
+        x: 300,
+        top: 300,
+        z: 0,
+        facing: "right"
+    },
+
+    opened_chests: [],
+    discovered_landmarks: [],
+    defeated_bosses: [],
+    inventory: {},
+    gil: 0,
+    user: {
+        id: 0,
+        username: "",
+        rank: "E",
+        rank_exp: 0,
+        currency: {
+            gil: 0
+        },
+        profile: {
+            title: "",
+            created_at: ""
+        }
+    }
+};
 
 let avatars = [
     {
@@ -31,6 +79,7 @@ let avatars = [
         image_world_down: "spr_character_idle_0.gif",
         image_world_left: "spr_character_0_walk.gif",
         image_world_right: "spr_character_0_walk.gif",
+        image_laying: "spr_character_0_laying.png"
     },
     {
         id: 1,
@@ -125,8 +174,8 @@ let users_avatars = [
 ];
 let current_squad = [
     {slot: 0, user_id: 0, avatar_id: 0, ready: true},
-    {slot: 1, user_id: 0, avatar_id: 1, ready: true},
-    {slot: 2, user_id: 0, avatar_id: 2, ready: true}
+    {slot: 1, user_id: 0, avatar_id: null, ready: true},
+    {slot: 2, user_id: 0, avatar_id: null, ready: true}
 ];
 
 const rank_reload_turns = {
@@ -414,7 +463,7 @@ let weapons = [
         stat_requirements: { atk: 11 },
         effects: { def: 4, res: 2, atk: 11, eva: 1, spATK: 0, dex: 2, spDEF: 0 }
     },
-    {
+    { 
         id: 17,
         name: "Ye Old Blapper",
         desc: "One shot in the chamber, great damage if it hits.",

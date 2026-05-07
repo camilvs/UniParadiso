@@ -191,7 +191,7 @@
     display: flex;
     flex-direction: row;
     background-image: linear-gradient(#222, grey);
-    color: yellow;
+    color: white;
 }
 
 .pause_member_portrait {
@@ -259,10 +259,10 @@
                 <div id="user_hearts" class="hud_button" style="width:240px;" title="Hearts"></div>
                 <div id="pause_menu" class="hud_button" title="Open Menu">Menu</div>
                 <div id="save_menu" class="hud_button" title="Save Menu">&#128427;</div>
-                <div id="exit_menu" class="hud_button" title="Exit">Exit</div>
+                <div id="exit_menu" class="hud_button" ></div>
             </div>
         </div>
-
+        <div id="fade_layer" style="position:absolute;inset:0;background-color:black;opacity:1;pointer-events:none;z-index:3999;"></div>
         <div id="game_viewport">
 
             <div id="world_map_screen" class="game_screen">
@@ -276,15 +276,98 @@
 
             <div id="room_screen" class="game_screen">
                 <div id="level_test_preview" class="scrolling-background">
-                    <!-- cube gets created here by play_test.js -->
                 </div>
             </div>
 
             <div id="battle_screen" class="game_screen">
-                <!-- battle screen later -->
             </div>
+            <div id="intro_dialogue_box"
+                style="
+                    position:absolute;
+                    left:80px;
+                    bottom:20px;
+                    width:740px;
+                    height:150px;
+                    background-color:rgba(0,0,0,0.9);
+                    border:3px solid white;
+                    color:white;
+                    display:none;
+                    flex-direction:row;
+                    z-index:4000;
+                ">
 
-            <div id="fade_layer"></div>
+                <div id="intro_dialogue_portrait"
+                    style="
+                        width:140px;
+                        height:140px;
+                        margin:5px;
+                        background-size:cover;
+                        background-repeat:no-repeat;
+                        background-position:center;
+                    ">
+                </div>
+
+                <div style="display:flex; flex-direction:column; flex:1;">
+                    <div id="intro_dialogue_text"
+                        style="
+                            font-size:28px;
+                            padding:18px;
+                            flex:1;
+                        ">
+                    </div>
+
+                    <div id="intro_dialogue_close"
+                        style="
+                            align-self:flex-end;
+                            margin:8px;
+                            width:32px;
+                            height:32px;
+                            border:1px solid white;
+                            display:flex;
+                            justify-content:center;
+                            align-items:center;
+                            cursor:pointer;
+                        ">
+                        X
+                    </div>
+                </div>
+            </div>
+            <div id="name_entry_window"
+            style="
+                position:absolute;
+                top:220px;
+                left:294px;
+                width:320px;
+                height:180px;
+                background-color:ghostwhite;
+                border:3px solid black;
+                display:none;
+                flex-direction:column;
+                align-items:center;
+                justify-content:space-evenly;
+                z-index:4100;
+            ">
+
+            <div style="font-size:22px;">Enter Username</div>
+
+            <input id="name_entry_input"
+                maxlength="16"
+                style="
+                    width:240px;
+                    height:32px;
+                    font-size:20px;
+                    text-align:center;
+                ">
+
+            <button id="name_entry_submit"
+                    style="
+                        width:120px;
+                        height:32px;
+                        cursor:pointer;
+                    ">
+                Submit
+            </button>
+        </div>
         </div>
 
         <div id="level_test_controller_dpad" style="position: relative; top: -124px;">
@@ -301,7 +384,6 @@
             <div id="controller_down" class="controller_button" style="position:relative; left:40px; top:9px;">&#8595;</div>
         </div>
 
-        <!-- Destination Prompt -->
         <div id="exit_to_destination_window"
              class="floating_window"
              style="width:260px; height:120px; top:300px; left:324px; align-items:center; justify-content:space-evenly;">
@@ -323,10 +405,6 @@
                 X
             </div>
         </div>
-
-        <!-- user_stats_window goes here -->
-        <!-- pause_menu_window goes here -->
-        <!-- editor_tools can stay hidden or removed for player build -->
 
     </div>
     <div id="pause_menu_window" class="floating_window"
@@ -364,13 +442,13 @@
                 </div>
 
                 <div class="pause_member_stats">
-                    <div class="stat_bar"><div id="member_1_def"></div></div>
-                    <div class="stat_bar"><div id="member_1_res"></div></div>
-                    <div class="stat_bar"><div id="member_1_atk"></div></div>
-                    <div class="stat_bar"><div id="member_1_eva"></div></div>
-                    <div class="stat_bar"><div id="member_1_spATK"></div></div>
-                    <div class="stat_bar"><div id="member_1_dex"></div></div>
-                    <div class="stat_bar"><div id="member_1_spDEF"></div></div>
+                    <div class="stat_bar"><div id="member_1_def" style="background-color: red;"></div></div>
+                    <div class="stat_bar"><div id="member_1_res" style="background-color: orange;"></div></div>
+                    <div class="stat_bar"><div id="member_1_atk" style="background-color: yellow;"></div></div>
+                    <div class="stat_bar"><div id="member_1_eva" style="background-color: green;"></div></div>
+                    <div class="stat_bar"><div id="member_1_spATK" style="background-color: blue;"></div></div>
+                    <div class="stat_bar"><div id="member_1_dex" style="background-color: indigo;"></div></div>
+                    <div class="stat_bar"><div id="member_1_spDEF" style="background-color: violet;"></div></div>
                 </div>
             </div>
                 <div id="member_2" class="pause_member_card">
@@ -385,7 +463,7 @@
                 </div>
 
                 <div class="pause_member_stats">
-                    <div class="stat_bar"><div id="member_2_def"></div></div>
+                    <div class="stat_bar"><div id="member_2_def" ></div></div>
                     <div class="stat_bar"><div id="member_2_res"></div></div>
                     <div class="stat_bar"><div id="member_2_atk"></div></div>
                     <div class="stat_bar"><div id="member_2_eva"></div></div>
@@ -457,11 +535,129 @@
             </div>
         </div>
     </div>
+    <div id="save_window"
+     class="floating_window"
+     style="
+        width: 320px;
+        height: 240px;
+        top: 220px;
+        left: 290px;
+        display: none;
+        flex-direction: column;
+        background-color: ghostwhite;
+        z-index: 3000;
+     ">
 
+    <div style="display:flex; flex-direction:row;">
+        <div id="save_window_header"
+             style="
+                width: 286px;
+                height: 28px;
+                border-bottom: 1px solid grey;
+                margin: 2px;
+             ">
+            Save Menu
+        </div>
+
+        <div id="save_window_close"
+             style="
+                width: 26px;
+                height: 26px;
+                border: 1px solid black;
+                margin: 2px;
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                cursor:pointer;
+             ">
+            X
+        </div>
+    </div>
+    <div style="display:flex;flex-direction:column;justify-content:space-evenly;align-items:center;height:100%;">
+        <div id="save_game_btn" class="hud_button">Save Game</div>
+        <div id="download_save_btn" class="hud_button">Download Save</div>
+            <div id="upload_save_btn" class="hud_button">Upload Save</div>
+            <div id="return_title_btn" class="hud_button">Return To Title</div>
+        </div>
+    </div>
+    <input id="upload_save_input"type="file"accept=".json"style="display:none;">
     <script src="./data_base.js"></script>
+    <script src="./game_levels.js"></script>
     <script src="./level_shared.js"></script>
     <script src="./game_play.js"></script>
     <script src="./play_test.js"></script>
     <script src="./world_map.js"></script>
+    <script>
+        window.addEventListener("load", function(){
+            const fadeLayer = document.getElementById("fade_layer");
+            const introPending = localStorage.getItem("new_game_intro_pending") === "true";
+
+            function fadeInFromBlack(duration = 700){
+                const fadeLayer = document.getElementById("fade_layer");
+                if(!fadeLayer) return;
+
+                fadeLayer.style.opacity = 1;
+                fadeLayer.style.pointerEvents = "auto";
+
+                fadeLayer.animate(
+                    [{ opacity: 1 }, { opacity: 0 }],
+                    { duration, fill: "forwards" }
+                ).onfinish = function(){
+                    fadeLayer.style.opacity = 0;
+                    fadeLayer.style.pointerEvents = "none";
+                };
+            }
+
+            const scene = localStorage.getItem("game_scene");
+            const saved = JSON.parse(localStorage.getItem("saved_room_location") || "{}");
+
+            console.log("Boot scene:", scene, saved);
+
+            if(scene === "room" && saved.level_id !== undefined){
+                worldMapActive = false;
+
+                document.getElementById("world_map_screen").style.display = "none";
+                document.getElementById("room_screen").style.display = "flex";
+
+                if(typeof closeDestinationWindow === "function"){
+                    closeDestinationWindow();
+                }
+
+                activeTeleportPrompt = null;
+                teleportPromptOpen = false;
+                teleportTransitioning = false;
+
+                if(typeof worldTeleportCooldown !== "undefined"){
+                    worldTeleportCooldown = Date.now() + 1200;
+                }
+
+                worldInput.left = false;
+                worldInput.right = false;
+                worldInput.up = false;
+                worldInput.down = false;
+
+                localStorage.setItem("test_level_id", String(saved.level_id));
+
+                startRoomMode();
+
+                if(introPending){
+                    requestAnimationFrame(() => {
+                        startOpeningCutscene();
+                    });
+                }else{
+                    requestAnimationFrame(() => {
+                        fadeInFromBlack(700);
+                    });
+                }
+
+                return;
+            }
+
+            worldMapActive = true;
+
+            document.getElementById("world_map_screen").style.display = "flex";
+            document.getElementById("room_screen").style.display = "none";
+        });
+    </script>
 </body>
 </html>

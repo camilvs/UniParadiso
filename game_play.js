@@ -8,6 +8,19 @@ let current_member_deck_slot = 0;
 
 let current_member_equip_slot = 0;
 
+const saveMenu = document.getElementById("save_menu");
+
+const saveWindow = document.getElementById("save_window");
+const saveWindowClose = document.getElementById("save_window_close");
+
+const saveGameBtn = document.getElementById("save_game_btn");
+const downloadSaveBtn = document.getElementById("download_save_btn");
+const uploadSaveBtn = document.getElementById("upload_save_btn");
+
+const returnTitleBtn = document.getElementById("return_title_btn");
+
+const uploadSaveInput =
+    document.getElementById("upload_save_input");
 
 // ---------- lookup helpers ----------
 function findUserById(user_id){
@@ -32,6 +45,7 @@ function findSquadMember(slot){
 
 // ---------- initialize current player from squad slot 0 ----------
 function initializeCurrentUser(){
+     loadActiveSaveUserIntoDatabase();
     const leadMember = findSquadMember(0);
 
     if(!leadMember || leadMember.user_id === null || leadMember.avatar_id === null){
@@ -192,7 +206,7 @@ function renderUserStats(){
     if(dexEl) dexEl.textContent = `: ${stats.dex}`;
     if(spDefEl) spDefEl.textContent = `: ${stats.spDEF}`;
     if(cpEl) cpEl.textContent = `: ${stats.cp}`;
-    console.log("Effective user stats rendered:", stats);
+    // console.log("Effective user stats rendered:", stats);
 }
 // ---------- pause squad ----------
 function renderPauseSquad(){
@@ -1501,7 +1515,214 @@ function syncPlayerToState(){
     }
 }
 
+let introCutsceneActive = false;
+let introDialogueStep = 0;
+
+function setPlayerLayingImage(){
+    const playerEl = getPlayerEl();
+    if(!playerEl || !current_avatar) return;
+
+    playerEl.style.backgroundImage =
+        `url(./images/${current_avatar.image_laying})`;
+}
+
+function setPlayerIdleImage(){
+    const playerEl = getPlayerEl();
+    if(!playerEl || !current_avatar) return;
+
+    playerEl.style.backgroundImage =
+        `url(./images/${current_avatar.image_idle})`;
+}
+
+function showIntroDialogue(text){
+    const box = document.getElementById("intro_dialogue_box");
+    const portrait = document.getElementById("intro_dialogue_portrait");
+    const dialogueText = document.getElementById("intro_dialogue_text");
+
+    if(!box || !portrait || !dialogueText || !current_avatar) return;
+
+    portrait.style.backgroundImage =
+        `url(./images/${current_avatar.image_portrait})`;
+
+    dialogueText.textContent = text;
+
+    box.style.display = "flex";
+}
+
+function hideIntroDialogue(){
+    const box = document.getElementById("intro_dialogue_box");
+    if(box) box.style.display = "none";
+}
+
+function startOpeningCutscene(){
+    if(localStorage.getItem("new_game_intro_pending") !== "true") return;
+    if(localStorage.getItem("opening_cutscene_done") === "true") return;
+
+    introCutsceneActive = true;
+    introDialogueStep = 1;
+
+    input_state.left = false;
+    input_state.right = false;
+
+    setPlayerLayingImage();
+
+    const fadeLayer = document.getElementById("fade_layer");
+
+    if(fadeLayer){
+        fadeLayer.style.display = "block";
+        fadeLayer.style.opacity = 1;
+
+        fadeLayer.animate(
+            [{ opacity: 1 }, { opacity: 0 }],
+            { duration: 2400, fill: "forwards" }
+        ).onfinish = function(){
+            showIntroDialogue("Where am I?");
+        };
+    }else{
+        showIntroDialogue("Where am I?");
+    }
+}
+
+const introDialogueClose =
+    document.getElementById("intro_dialogue_close");
+
+if(introDialogueClose){
+    introDialogueClose.onclick = function(){
+
+        if(!introCutsceneActive) return;
+
+        if(introDialogueStep === 1){
+            introDialogueStep = 2;
+
+            setPlayerIdleImage();
+
+            showIntroDialogue(
+                "Why am I dressed like a clown?"
+            );
+
+            return;
+        }
+
+        if(introDialogueStep === 2){
+            introDialogueStep = 3;
+
+            showNameEntryWindow();
+
+            return;
+        }
+    };
+}
+
+const nameEntrySubmit =
+    document.getElementById("name_entry_submit");
+
+if(nameEntrySubmit){
+    nameEntrySubmit.onclick = function(){
+
+        const nameWindow =
+            document.getElementById("name_entry_window");
+
+        const nameInput =
+            document.getElementById("name_entry_input");
+
+        const username =
+            nameInput.value.trim();
+
+        if(username === ""){
+            alert("Please enter a username.");
+            return;
+        }
+
+        saveUsernameToCurrentSlot(username);
+
+        if(current_user){
+            current_user.username = username;
+        }
+
+        renderUserHUD();
+
+        if(nameWindow){
+            nameWindow.style.display = "none";
+        }
+
+        hideIntroDialogue();
+
+        introCutsceneActive = false;
+
+        localStorage.setItem(
+            "opening_cutscene_done",
+            "true"
+        );
+
+        localStorage.setItem(
+            "new_game_intro_pending",
+            "false"
+        );
+    };
+}
+
+function showNameEntryWindow(){
+    const nameWindow = document.getElementById("name_entry_window");
+    const nameInput = document.getElementById("name_entry_input");
+
+    if(!nameWindow || !nameInput) return;
+
+    nameInput.value = "";
+
+    nameWindow.style.display = "flex";
+
+    showIntroDialogue(
+        "A window asking for my user name? What is this, some type of game?"
+    );
+
+    setTimeout(() => {
+        nameInput.focus();
+    }, 100);
+}
+
+function saveUsernameToCurrentSlot(username){
+    const activeSlot = Number(
+        localStorage.getItem("uni_paradiso_active_save_slot") || 1
+    );
+
+    const key = `uni_paradiso_save_slot_${activeSlot}`;
+    const raw = localStorage.getItem(key);
+
+    if(!raw) return;
+
+    const save = JSON.parse(raw);
+
+    save.user = save.user || {};
+    save.user.id = 0;
+    save.user.username = username;
+    save.user.rank = save.user.rank || "E";
+    save.user.rank_exp = save.user.rank_exp || 0;
+    save.user.currency = save.user.currency || { gil: 0 };
+    save.user.profile = save.user.profile || {
+        title: "",
+        created_at: Date.now()
+    };
+
+    save.updated_at = Date.now();
+
+    localStorage.setItem(key, JSON.stringify(save));
+
+    users[0].username = username;
+}
+
 function updatePlayer(){
+
+    if(introCutsceneActive){
+        player_state.moving = false;
+        syncPlayerToState();
+
+        if(introDialogueStep === 1){
+            setPlayerLayingImage();
+        }
+
+        return;
+    }
+
     if(roomLandmarkTransitioning){
         syncPlayerToState();
         return;
@@ -1578,6 +1799,9 @@ function gameLoop(){
     checkRoomLandmarkCollision();
     updateSquadMemberStates();
     syncSquadMembersToState();
+    if(current_level && player_state.moving){
+        saveRoomPlayerLocation();
+    }
     updateCamera();
     checkRoomRandomEncounter();
 
@@ -1641,4 +1865,179 @@ function isAnyMovementInput(){
         input_state.up ||
         input_state.down
     );
+}
+
+saveMenu.onclick = function(){
+
+    saveWindow.style.display = "flex";
+
+};
+
+saveWindowClose.onclick = function(){
+
+    saveWindow.style.display = "none";
+
+};
+
+saveGameBtn.onclick = function(){
+
+    const saveData = {
+
+        game_scene:
+            localStorage.getItem("game_scene"),
+
+        saved_room_location:
+            JSON.parse(
+                localStorage.getItem("saved_room_location") || "{}"
+            ),
+
+        world_map_data:
+            JSON.parse(
+                localStorage.getItem("world_map_data") || "{}"
+            ),
+
+        timestamp: Date.now()
+    };
+
+    localStorage.setItem(
+        "player_save",
+        JSON.stringify(saveData)
+    );
+
+    alert("Game Saved");
+};
+
+downloadSaveBtn.onclick = function(){
+
+    const save =
+        localStorage.getItem("player_save");
+
+    if(!save){
+
+        alert("No save data found.");
+        return;
+    }
+
+    const blob = new Blob(
+        [save],
+        { type: "application/json" }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = "uni_paradiso_save.json";
+
+    a.click();
+
+    URL.revokeObjectURL(url);
+};
+
+uploadSaveBtn.onclick = function(){
+
+    uploadSaveInput.click();
+
+};
+
+uploadSaveInput.addEventListener(
+    "change",
+    function(){
+
+        const file = uploadSaveInput.files[0];
+
+        if(!file) return;
+
+        const reader = new FileReader();
+
+        reader.onload = function(e){
+
+            try{
+
+                const save =
+                    JSON.parse(e.target.result);
+
+                localStorage.setItem(
+                    "player_save",
+                    JSON.stringify(save)
+                );
+
+                if(save.game_scene){
+
+                    localStorage.setItem(
+                        "game_scene",
+                        save.game_scene
+                    );
+                }
+
+                if(save.saved_room_location){
+
+                    localStorage.setItem(
+                        "saved_room_location",
+                        JSON.stringify(
+                            save.saved_room_location
+                        )
+                    );
+                }
+
+                if(save.world_map_data){
+
+                    localStorage.setItem(
+                        "world_map_data",
+                        JSON.stringify(
+                            save.world_map_data
+                        )
+                    );
+                }
+
+                alert("Save Uploaded");
+
+                location.reload();
+
+            }catch(err){
+
+                console.error(err);
+                alert("Invalid Save File");
+
+            }
+        };
+
+        reader.readAsText(file);
+    }
+);
+
+returnTitleBtn.onclick = function(){
+
+    window.location.href = "./index.html";
+
+};
+
+
+function loadActiveSaveUserIntoDatabase(){
+    const activeSlot = Number(
+        localStorage.getItem("uni_paradiso_active_save_slot") || 1
+    );
+
+    const saveKey = `uni_paradiso_save_slot_${activeSlot}`;
+    const rawSave = localStorage.getItem(saveKey);
+
+    if(!rawSave) return;
+
+    const save = JSON.parse(rawSave);
+
+    if(!save.user) return;
+
+    const userIndex = users.findIndex(user =>
+        Number(user.id) === Number(save.user.id)
+    );
+
+    if(userIndex >= 0){
+        users[userIndex] = {
+            ...users[userIndex],
+            ...save.user
+        };
+    }else{
+        users.push(save.user);
+    }
 }

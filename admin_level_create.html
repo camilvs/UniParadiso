@@ -221,6 +221,9 @@
                     <div id="treasure_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Chest</div>
                     <div id="enemy_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Encounters</div>
                     <div id="landmark_asset" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Landmarks</div>
+                    <div id="camera_left" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Camera L</div>
+                    <div id="camera_center" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Camera C</div>
+                     <div id="camera_right" style="background-color: blue; color: white; display: flex; flex-direction: column; justify-content: center; padding-left: 4px; padding-right: 4px; border-radius: 7px; cursor: pointer;">Camera R</div>
                 </div>
             </div>
             <div id="create_level_holder" style="display: flex; flex-direction: row;">
@@ -707,6 +710,10 @@
     var level_desciption_input = document.getElementById("level_desciption_input");
     var create_level_input = document.getElementById("create_level_input");
     var exit_level_stats = document.getElementById("exit_level_stats");
+    //camera
+    var camera_left = document.getElementById("camera_left");
+    var camera_center = document.getElementById("camera_center");
+    var camera_right = document.getElementById("camera_right");
     //level create 
     var level_nav_name = document.getElementById("level_nav_name");
     var current_level = null;
@@ -4295,6 +4302,17 @@ function setCardVisual(el, imagePath, fallbackColor){
 destination_to.addEventListener("change", () => {
     populateDestinationLandmarks();
 });
+
+//camera function
+camera_left.onclick =()=>{
+    cube.style.transform = "rotateY(45deg)";
+}
+camera_center.onclick =()=>{
+    cube.style.transform = "rotateY(0deg)";
+}
+camera_right.onclick =()=>{
+    cube.style.transform = "rotateY(-45deg)";
+}
 
 document.getElementById("export_levels_json").onclick = function(){
     const levels = JSON.parse(localStorage.getItem("levels") || "[]");

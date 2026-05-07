@@ -2524,221 +2524,41 @@ let enemy_stats = [
 let users_weapons = [
     // Avatar 0 owns 3 copies
     {
-        id: 0,
-        user_id: 0,
-        avatar_id: 0,
-        weapon_id: 6,
-        level: 1,
-        rank: "F",
-        quantity: 1,
+        id: null,
+        user_id: null,
+        avatar_id: null,
+        weapon_id: null,
+        level: null,
+        rank: null,
+        quantity: null,
         locked: false,
         favorite: false
     },
-    {
-        id: 1,
-        user_id: 0,
-        avatar_id: 0,
-        weapon_id: 6,
-        level: 1,
-        rank: "F",
-        quantity: 1,
-        locked: false,
-        favorite: false
-    },
-    {
-        id: 2,
-        user_id: 0,
-        avatar_id: 0,
-        weapon_id: 6,
-        level: 1,
-        rank: "F",
-        quantity: 1,
-        locked: false,
-        favorite: false
-    },
-
-    // Avatar 1 owns 3 copies
-    {
-        id: 3,
-        user_id: 0,
-        avatar_id: 1,
-        weapon_id: 18,
-        level: 1,
-        rank: "F",
-        quantity: 1,
-        locked: false,
-        favorite: false
-    },
-    {
-        id: 4,
-        user_id: 0,
-        avatar_id: 1,
-        weapon_id: 18,
-        level: 1,
-        rank: "F",
-        quantity: 1,
-        locked: false,
-        favorite: false
-    },
-    {
-        id: 5,
-        user_id: 0,
-        avatar_id: 1,
-        weapon_id: 18,
-        level: 1,
-        rank: "F",
-        quantity: 1,
-        locked: false,
-        favorite: false
-    },
-
-    // Avatar 2 owns 3 copies
-    {
-        id: 6,
-        user_id: 0,
-        avatar_id: 2,
-        weapon_id: 2,
-        level: 1,
-        rank: "F",
-        quantity: 1,
-        locked: false,
-        favorite: false
-    },
-    {
-        id: 7,
-        user_id: 0,
-        avatar_id: 2,
-        weapon_id: 2,
-        level: 1,
-        rank: "F",
-        quantity: 1,
-        locked: false,
-        favorite: false
-    },
-    {
-        id: 8,
-        user_id: 0,
-        avatar_id: 2,
-        weapon_id: 2,
-        level: 1,
-        rank: "F",
-        quantity: 1,
-        locked: false,
-        favorite: false
-    }
 ];
 
 let users_manifest = [
     {
-        id: 0,
-        user_id: 0,
-        avatar_id: 0,
-        manifest_id: 0,
-        level: 1,
+        id: null,
+        user_id: null,
+        avatar_id: null,
+        manifest_id: null,
+        level: null,
         rank: "F",
         quantity: 1,
         locked: false,
         favorite: false
     },
-    {
-        id: 1,
-        user_id: 0,
-        avatar_id: 1,
-        manifest_id: 1,
-        level: 1,
-        rank: "F",
-        quantity: 1,
-        locked: false,
-        favorite: false
-    },
-    {
-        id: 2,
-        user_id: 0,
-        avatar_id: 2,
-        manifest_id: 2,
-        level: 1,
-        rank: "F",
-        quantity: 1,
-        locked: false,
-        favorite: false
-    }
 ];
 
 let users_skills = [
     {
-        id: 0,
-        user_id: 0,
-        avatar_id: 0,
-        skill_id: 0,
-        level: 1,
+        id: null,
+        user_id: null,
+        avatar_id: null,
+        skill_id: null,
+        level: null,
         rank: "F",
-        quantity: 1,
-        locked: false,
-        favorite: false
-    },
-    {
-        id: 1,
-        user_id: 0,
-        avatar_id: 0,
-        skill_id: 1,
-        level: 1,
-        rank: "F",
-        quantity: 1,
-        locked: false,
-        favorite: false
-    },
-    {
-        id: 2,
-        user_id: 0,
-        avatar_id: 1,
-        skill_id: 3,
-        level: 1,
-        rank: "F",
-        quantity: 1,
-        locked: false,
-        favorite: false
-    },
-    {
-        id: 3,
-        user_id: 0,
-        avatar_id: 2,
-        skill_id: 2,
-        level: 1,
-        rank: "F",
-        quantity: 1,
-        locked: false,
-        favorite: false
-    },
-        {
-        id: 4,
-        user_id: 0,
-        avatar_id: 0,
-        skill_id: 0,
-        level: 1,
-        rank: "F",
-        quantity: 1,
-        locked: false,
-        favorite: false
-    },
-        {
-        id: 5,
-        user_id: 0,
-        avatar_id: 0,
-        skill_id: 3,
-        level: 1,
-        rank: "F",
-        quantity: 1,
-        locked: false,
-        favorite: false
-    },
-            {
-        id: 6,
-        user_id: 0,
-        avatar_id: 1,
-        skill_id: 1,
-        level: 1,
-        rank: "F",
-        quantity: 1,
+        quantity: null,
         locked: false,
         favorite: false
     },
@@ -2746,37 +2566,21 @@ let users_skills = [
 
 let users_items = [
     {
-        id: 0,
-        user_id: 0,
-        item_id: 0,
-        quantity: 3,
+        id: null,
+        user_id: null,
+        item_id: null,
+        quantity: null,
         locked: false,
         favorite: false
     },
-    {
-        id: 1,
-        user_id: 0,
-        item_id: 1,
-        quantity: 2,
-        locked: false,
-        favorite: false
-    },
-    {
-        id: 2,
-        user_id: 0,
-        item_id: 2,
-        quantity: 1,
-        locked: false,
-        favorite: false
-    }
 ];
 
 let users_equipments = [
     {
         id: 0,
         user_id: 0,
-        equipment_id: 0,
-        quantity: 1,
+        equipment_id: null,
+        quantity: null,
         locked: false,
         favorite: false
     },
@@ -2809,28 +2613,28 @@ let squad_loadouts = [
         id: 0,
         user_id: 0,
         avatar_id: 0,
-        weapons: [0, 1, 2],
-        battle_items: [0],
-        manifest: [0],
-        skills: [0, 3,]
+        weapons: [],
+        battle_items: [],
+        manifest: [],
+        skills: []
     },
     {
         id: 1,
         user_id: 0,
         avatar_id: 1,
-        weapons: [3, 4, 5],
+        weapons: [],
         battle_items: [],
-        manifest: [1],
-        skills: [2]
+        manifest: [],
+        skills: []
     },
     {
         id: 2,
         user_id: 0,
         avatar_id: 2,
-        weapons: [6, 7, 8],
+        weapons: [],
         battle_items: [],
-        manifest: [2],
-        skills: [3]
+        manifest: [],
+        skills: []
     }
 ];
 
@@ -2839,19 +2643,19 @@ let squad_equipment_loadouts = [
         id: 0,
         user_id: 0,
         avatar_id: 0,
-        slots: [0, null, null]
+        slots: [null, null, null]
     },
     {
         id: 1,
         user_id: 0,
         avatar_id: 1,
-        slots: [1, null, null]
+        slots: [null, null, null]
     },
     {
         id: 2,
         user_id: 0,
         avatar_id: 2,
-        slots: [2, null, null]
+        slots: [null, null, null]
     }
 ];
 
